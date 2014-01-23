@@ -1,0 +1,127 @@
+package it.bioko.system.command.KILL_ME;
+
+import it.bioko.system.KILL_ME.commons.GenericCommandNames;
+import it.bioko.system.KILL_ME.commons.GenericFieldNames;
+import it.bioko.system.KILL_ME.commons.GenericFieldValues;
+import it.bioko.system.KILL_ME.commons.logger.Loggers;
+import it.bioko.system.command.AbstractCommandHandler;
+import it.bioko.system.command.Command;
+import it.bioko.system.command.CommandException;
+import it.bioko.system.entity.description.CommandEntity;
+import it.bioko.system.entity.description.CommandEntityBuilder;
+import it.bioko.system.entity.description.ParameterEntity;
+import it.bioko.system.exceptions.CommandExceptionsFactory;
+import it.bioko.utils.domain.DomainEntity;
+import it.bioko.utils.fields.FieldNames;
+import it.bioko.utils.fields.Fields;
+
+import java.util.ArrayList;
+import java.util.List;
+
+
+public class GetCommandInvocationInfoCommand extends Command {
+	
+	private AbstractCommandHandler _commandHandler;
+
+	@Override
+	public void onContextInitialized() {
+		_commandHandler = _context.getCommandHandler();
+	}
+
+	// TODO MATTO I
+	// usando componingInput e outputKey si possono implementare i controlli in ingresso e 
+	// uscita verificando che i campi obbligatori siano presenti
+	@Override
+	public Fields execute(Fields input) throws CommandException {
+		Loggers.xsystem.info("EXECUTING Command:" + this.getClass().getSimpleName());
+		Fields result = Fields.empty();
+		
+		Fields commandEntityFields = Fields.empty();
+		commandEntityFields.put(GenericFieldNames.NAME, input.stringNamed(GenericFieldNames.COMMAND));
+
+		String commandName = input.stringNamed(GenericFieldNames.COMMAND);
+		if (commandName == null) {
+			throw CommandExceptionsFactory.createExpectedFieldNotFound(GenericFieldNames.COMMAND);
+		}
+		Command command = _commandHandler.getByName(commandName);
+		if (command == null) {
+			Loggers.xsystem.error("Command " + commandName + " not found");
+			throw CommandExceptionsFactory.createCommandNotFoundException(commandName);
+		}
+		
+		ArrayList<ParameterEntity> inputParameters = extractInputParameters(commandName, command);
+		commandEntityFields.put(GenericFieldNames.INPUT, inputParameters);
+		
+		ArrayList<ParameterEntity> parameters = extractOutputParameters(commandName, command);
+		commandEntityFields.put(GenericFieldNames.OUTPUT, parameters);
+		
+		CommandEntity entity = new CommandEntity(commandEntityFields);
+		ArrayList<DomainEntity> response = new ArrayList<DomainEntity>();
+		response.add(entity);
+		result.put(GenericFieldNames.RESPONSE, response);
+			
+		Loggers.xsystem.info("END Command:" + this.getClass().getSimpleName());
+		return input.putAll(result);
+	}
+
+	@SuppressWarnings("unchecked")
+	private ArrayList<ParameterEntity> extractInputParameters(String commandName, Command command) {
+		ArrayList<ParameterEntity> parameters = null;
+		if (command instanceof SetCommand) {
+			parameters = (ArrayList<ParameterEntity>) ((SetCommand)command)
+					.componingInputKeys(commandName).valueFor(GenericFieldNames.INPUT);
+		} else {
+			parameters = ((ArrayList<ParameterEntity>) command
+					.componingInputKeys().valueFor(GenericFieldNames.INPUT));
+		}
+		return parameters;
+	}
+
+	@SuppressWarnings("unchecked")
+	private ArrayList<ParameterEntity> extractOutputParameters(String commandName, Command command) {
+		ArrayList<ParameterEntity> parameters = null;
+		if (command instanceof SetCommand) {
+			parameters = (ArrayList<ParameterEntity>) ((SetCommand)command)
+					.componingOutputKeys(commandName).valueFor(GenericFieldNames.OUTPUT);
+		} else {
+			parameters = ((ArrayList<ParameterEntity>) command
+					.componingOutputKeys().valueFor(GenericFieldNames.OUTPUT));
+		}
+		return parameters;
+	}
+	
+	@Override
+	public Fields componingInputKeys() {
+		ArrayList<ParameterEntity> request = new ArrayList<ParameterEntity>(); 
+		
+		ParameterEntity parameter = new ParameterEntity(Fields.empty());
+		parameter.set(ParameterEntity.NAME, GenericFieldNames.COMMAND);
+		parameter.set(ParameterEntity.HTTP_PARAMETER_TYPE, GenericFieldValues.QUERY_STRING);
+		request.add(parameter);
+		
+		Fields fields = Fields.single(FieldNames.COMMAND_NAME, GenericCommandNames.GET_COMMAND_LIST);
+		fields.put(GenericFieldNames.INPUT, request);
+		return fields;
+	}
+
+	@Override
+	public Fields componingOutputKeys() {
+		CommandEntity entity = new CommandEntityBuilder().build(false);
+		List<String> keys = entity.fields().keys();
+		
+		ArrayList<DomainEntity> response = new ArrayList<DomainEntity>();
+		CommandEntityBuilder builder = new CommandEntityBuilder();
+		for (String aKey : keys) {
+			builder.set(CommandEntity.NAME, aKey);
+			response.add(builder.build(false));
+		}		
+		
+		Fields fields = Fields.single(GenericFieldNames.OUTPUT, response);
+		return fields;
+	}
+
+	@Override
+	public String getName() {
+		return GenericCommandNames.COMMAND_INVOCATION_INFO;
+	}
+}

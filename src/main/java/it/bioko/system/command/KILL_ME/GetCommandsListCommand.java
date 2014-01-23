@@ -1,0 +1,81 @@
+package it.bioko.system.command.KILL_ME;
+
+import it.bioko.system.KILL_ME.commons.GenericCommandNames;
+import it.bioko.system.KILL_ME.commons.GenericFieldNames;
+import it.bioko.system.KILL_ME.commons.logger.Loggers;
+import it.bioko.system.command.AbstractCommandHandler;
+import it.bioko.system.command.Command;
+import it.bioko.system.command.CommandException;
+import it.bioko.system.entity.description.CommandEntity;
+import it.bioko.system.entity.description.ParameterEntity;
+import it.bioko.system.entity.description.ParameterEntityBuilder;
+import it.bioko.utils.domain.DomainEntity;
+import it.bioko.utils.fields.FieldNames;
+import it.bioko.utils.fields.Fields;
+
+import java.util.ArrayList;
+
+
+public class GetCommandsListCommand extends Command {
+	
+	private AbstractCommandHandler _commandHandler;
+
+	public GetCommandsListCommand(AbstractCommandHandler commandHandler){
+		_commandHandler = commandHandler;
+	}
+	
+	public GetCommandsListCommand() {		
+	}
+	
+	@Override
+	public void onContextInitialized() {
+		_commandHandler = _context.getCommandHandler();
+	}
+
+	@Override
+	public Fields execute(Fields input) throws CommandException {
+		Loggers.xsystem.info("EXECUTING Command:" + this.getClass().getSimpleName());
+		Fields result = Fields.empty();
+		
+		// Meta linguaggio? Il comando descrive il command handler con lo stesso meccanismo con cui
+		// descriverebbe qualunque altra cosa
+		ArrayList<DomainEntity> response = new ArrayList<DomainEntity>();
+		for (String aCommandName : _commandHandler.keys()) {
+			CommandEntity commandEntity = new CommandEntity(Fields.empty());
+			commandEntity.set(CommandEntity.NAME, aCommandName);
+			response.add(commandEntity);
+		}
+		result.put(GenericFieldNames.RESPONSE, response);
+		result.putAll(input);
+		
+		Loggers.xsystem.info("END Command:" + this.getClass().getSimpleName());
+		return result;
+	}
+
+	@Override
+	public Fields componingInputKeys() {
+		ArrayList<ParameterEntity> request = new ArrayList<ParameterEntity>(); 
+		
+		Fields fields = Fields.single(FieldNames.COMMAND_NAME, GenericCommandNames.GET_COMMAND_LIST);
+		fields.put(GenericFieldNames.INPUT, request);
+		return fields;
+	}
+
+	@Override
+	public Fields componingOutputKeys() {
+		ArrayList<DomainEntity> response = new ArrayList<DomainEntity>();
+		ParameterEntityBuilder builder = new ParameterEntityBuilder();
+		
+		builder.set(ParameterEntity.NAME, ParameterEntity.NAME);
+		response.add(builder.build(false));
+		
+		Fields fields = Fields.empty();
+		fields.put(GenericFieldNames.OUTPUT, response);
+		return fields;
+	}
+
+	@Override
+	public String getName() {
+		return GenericFieldNames.COMMANDS_LIST;
+	}
+}
