@@ -36,12 +36,12 @@ import org.biokoframework.system.command.Command;
 import org.biokoframework.system.command.CommandException;
 import org.biokoframework.system.entity.authentication.EmailConfirmation;
 import org.biokoframework.system.entity.login.Login;
-import org.biokoframework.system.repository.core.Repository;
 import org.biokoframework.system.repository.core.SafeRepositoryHelper;
 import org.biokoframework.system.service.currenttime.CurrentTimeService;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.fields.FieldValues;
 import org.biokoframework.utils.fields.Fields;
+import org.biokoframework.utils.repository.Repository;
 import org.biokoframework.utils.validator.Validator;
 
 

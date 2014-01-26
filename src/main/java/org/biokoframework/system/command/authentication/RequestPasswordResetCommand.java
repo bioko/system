@@ -43,7 +43,6 @@ import org.biokoframework.system.entity.authentication.PasswordReset;
 import org.biokoframework.system.entity.login.Login;
 import org.biokoframework.system.entity.template.Template;
 import org.biokoframework.system.exceptions.CommandExceptionsFactory;
-import org.biokoframework.system.repository.core.Repository;
 import org.biokoframework.system.repository.core.SafeRepositoryHelper;
 import org.biokoframework.system.service.currenttime.CurrentTimeService;
 import org.biokoframework.system.service.mail.ContentBuilder;
@@ -52,6 +51,7 @@ import org.biokoframework.system.service.mail.EmailServiceImplementation;
 import org.biokoframework.system.service.random.RandomGeneratorService;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.fields.Fields;
+import org.biokoframework.utils.repository.Repository;
 import org.biokoframework.utils.validator.Validator;
 import org.joda.time.DateTime;
 

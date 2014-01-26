@@ -33,8 +33,9 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.biokoframework.system.command.AbstractCommandHandler;
 import org.biokoframework.system.event.SystemListener;
-import org.biokoframework.system.repository.core.Repository;
+import org.biokoframework.system.repository.core.AbstractRepository;
 import org.biokoframework.utils.domain.DomainEntity;
+import org.biokoframework.utils.repository.Repository;
 
 public class ProxyContext extends Context {
 
@@ -66,7 +67,7 @@ public class ProxyContext extends Context {
 	}
 
 	@Override
-	public void addRepository(String repoName, Repository<?> repo) {
+	public void addRepository(String repoName, AbstractRepository<?> repo) {
 		throw new UnsupportedOperationException();		
 	}
 

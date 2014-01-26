@@ -32,8 +32,8 @@ import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.KILL_ME.commons.logger.Loggers;
 import org.biokoframework.system.command.Command;
 import org.biokoframework.system.command.CommandException;
-import org.biokoframework.system.repository.core.Repository;
 import org.biokoframework.utils.fields.Fields;
+import org.biokoframework.utils.repository.Repository;
 
 public class PrintRepositoryCommand extends Command {
 

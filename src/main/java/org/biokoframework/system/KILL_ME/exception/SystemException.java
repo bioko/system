@@ -27,51 +27,34 @@
 
 package org.biokoframework.system.KILL_ME.exception;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.biokoframework.utils.domain.ErrorEntity;
+import org.biokoframework.utils.exception.BiokoException;
 
-public class SystemException extends Exception {
+public class SystemException extends BiokoException {
 
 	private static final long serialVersionUID = 1L;
 	
-	private Exception _exception;
-	//private ErrorEntity _error;
-	private List<ErrorEntity> _errors = new ArrayList<ErrorEntity>();
-	
 	public SystemException(ErrorEntity error) {
-		super(error.toJSONString());
-		_errors.add(error);
+		super(error);
+		
 	}
 	
 	public SystemException(List<ErrorEntity> errors) {
-		_errors = new ArrayList<ErrorEntity>(errors);
+		super(errors);
 	}
 	
 	public SystemException(Exception exception) {
 		super(exception);
-		_exception = exception;
 	}
 	
 	public SystemException(ErrorEntity error, Exception exception) {
-		super(exception);
-		_errors.add(error);
-		_exception = exception;
+		super(error, exception);
 	}
 	
 	public SystemException(List<ErrorEntity> errors, Exception exception) {
-		super(exception);
-		_errors = new ArrayList<ErrorEntity>(errors);		
-		_exception = exception;
-	}
-	
-	public List<ErrorEntity> getErrors() {
-		return _errors;
-	}
-	
-	public Exception exception() {
-		return _exception;
+		super(errors, exception);
 	}
 
 }

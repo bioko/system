@@ -34,9 +34,10 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.biokoframework.system.command.AbstractCommandHandler;
 import org.biokoframework.system.event.SystemListener;
-import org.biokoframework.system.repository.core.Repository;
+import org.biokoframework.system.repository.core.AbstractRepository;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.fields.Fields;
+import org.biokoframework.utils.repository.Repository;
 
 public class ContextImpl extends Context {
 
@@ -49,7 +50,7 @@ public class ContextImpl extends Context {
 
 	public ContextImpl(Fields contextFields) {
 		_contextMap = contextFields.copy();
-		_contextMap.put(REPOSITORIES, new HashMap<String, Repository<?>>());
+		_contextMap.put(REPOSITORIES, new HashMap<String, AbstractRepository<?>>());
 		_contextMap.put(SYSTEM_PROPERTIES, new HashMap<String, String>());
 		_contextMap.put(SYSTEM_LISTENERS, new LinkedList<SystemListener>());
 	}
@@ -77,8 +78,8 @@ public class ContextImpl extends Context {
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public void addRepository(String repoName, Repository<?> repo) {
-		HashMap<String, Repository<?>> repoMap = (HashMap<String, Repository<?>>) _contextMap.objectNamed(REPOSITORIES);
+	public void addRepository(String repoName, AbstractRepository<?> repo) {
+		HashMap<String, AbstractRepository<?>> repoMap = (HashMap<String, AbstractRepository<?>>) _contextMap.objectNamed(REPOSITORIES);
 		repoMap.put(repoName, repo);
 	}
 	
@@ -86,7 +87,7 @@ public class ContextImpl extends Context {
 	@SuppressWarnings("unchecked")
 	public <DE extends DomainEntity> Repository<DE> getRepository(String repoName) {
 				
-		HashMap<String, Repository<?>> repoMap = (HashMap<String, Repository<?>>) _contextMap.objectNamed(REPOSITORIES);
+		HashMap<String, AbstractRepository<?>> repoMap = (HashMap<String, AbstractRepository<?>>) _contextMap.objectNamed(REPOSITORIES);
 		Repository<?> repo = repoMap.get(repoName);
 		
 		return (Repository<DE>) repo;

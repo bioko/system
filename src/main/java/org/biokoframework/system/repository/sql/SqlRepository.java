@@ -37,17 +37,17 @@ import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.biokoframework.system.command.ValidationException;
-import org.biokoframework.system.repository.core.Repository;
-import org.biokoframework.system.repository.core.RepositoryException;
+import org.biokoframework.system.repository.core.AbstractRepository;
 import org.biokoframework.system.repository.sql.query.SqlQuery;
 import org.biokoframework.system.repository.sql.translator.SqlTypesTranslator;
 import org.biokoframework.system.repository.sql.util.SqlStatementsHelper;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.domain.annotation.field.ComponingFieldsFactory;
 import org.biokoframework.utils.domain.annotation.field.Field;
+import org.biokoframework.utils.exception.ValidationException;
+import org.biokoframework.utils.repository.RepositoryException;
 
-public class SqlRepository<DE extends DomainEntity> extends Repository<DE> {
+public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<DE> {
 	
 	protected final SqlConnector _dbConnector;
 	protected final Class<DE> _entityClass;

@@ -39,9 +39,9 @@ import org.biokoframework.system.entity.description.ParameterEntity;
 import org.biokoframework.system.entity.resolution.AnnotatedEntityResolver;
 import org.biokoframework.system.entity.resolution.EntityResolver;
 import org.biokoframework.system.exceptions.CommandExceptionsFactory;
-import org.biokoframework.system.repository.core.Repository;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.fields.Fields;
+import org.biokoframework.utils.repository.Repository;
 
 public class ResolvableCommand extends Command {
 

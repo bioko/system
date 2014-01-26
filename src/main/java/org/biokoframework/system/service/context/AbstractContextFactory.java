@@ -36,18 +36,18 @@ import org.biokoframework.system.ConfigurationEnum;
 import org.biokoframework.system.KILL_ME.XSystemIdentityCard;
 import org.biokoframework.system.KILL_ME.commons.GenericConstants;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldValues;
-import org.biokoframework.system.KILL_ME.exception.SystemException;
 import org.biokoframework.system.context.Context;
 import org.biokoframework.system.context.ContextImpl;
-import org.biokoframework.system.repository.core.Repository;
 import org.biokoframework.system.service.queue.Queue;
 import org.biokoframework.system.service.queue.QueuedItem;
 import org.biokoframework.system.service.random.RandomGeneratorService;
+import org.biokoframework.utils.exception.BiokoException;
 import org.biokoframework.utils.fields.Fields;
+import org.biokoframework.utils.repository.Repository;
 
 public abstract class AbstractContextFactory implements ContextFactory {
 
-	public Context create(XSystemIdentityCard identityCard) throws SystemException {
+	public Context create(XSystemIdentityCard identityCard) throws BiokoException {
 
 
 		Fields identityFields = Fields.empty();
@@ -86,11 +86,11 @@ public abstract class AbstractContextFactory implements ContextFactory {
 
 
 
-	protected abstract Context configureForProd(Context context) throws SystemException;
+	protected abstract Context configureForProd(Context context) throws BiokoException;
 	
-	protected abstract Context configureForDev(Context context) throws SystemException;
+	protected abstract Context configureForDev(Context context) throws BiokoException;
 	
-	protected abstract Context configureForDemo(Context context) throws SystemException;
+	protected abstract Context configureForDemo(Context context) throws BiokoException;
 	
 	protected abstract Logger getSystemLogger();
 

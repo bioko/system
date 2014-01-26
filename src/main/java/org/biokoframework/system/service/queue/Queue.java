@@ -30,10 +30,10 @@ package org.biokoframework.system.service.queue;
 import java.util.List;
 
 import org.biokoframework.system.KILL_ME.commons.logger.Loggers;
-import org.biokoframework.system.command.ValidationException;
-import org.biokoframework.system.repository.core.Repository;
-import org.biokoframework.system.repository.core.RepositoryException;
+import org.biokoframework.utils.exception.ValidationException;
 import org.biokoframework.utils.fields.Fields;
+import org.biokoframework.utils.repository.Repository;
+import org.biokoframework.utils.repository.RepositoryException;
 
 
 // TODO all the queue can be replaced by two queries:

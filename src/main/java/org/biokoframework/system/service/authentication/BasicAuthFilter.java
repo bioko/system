@@ -40,8 +40,8 @@ import org.biokoframework.system.command.AbstractFilter;
 import org.biokoframework.system.command.CommandException;
 import org.biokoframework.system.entity.login.Login;
 import org.biokoframework.system.exceptions.CommandExceptionsFactory;
-import org.biokoframework.system.repository.core.Repository;
 import org.biokoframework.utils.fields.Fields;
+import org.biokoframework.utils.repository.Repository;
 
 public class BasicAuthFilter extends AbstractFilter {
 	

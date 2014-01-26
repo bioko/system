@@ -42,10 +42,10 @@ import org.biokoframework.system.command.CommandException;
 import org.biokoframework.system.entity.EntityClassNameTranslator;
 import org.biokoframework.system.entity.description.ParameterEntity;
 import org.biokoframework.system.exceptions.CommandExceptionsFactory;
-import org.biokoframework.system.repository.core.Repository;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.fields.FieldNames;
 import org.biokoframework.utils.fields.Fields;
+import org.biokoframework.utils.repository.Repository;
 
 @Deprecated
 public class UniqueCheckerCommand<T extends DomainEntity> extends Command {

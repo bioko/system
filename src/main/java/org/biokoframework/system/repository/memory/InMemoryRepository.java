@@ -30,9 +30,9 @@ package org.biokoframework.system.repository.memory;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.biokoframework.system.repository.core.RepositoryException;
 import org.biokoframework.system.repository.sql.SqlRepository;
 import org.biokoframework.utils.domain.DomainEntity;
+import org.biokoframework.utils.repository.RepositoryException;
 
 public class InMemoryRepository<T extends DomainEntity> extends SqlRepository<T> {
 

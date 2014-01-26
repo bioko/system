@@ -35,11 +35,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.biokoframework.system.repository.core.query.AbstractConstraint;
-import org.biokoframework.system.repository.core.query.Constraint;
-import org.biokoframework.system.repository.core.query.Query;
 import org.biokoframework.system.repository.sql.translator.SqlTypesTranslator;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.domain.annotation.field.Field;
+import org.biokoframework.utils.repository.query.Constraint;
+import org.biokoframework.utils.repository.query.Query;
 
 public class SqlConstraint<DE extends DomainEntity> extends AbstractConstraint<DE> implements Constraint<DE> {
 

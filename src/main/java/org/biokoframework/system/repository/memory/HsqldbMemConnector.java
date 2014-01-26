@@ -34,7 +34,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.biokoframework.system.repository.core.RepositoryException;
 import org.biokoframework.system.repository.sql.SqlConnector;
 import org.biokoframework.system.repository.sql.query.SqlOperator;
 import org.biokoframework.system.repository.sql.translator.annotation.Translate;
@@ -46,6 +45,7 @@ import org.biokoframework.system.repository.sql.translator.annotation.impl.HSQLD
 import org.biokoframework.system.repository.sql.translator.annotation.impl.HSQLDBStringTranslator;
 import org.biokoframework.system.repository.sql.translator.annotation.impl.LocalDateTranslator;
 import org.biokoframework.utils.domain.DomainEntity;
+import org.biokoframework.utils.repository.RepositoryException;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 

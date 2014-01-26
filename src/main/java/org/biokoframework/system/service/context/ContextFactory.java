@@ -28,11 +28,11 @@
 package org.biokoframework.system.service.context;
 
 import org.biokoframework.system.KILL_ME.XSystemIdentityCard;
-import org.biokoframework.system.KILL_ME.exception.SystemException;
 import org.biokoframework.system.context.Context;
+import org.biokoframework.utils.exception.BiokoException;
 
 public interface ContextFactory {
 	
-	public Context create(XSystemIdentityCard identityCard) throws SystemException;
+	public Context create(XSystemIdentityCard identityCard) throws BiokoException;
 
 }

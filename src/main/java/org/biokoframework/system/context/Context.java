@@ -32,8 +32,9 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.biokoframework.system.command.AbstractCommandHandler;
 import org.biokoframework.system.event.SystemListener;
-import org.biokoframework.system.repository.core.Repository;
+import org.biokoframework.system.repository.core.AbstractRepository;
 import org.biokoframework.utils.domain.DomainEntity;
+import org.biokoframework.utils.repository.Repository;
 
 public abstract class Context {
 
@@ -56,7 +57,7 @@ public abstract class Context {
 	
 	public abstract String getSystemName();
 	
-	public abstract void addRepository(String repoName, Repository<?> repo);
+	public abstract void addRepository(String repoName, AbstractRepository<?> repo);
 	
 	
 	public abstract <DE extends DomainEntity> Repository<DE> getRepository(String repoName);

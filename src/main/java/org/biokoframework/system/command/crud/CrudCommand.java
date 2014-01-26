@@ -33,16 +33,16 @@ import org.apache.log4j.Logger;
 import org.biokoframework.system.KILL_ME.commons.GenericCommandNames;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.command.CommandException;
-import org.biokoframework.system.command.ValidationException;
 import org.biokoframework.system.command.KILL_ME.SetCommand;
 import org.biokoframework.system.context.Context;
 import org.biokoframework.system.exceptions.CommandExceptionsFactory;
-import org.biokoframework.system.repository.core.Repository;
 import org.biokoframework.system.repository.core.SafeRepositoryHelper;
 import org.biokoframework.system.service.description.JsonSystemDescriptor;
 import org.biokoframework.utils.domain.DomainEntity;
+import org.biokoframework.utils.exception.ValidationException;
 import org.biokoframework.utils.fields.FieldNames;
 import org.biokoframework.utils.fields.Fields;
+import org.biokoframework.utils.repository.Repository;
 
 public class CrudCommand<T extends DomainEntity> extends SetCommand {
 

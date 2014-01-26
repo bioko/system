@@ -36,20 +36,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.biokoframework.system.command.ValidationException;
 import org.biokoframework.system.command.crud.CrudMethod;
 import org.biokoframework.system.entity.EntityClassNameTranslator;
 import org.biokoframework.system.exceptions.CommandExceptionsFactory;
-import org.biokoframework.system.repository.core.Repository;
-import org.biokoframework.system.repository.core.RepositoryException;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.domain.annotation.field.ForeignKeysFactory;
+import org.biokoframework.utils.exception.ValidationException;
 import org.biokoframework.utils.fields.Fields;
+import org.biokoframework.utils.repository.Repository;
+import org.biokoframework.utils.repository.RepositoryException;
 
 public class AnnotatedEntityDissolver implements EntityDissolver {
 
-	private HashMap<String, Repository<? extends DomainEntity>> _repositories = 
-			new HashMap<String, Repository<? extends DomainEntity>>();
+	private HashMap<String, Repository<? extends DomainEntity>> _repositories = new HashMap<String, Repository<? extends DomainEntity>>();
 	private HashMap<String, Class<? extends DomainEntity>> _entityClasses = new HashMap<String, Class<? extends DomainEntity>>();
 		
 	@SuppressWarnings("unchecked")

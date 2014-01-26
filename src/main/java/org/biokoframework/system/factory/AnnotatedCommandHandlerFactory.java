@@ -48,8 +48,8 @@ import org.biokoframework.system.context.Context;
 import org.biokoframework.system.entity.EntityClassNameTranslator;
 import org.biokoframework.system.entity.binary.BinaryEntity;
 import org.biokoframework.system.factory.binary.BinaryEntityRepository;
-import org.biokoframework.system.repository.core.Repository;
 import org.biokoframework.utils.domain.DomainEntity;
+import org.biokoframework.utils.repository.Repository;
 
 public class AnnotatedCommandHandlerFactory {
 

@@ -31,10 +31,10 @@ import java.util.List;
 
 import org.biokoframework.system.KILL_ME.commons.GenericRepositoryNames;
 import org.biokoframework.system.entity.login.Login;
-import org.biokoframework.system.repository.core.Repository;
 import org.biokoframework.system.service.validation.AbstractValidator;
 import org.biokoframework.utils.domain.ErrorEntity;
 import org.biokoframework.utils.fields.Fields;
+import org.biokoframework.utils.repository.Repository;
 import org.biokoframework.utils.validator.ValidatorErrorBuilder;
 
 public class EmailUniqueInLoginRepoValidator extends AbstractValidator {

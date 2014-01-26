@@ -27,8 +27,8 @@
 
 package org.biokoframework.system.entity.resolution;
 
-import org.biokoframework.system.repository.core.Repository;
 import org.biokoframework.utils.domain.DomainEntity;
+import org.biokoframework.utils.repository.Repository;
 
 public interface EntityResolver {
 

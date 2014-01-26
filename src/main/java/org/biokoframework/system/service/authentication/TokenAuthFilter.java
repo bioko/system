@@ -40,9 +40,9 @@ import org.biokoframework.system.command.CommandException;
 import org.biokoframework.system.entity.authentication.Authentication;
 import org.biokoframework.system.entity.authentication.AuthenticationManager;
 import org.biokoframework.system.exceptions.CommandExceptionsFactory;
-import org.biokoframework.system.repository.core.Repository;
 import org.biokoframework.system.repository.core.SafeRepositoryHelper;
 import org.biokoframework.utils.fields.Fields;
+import org.biokoframework.utils.repository.Repository;
 
 public class TokenAuthFilter extends AbstractFilter {
 

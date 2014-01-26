@@ -37,14 +37,15 @@ import java.util.UUID;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.biokoframework.system.KILL_ME.commons.logger.Loggers;
-import org.biokoframework.system.command.ValidationException;
 import org.biokoframework.system.entity.binary.BinaryEntity;
-import org.biokoframework.system.repository.core.Repository;
-import org.biokoframework.system.repository.core.RepositoryException;
-import org.biokoframework.system.repository.core.query.Query;
+import org.biokoframework.system.repository.core.AbstractRepository;
+import org.biokoframework.utils.exception.ValidationException;
+import org.biokoframework.utils.repository.Repository;
+import org.biokoframework.utils.repository.RepositoryException;
+import org.biokoframework.utils.repository.query.Query;
 import org.joda.time.DateTime;
 
-public class BinaryEntityRepository extends Repository<BinaryEntity> {
+public class BinaryEntityRepository extends AbstractRepository<BinaryEntity> {
 
 	private static final String DATE_PATH_PATTERN = new StringBuilder()
 			.append("yyyy")

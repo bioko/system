@@ -28,6 +28,8 @@
 package org.biokoframework.system.repository.core.query;
 
 import org.biokoframework.utils.domain.DomainEntity;
+import org.biokoframework.utils.repository.query.Constraint;
+import org.biokoframework.utils.repository.query.Query;
 
 public abstract class AbstractConstraint<DE extends DomainEntity> implements Constraint<DE> {
 

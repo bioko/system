@@ -32,21 +32,20 @@ import java.util.Map;
 
 import org.biokoframework.system.KILL_ME.XSystem;
 import org.biokoframework.system.KILL_ME.XSystemIdentityCard;
-import org.biokoframework.system.KILL_ME.exception.SystemException;
 import org.biokoframework.system.command.AbstractCommandHandler;
 import org.biokoframework.system.command.AbstractFilter;
 import org.biokoframework.system.command.ProxyCommandHandler;
 import org.biokoframework.system.context.Context;
 import org.biokoframework.system.context.ProxyContext;
-import org.biokoframework.system.service.context.AbstractContextFactory;
 import org.biokoframework.system.service.context.ContextFactory;
 import org.biokoframework.system.service.cron.annotation.AnnotatedSystemCronServiceInitializer;
 import org.biokoframework.system.service.validation.AbstractValidator;
+import org.biokoframework.utils.exception.BiokoException;
 import org.biokoframework.utils.validator.ValidatorRule;
 
 public class AnnotatedSystemFactory {
 
-	public static XSystem createSystem(XSystemIdentityCard identityCard, ContextFactory _systemContextFactory, Class<?> annotatedSystemCommands) throws IllegalArgumentException, IllegalAccessException, InstantiationException, ClassNotFoundException, SystemException {
+	public static XSystem createSystem(XSystemIdentityCard identityCard, ContextFactory _systemContextFactory, Class<?> annotatedSystemCommands) throws IllegalArgumentException, IllegalAccessException, InstantiationException, ClassNotFoundException, BiokoException {
 		
 		Context context = _systemContextFactory.create(identityCard);
 		context.put(Context.COMMANDS_CLASS, annotatedSystemCommands);

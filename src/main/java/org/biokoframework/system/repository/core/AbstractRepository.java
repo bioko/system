@@ -30,36 +30,41 @@ package org.biokoframework.system.repository.core;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.biokoframework.system.command.ValidationException;
-import org.biokoframework.system.repository.core.query.Query;
 import org.biokoframework.utils.domain.DomainEntity;
+import org.biokoframework.utils.exception.ValidationException;
 import org.biokoframework.utils.fields.Fields;
+import org.biokoframework.utils.repository.Repository;
+import org.biokoframework.utils.repository.RepositoryException;
+import org.biokoframework.utils.repository.query.Query;
 
-public abstract class Repository<T extends DomainEntity> {
+public abstract class AbstractRepository<T extends DomainEntity> implements Repository<T> {
 
+	@Override
 	public abstract T save(T anEntity) throws ValidationException, RepositoryException;
 
+	@Override
 	public abstract T delete(String anEntityKey);
 
+	@Override
 	public abstract T retrieve(String anEntityKey);
 
+	@Override
 	public abstract T retrieveByForeignKey(String foreignKeyName, String foreignKeyValue);
 	
 //	public abstract T retrieveByForeignKey(String foreignKeyName, String foreignKeyValue, boolean ignoreCase);
 
+	@Override
 	public abstract ArrayList<T> getEntitiesByForeignKey(String foreignKeyName, String foreignKeyValue);
 	
 //	public abstract ArrayList<T> getEntitiesByForeignKey(String foreignKeyName, String foreignKeyValue, boolean ignoreCase);
 
-	@Deprecated
-	public final boolean contains(T anEntity) {
-		return false;
-	}
-
+	@Override
 	public abstract String report();
 
+	@Override
 	public abstract ArrayList<T> getAll();
 
+	@Override
 	public List<T> call(DomainEntity aDomainEntity, String aMethod) throws ValidationException, RepositoryException {
 		T repoEntity = (T) aDomainEntity;
 		
@@ -95,6 +100,7 @@ public abstract class Repository<T extends DomainEntity> {
 		return result;
 	}
 
+	@Override
 	public abstract T retrieve(T anEntityT);
 	
 	// TODO togliere quando Mattia farà il query builder,
@@ -110,6 +116,8 @@ public abstract class Repository<T extends DomainEntity> {
 		
 		return foundKey;
 	}
+
+	@Override
 	public abstract Query<T> createQuery();
 
 }

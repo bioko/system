@@ -33,12 +33,12 @@ import static org.junit.Assert.assertThat;
 
 import java.util.List;
 
-import org.biokoframework.system.command.ValidationException;
-import org.biokoframework.system.repository.core.Repository;
-import org.biokoframework.system.repository.core.RepositoryException;
 import org.biokoframework.system.repository.memory.InMemoryRepository;
 import org.biokoframework.system.repository.memory.dummy1.ASDummyEntity1;
 import org.biokoframework.system.repository.memory.dummy1.ASDummyEntity1Builder;
+import org.biokoframework.utils.exception.ValidationException;
+import org.biokoframework.utils.repository.Repository;
+import org.biokoframework.utils.repository.RepositoryException;
 import org.json.simple.JSONValue;
 import org.junit.Test;
 

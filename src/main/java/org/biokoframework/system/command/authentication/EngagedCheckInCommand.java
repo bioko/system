@@ -47,12 +47,12 @@ import org.biokoframework.system.entity.authentication.AuthenticationManager;
 import org.biokoframework.system.entity.description.ParameterEntity;
 import org.biokoframework.system.entity.description.ParameterEntityBuilder;
 import org.biokoframework.system.entity.login.Login;
-import org.biokoframework.system.repository.core.Repository;
 import org.biokoframework.system.repository.core.SafeRepositoryHelper;
 import org.biokoframework.system.service.authentication.strategies.AuthenticationStrategy;
 import org.biokoframework.system.service.authentication.strategies.AuthenticationStrategyFactory;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.fields.Fields;
+import org.biokoframework.utils.repository.Repository;
 
 
 public class EngagedCheckInCommand extends Command {

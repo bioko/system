@@ -31,7 +31,7 @@ import java.io.File;
 
 import org.apache.commons.io.FileUtils;
 import org.biokoframework.system.entity.binary.BinaryEntity;
-import org.biokoframework.system.repository.core.Repository;
+import org.biokoframework.utils.repository.Repository;
 
 public class BinaryEntityRepositoryFactory {
 

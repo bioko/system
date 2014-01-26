@@ -32,6 +32,7 @@ import java.util.List;
 import org.biokoframework.system.command.CommandException;
 import org.biokoframework.system.context.Context;
 import org.biokoframework.utils.domain.DomainEntity;
+import org.biokoframework.utils.repository.Repository;
 
 public class SafeRepositoryHelper {
 	
