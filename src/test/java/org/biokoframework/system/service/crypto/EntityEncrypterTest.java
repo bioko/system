@@ -37,7 +37,6 @@ import static org.junit.Assert.assertThat;
 import org.apache.commons.lang3.StringUtils;
 import org.biokoframework.system.entity.login.Login;
 import org.biokoframework.system.entity.login.LoginBuilder;
-import org.biokoframework.system.service.crypto.EntityEncryptor;
 import org.biokoframework.utils.fields.Fields;
 import org.junit.Test;
 import org.springframework.security.crypto.bcrypt.BCrypt;

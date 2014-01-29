@@ -40,8 +40,6 @@ import org.biokoframework.system.context.Context;
 import org.biokoframework.system.context.ProxyContext;
 import org.biokoframework.system.entity.login.Login;
 import org.biokoframework.system.factory.AnnotatedCommandHandlerFactory;
-import org.biokoframework.system.service.description.JsonEntityDescription;
-import org.biokoframework.system.service.description.JsonSystemDescriptor;
 import org.biokoframework.system.service.description.dummy.DummyContextFactory;
 import org.biokoframework.system.service.description.dummy.DummyEntityWithLocation;
 import org.biokoframework.system.service.description.dummy.DummyReferencingEntity;

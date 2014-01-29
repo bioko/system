@@ -32,7 +32,6 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 import org.biokoframework.system.ConfigurationEnum;
-import org.biokoframework.system.service.currenttime.CurrentTimeService;
 import org.biokoframework.system.service.currenttime.impl.TestCurrentTimeService;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;

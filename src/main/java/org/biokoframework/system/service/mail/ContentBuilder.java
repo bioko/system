@@ -27,9 +27,6 @@
 
 package org.biokoframework.system.service.mail;
 
-import freemarker.template.Configuration;
-import freemarker.template.TemplateException;
-
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -38,6 +35,9 @@ import java.util.Map;
 import org.biokoframework.system.command.CommandException;
 import org.biokoframework.system.entity.template.Template;
 import org.biokoframework.system.exceptions.CommandExceptionsFactory;
+
+import freemarker.template.Configuration;
+import freemarker.template.TemplateException;
 
 public class ContentBuilder {
 

@@ -33,7 +33,6 @@ import static org.junit.Assert.assertThat;
 
 import java.util.List;
 
-import org.biokoframework.system.repository.memory.InMemoryRepository;
 import org.biokoframework.system.repository.memory.dummy1.ASDummyEntity1;
 import org.biokoframework.system.repository.memory.dummy1.ASDummyEntity1Builder;
 import org.biokoframework.utils.exception.ValidationException;

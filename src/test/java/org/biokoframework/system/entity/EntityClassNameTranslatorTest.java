@@ -29,7 +29,6 @@ package org.biokoframework.system.entity;
 
 import static org.junit.Assert.assertEquals;
 
-import org.biokoframework.system.entity.EntityClassNameTranslator;
 import org.junit.Test;
 
 public class EntityClassNameTranslatorTest {

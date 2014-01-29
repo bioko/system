@@ -32,7 +32,6 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 
 import org.biokoframework.system.ConfigurationEnum;
-import org.biokoframework.system.service.random.RandomGeneratorService;
 import org.biokoframework.system.service.random.impl.TestRandomGeneratorService;
 import org.junit.Test;
 

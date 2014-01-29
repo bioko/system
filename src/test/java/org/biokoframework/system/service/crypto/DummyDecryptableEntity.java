@@ -27,7 +27,6 @@
 
 package org.biokoframework.system.service.crypto;
 
-import org.biokoframework.system.service.crypto.EntityEncryptor;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.domain.annotation.field.Field;
 import org.biokoframework.utils.domain.annotation.hint.Hint;

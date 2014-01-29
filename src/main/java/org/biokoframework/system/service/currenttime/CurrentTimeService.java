@@ -28,7 +28,6 @@
 package org.biokoframework.system.service.currenttime;
 
 import org.biokoframework.system.ConfigurationEnum;
-import org.biokoframework.system.service.currenttime.CurrentTimeServiceImplementation;
 import org.biokoframework.system.service.currenttime.impl.ProdCurrentTimeService;
 import org.biokoframework.system.service.currenttime.impl.TestCurrentTimeService;
 import org.joda.time.DateTime;

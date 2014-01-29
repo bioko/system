@@ -28,7 +28,6 @@
 package org.biokoframework.system.service.random;
 
 import org.biokoframework.system.ConfigurationEnum;
-import org.biokoframework.system.service.random.RandomGeneratorServiceImplementation;
 import org.biokoframework.system.service.random.impl.ProdRandomGeneratorService;
 import org.biokoframework.system.service.random.impl.TestRandomGeneratorService;
 
