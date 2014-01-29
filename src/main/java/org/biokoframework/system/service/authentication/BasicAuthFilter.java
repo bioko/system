@@ -73,7 +73,7 @@ public class BasicAuthFilter extends AbstractFilter {
 			return;
 		}
 		
-		String encodedAuthentication = input.stringNamed(GenericFieldNames.BASIC_AUTHENTICATION);
+		String encodedAuthentication = input.get(GenericFieldNames.BASIC_AUTHENTICATION);
 		String decodedString = new String(Base64.decodeBase64(encodedAuthentication.substring(BASIC_AUTH_START.length())));
 
 		String userName = decodedString.replaceFirst(":.*", "");
@@ -87,7 +87,7 @@ public class BasicAuthFilter extends AbstractFilter {
 		} else {
 			
 			if (!_commandRoles.isEmpty()) {
-				String userRolesAsString = StringUtils.defaultString(login.get(Login.ROLES));
+				String userRolesAsString = StringUtils.defaultString(login.get(Login.ROLES).toString());
 				
 				LinkedList<String> userRoles = new LinkedList<String>(Arrays.asList(userRolesAsString.split(GenericConstants.USER_ROLE_SEPARATOR)));
 				userRoles.retainAll(_commandRoles);

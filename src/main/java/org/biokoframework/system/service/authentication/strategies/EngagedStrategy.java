@@ -52,8 +52,8 @@ public class EngagedStrategy implements AuthenticationStrategy {
 	public Fields authenticate(Context context, Fields input, boolean failSilently) throws CommandException {
 		Repository<Login> loginRepository = context.getRepository(GenericRepositoryNames.LOGIN_REPOSITORY);
 		
-		String userName = input.stringNamed(GenericFieldNames.USER_EMAIL);
-		String password = input.stringNamed(GenericFieldNames.PASSWORD);
+		String userName = input.get(GenericFieldNames.USER_EMAIL);
+		String password = input.get(GenericFieldNames.PASSWORD);
 		
 		// TODO transform into query: "SELECT * FROM Login where userEmail = ? and password = ?;
 		Login login = loginRepository.retrieveByForeignKey(GenericFieldNames.USER_EMAIL, userName);

@@ -66,7 +66,7 @@ public class AnnotatedEntityDissolver implements EntityDissolver {
 				String anEntityFieldName = it.next();
 				
 				Class<? extends DomainEntity> entityClass = _entityClasses.get(EntityClassNameTranslator.fromFieldName(anEntityFieldName));
-				Object object = fields.objectNamed(anEntityFieldName);
+				Object object = fields.get(anEntityFieldName);
 				if (object instanceof Map) {
 					Fields entityFields = Fields.fromMap((Map<String, Object>) object);
 					DomainEntity entity;
@@ -138,7 +138,7 @@ public class AnnotatedEntityDissolver implements EntityDissolver {
 	private List<String> getEntityNames(Fields fields) {
 		List<String> entityNames = new LinkedList<String>();
 		for (String aKey : fields.keys()) {
-			if (containsEntity(fields.valueFor(aKey))) {
+			if (containsEntity(fields.get(aKey))) {
 				entityNames.add(aKey);
 			}
 		}

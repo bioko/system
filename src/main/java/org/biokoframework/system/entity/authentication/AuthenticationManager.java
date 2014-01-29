@@ -50,7 +50,7 @@ public class AuthenticationManager {
 	}
 	
 	public static boolean isExpired(Authentication authentication) {
-		long expireTimeSecs = Long.parseLong(authentication.get(GenericFieldNames.AUTH_TOKEN_EXPIRE));
+		long expireTimeSecs = Long.parseLong(authentication.get(GenericFieldNames.AUTH_TOKEN_EXPIRE).toString());
 		long nowSecs = System.currentTimeMillis() / 1000;
 		return nowSecs < expireTimeSecs;
 	}

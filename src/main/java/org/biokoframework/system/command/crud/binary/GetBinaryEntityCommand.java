@@ -63,7 +63,7 @@ public class GetBinaryEntityCommand extends Command {
 		Logger logger = _context.get(Context.LOGGER);
 		
 		try {
-			logger.info("INPUT: " + input.asJson());
+			logger.info("INPUT: " + input.toJSONString());
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -71,7 +71,7 @@ public class GetBinaryEntityCommand extends Command {
 		
 		ArrayList<BinaryEntity> response = new ArrayList<BinaryEntity>();
 		
-		String blobId = input.stringNamed(DomainEntity.ID);
+		String blobId = input.get(DomainEntity.ID);
 		if (blobId == null || blobId.isEmpty()) {
 			throw CommandExceptionsFactory.createExpectedFieldNotFound(DomainEntity.ID);
 		}
@@ -85,7 +85,7 @@ public class GetBinaryEntityCommand extends Command {
 		result.put(GenericFieldNames.RESPONSE_CONTENT_TYPE, blob.get(BinaryEntity.MEDIA_TYPE));
 		
 		result.put(GenericFieldNames.RESPONSE, response);
-		logger.info("OUTPUT after execution: " + result.asString());
+		logger.info("OUTPUT after execution: " + result.toString());
 		logger.info("END CRUD Command:" + this.getClass().getSimpleName());
 		return result;
 	}

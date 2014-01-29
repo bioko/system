@@ -90,7 +90,7 @@ public class BinaryEntityRepository extends AbstractRepository<BinaryEntity> {
 		BinaryEntity aBlob = _supportRepository.delete(aBlobId);
 		if (aBlob != null) {
 			try {
-				File file = new File(aBlob.get(BinaryEntity.PATH));
+				File file = new File(aBlob.get(BinaryEntity.PATH).toString());
 				aBlob.setStream(new FileInputStream(file));
 				file.delete();
 				aBlob.fields().remove(BinaryEntity.PATH);
@@ -109,7 +109,7 @@ public class BinaryEntityRepository extends AbstractRepository<BinaryEntity> {
 		if (aBlob != null) {
 			returnBlob = new BinaryEntity(aBlob.fields().copy());
 			try {
-				returnBlob.setStream(new FileInputStream(aBlob.get(BinaryEntity.PATH)));
+				returnBlob.setStream(new FileInputStream(aBlob.get(BinaryEntity.PATH).toString()));
 			} catch (IOException exception) {
 				Loggers.engagedServer.error("Save blob file", exception);
 				return null;
@@ -177,7 +177,7 @@ public class BinaryEntityRepository extends AbstractRepository<BinaryEntity> {
 	}
 
 	private void updateFile(BinaryEntity blob) throws IOException {
-		File file = new File(blob.get(BinaryEntity.PATH));
+		File file = new File(blob.get(BinaryEntity.PATH).toString());
 		FileOutputStream fileOutputStream = new FileOutputStream(file);
 
 		IOUtils.copy(blob.getStream(), fileOutputStream);

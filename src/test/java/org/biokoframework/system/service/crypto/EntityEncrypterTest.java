@@ -62,8 +62,8 @@ public class EntityEncrypterTest {
 		
 		assertThat(encryptedLogin.get(Login.PASSWORD), is(not(equalTo(login.get(Login.PASSWORD)))));
 		
-		assertThat(BCrypt.checkpw(login.get(Login.PASSWORD), encryptedLogin.get(Login.PASSWORD)), is(true));
-		assertThat(BCrypt.checkpw("A wrong password", encryptedLogin.get(Login.PASSWORD)), is(false));
+		assertThat(BCrypt.checkpw(login.get(Login.PASSWORD).toString(), encryptedLogin.get(Login.PASSWORD).toString()), is(true));
+		assertThat(BCrypt.checkpw("A wrong password", encryptedLogin.get(Login.PASSWORD).toString()), is(false));
 	}
 	
 	@Test
@@ -93,7 +93,7 @@ public class EntityEncrypterTest {
 		
 		for (String aFieldName : plainEntity.fields().keys()) {
 			if (!aFieldName.equals(DummyDecryptableEntity.A_TWO_WAY_ENCRYPTED_FIELD)) {
-				StringUtils.equals(plainEntity.get(aFieldName), encryptedEntity.get(aFieldName));
+				StringUtils.equals(plainEntity.get(aFieldName).toString(), encryptedEntity.get(aFieldName).toString());
 			}
 		}
 		

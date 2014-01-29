@@ -58,18 +58,18 @@ public class ResolvableCommand extends Command {
 	@Override
 	public Fields execute(Fields input) throws CommandException {
 		Loggers.xsystem.info("EXECUTING Command:" + this.getClass().getSimpleName());	
-		Loggers.xsystem.info("INPUT: " + input.asString());
+		Loggers.xsystem.info("INPUT: " + input.toString());
 		
 		boolean doResolve = false;
 		if (input.contains(GenericFieldNames.RESOLVE_ENTITIES)) {
-			doResolve = Boolean.parseBoolean(input.stringNamed(GenericFieldNames.RESOLVE_ENTITIES));
+			doResolve = Boolean.parseBoolean(input.get(GenericFieldNames.RESOLVE_ENTITIES).toString());
 		}
 		
 		Fields unresolvedResult = _baseCommand.execute(input);
 		
 		Fields result;
 		if (doResolve) {
-			ArrayList<DomainEntity> entities = unresolvedResult.valueFor(GenericFieldNames.RESPONSE, ArrayList.class);
+			ArrayList<DomainEntity> entities = unresolvedResult.get(GenericFieldNames.RESPONSE);
 			ArrayList<DomainEntity> resolvedEntities = new ArrayList<DomainEntity>();
 			
 			try {
@@ -86,7 +86,7 @@ public class ResolvableCommand extends Command {
 			result = unresolvedResult;
 		}
 		
-		Loggers.xsystem.info("OUTPUT after execution: " + result.asString());
+		Loggers.xsystem.info("OUTPUT after execution: " + result.toString());
 		Loggers.xsystem.info("END Command:" + this.getClass().getSimpleName());	
 		return result;
 	}
@@ -115,7 +115,7 @@ public class ResolvableCommand extends Command {
 		parameter.set(ParameterEntity.NAME, GenericFieldNames.RESOLVE_ENTITIES);
 		parameter.set(ParameterEntity.HTTP_PARAMETER_TYPE, GenericFieldValues.QUERY_STRING);
 		
-		ArrayList<ParameterEntity> inputs = (ArrayList<ParameterEntity>) componingInputKeys.valueFor(GenericFieldNames.INPUT);
+		ArrayList<ParameterEntity> inputs = componingInputKeys.get(GenericFieldNames.INPUT);
 		inputs.add(parameter);
 		
 		componingInputKeys.put(GenericFieldNames.INPUT, inputs);

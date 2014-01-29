@@ -64,12 +64,12 @@ public class CrudCommand<T extends DomainEntity> extends SetCommand {
 	@Override
 	public Fields execute(Fields input) throws CommandException {
 		Fields result = Fields.empty();
-		CrudMethod crudMethod = CrudMethod.fromRestCommand(input.stringNamed(FieldNames.COMMAND_NAME));
+		CrudMethod crudMethod = CrudMethod.fromRestCommand(input.get(FieldNames.COMMAND_NAME).toString());
 
 		Logger logger = _context.get(Context.LOGGER);
 		
 		try {
-			logger.info("INPUT: " + input.asJson());
+			logger.info("INPUT: " + input.toJSONString());
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -98,7 +98,7 @@ public class CrudCommand<T extends DomainEntity> extends SetCommand {
 			}
 			result.putAll(input);
 		}
-		logger.info("OUTPUT after execution: " + result.asString());
+		logger.info("OUTPUT after execution: " + result.toString());
 		logger.info("END CRUD Command:" + this.getClass().getSimpleName());
 		return result;
 	}

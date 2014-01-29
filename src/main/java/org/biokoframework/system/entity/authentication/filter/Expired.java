@@ -41,7 +41,7 @@ public class Expired implements Filter<Authentication> {
 	
 	@Override
 	public boolean allows(Authentication entity) {
-		long expiration = Long.parseLong(entity.get(GenericFieldNames.AUTH_TOKEN_EXPIRE));
+		long expiration = Long.parseLong(entity.get(GenericFieldNames.AUTH_TOKEN_EXPIRE).toString());
 		return _now > expiration ;
 	}
 	

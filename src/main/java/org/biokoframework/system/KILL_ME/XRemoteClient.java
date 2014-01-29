@@ -66,9 +66,9 @@ public class XRemoteClient {
 	
 	public Fields invokeServer(Fields input) {
 		try {
-			_logger.info("Invoking XRemoteServer - input: " + input.asString());
+			_logger.info("Invoking XRemoteServer - input: " + input.toString());
 			Fields output = _server.execute(input);
-			_logger.info("Invoking XRemoteServer - output: " + output.asString());
+			_logger.info("Invoking XRemoteServer - output: " + output.toString());
 			return output;
 		} catch (RemoteException e) {
 			_logger.error("Exception occurred: " + StackTracePrinter.print(e));

@@ -62,7 +62,7 @@ public class MultipleCommandPlusPlus extends Command {
 	public final Fields execute(Fields input) throws CommandException {
 		Loggers.xsystem.info("EXECUTING Multiple Command");
 		Loggers.xsystem.info("STEPS: " + _steps.size());
-		Loggers.xsystem.info("INPUT: " + input.asString());
+		Loggers.xsystem.info("INPUT: " + input.toString());
 		
 		if (_commandHandler==null)
 			_commandHandler = _context.getCommandHandler();
@@ -81,7 +81,7 @@ public class MultipleCommandPlusPlus extends Command {
 				stepInput.put(FieldNames.COMMAND_NAME, aStep.getValue());
 				Fields stepOutput = stepCommand.execute(stepInput);
 				
-				Collection<?> stepResponse = (Collection<?>) stepOutput.valueFor(GenericFieldNames.RESPONSE);
+				Collection<?> stepResponse = stepOutput.get(GenericFieldNames.RESPONSE);
 				prepareNextStepInput(aStep.getKey(), stepOutput, stepInput);
 				
 				if (stepResponse!=null)
@@ -91,7 +91,7 @@ public class MultipleCommandPlusPlus extends Command {
 		
 		postProcessingCleanUp(response, result);
 		
-		Loggers.xsystem.info("MultipleCommand output: " + result.asString());
+		Loggers.xsystem.info("MultipleCommand output: " + result.toString());
 		Loggers.xsystem.info("END MultipleCommand");
 		return result;
 	}

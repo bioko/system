@@ -47,18 +47,18 @@ public class SendMailCommand extends Command {
 	public Fields execute(Fields input) throws CommandException {
 		logInput(input);
 
-		Queue mailQueue = _context.get(input.stringNamed(GenericFieldNames.QUEUE_NAME));
+		Queue mailQueue = _context.get(input.get(GenericFieldNames.QUEUE_NAME).toString());
 		
 		Fields mailFields;
 		while((mailFields = mailQueue.popFields()) != null) {
 			EmailFiller filler = new EmailFiller();
 			
-			String mailAddress = mailFields.stringNamed(TO);
+			String mailAddress = mailFields.get(TO);
 			filler.addTo(mailAddress);
-			filler.setFrom(mailFields.stringNamed(FROM));
-			String content = mailFields.stringNamed(CONTENT);
+			filler.setFrom(mailFields.get(FROM).toString());
+			String content = mailFields.get(CONTENT);
 			filler.setContent(content);
-			filler.setSubject(mailFields.stringNamed(SUBJECT));
+			filler.setSubject(mailFields.get(SUBJECT).toString());
 			
 			EmailServiceImplementation dispatcher = EmailServiceImplementation.mailServer();
 			MimeMessage message = dispatcher.newMessage();

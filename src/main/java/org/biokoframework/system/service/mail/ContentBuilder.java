@@ -50,11 +50,11 @@ public class ContentBuilder {
 	}
 
 	public String buildBody() throws CommandException {
-		return build(_template.get(Template.BODY));
+		return build(_template.get(Template.BODY).toString());
 	}
 	
 	public String buildTitle() throws CommandException {
-		return build(_template.get(Template.TITLE));
+		return build(_template.get(Template.TITLE).toString());
 	}
 
 	private String build(String template) throws CommandException {

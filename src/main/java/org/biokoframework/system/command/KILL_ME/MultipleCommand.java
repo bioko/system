@@ -65,7 +65,7 @@ public class MultipleCommand extends Command {
 			input.putAll(output);
 
 		}
-		Loggers.xsystem.info("MultipleCommand output: " + overAllOutput.asString());
+		Loggers.xsystem.info("MultipleCommand output: " + overAllOutput.toString());
 		Loggers.xsystem.info("End MultipleCommand: " + this.getClass().getSimpleName());
 		return overAllOutput;
 	}

@@ -72,9 +72,9 @@ public class AuthFilter extends AbstractFilter {
 		
 		Fields authenticationFields = strategy.authenticate(_context, input, !_checkAuth);
 		if (authenticationFields != null) {
-			Login login = (Login) authenticationFields.objectNamed(Login.class.getSimpleName());
+			Login login = authenticationFields.get(Login.class.getSimpleName());
 			if (!_commandRoles.isEmpty()) {
-				String userRolesAsString = StringUtils.defaultString(login.get(Login.ROLES));
+				String userRolesAsString = StringUtils.defaultString(login.get(Login.ROLES).toString());
 
 				LinkedList<String> userRoles = new LinkedList<String>(Arrays.asList(userRolesAsString.split(GenericConstants.USER_ROLE_SEPARATOR)));
 				userRoles.retainAll(_commandRoles);
@@ -84,7 +84,7 @@ public class AuthFilter extends AbstractFilter {
 			}
 			input.put(GenericFieldNames.AUTH_LOGIN_ID, login.getId());
 			
-			_outputFields = (Fields) authenticationFields.objectNamed(AuthenticationStrategy.OUTPUT_FIELDS);
+			_outputFields = authenticationFields.get(AuthenticationStrategy.OUTPUT_FIELDS);
 		}
 	}
 

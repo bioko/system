@@ -99,7 +99,7 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 			int i = 1;
 			for (Entry<String, Field> anEntry : _fieldNames.entrySet()) {
 				String aFieldName = anEntry.getKey();			
-				_translator.insertIntoStatement(aFieldName, entity.get(aFieldName), anEntry.getValue(), insertStatement, i);				
+				_translator.insertIntoStatement(aFieldName, entity.get(aFieldName).toString(), anEntry.getValue(), insertStatement, i);				
 				i++;
 			}
 			insertStatement.execute();
@@ -129,7 +129,7 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 			int i = 1;
 			for (Entry<String, Field> anEntry : _fieldNames.entrySet()) {
 				String aFieldName = anEntry.getKey();
-				_translator.insertIntoStatement(aFieldName, entity.get(aFieldName), anEntry.getValue(), updateStatement, i);
+				_translator.insertIntoStatement(aFieldName, entity.get(aFieldName).toString(), anEntry.getValue(), updateStatement, i);
 				i++;
 			}
 			updateStatement.setString(_fieldNames.size() + 1, entity.getId());

@@ -56,9 +56,9 @@ public class TokenAuthStrategy implements AuthenticationStrategy {
 		Repository<Authentication> authRepo = context.getRepository(GenericRepositoryNames.AUTHENTICATION_REPOSITORY);
 		Fields authFields = Fields.empty();
 
-		String token = input.stringNamed(GenericFieldNames.AUTH_TOKEN);
+		String token = input.get(GenericFieldNames.AUTH_TOKEN);
 		if (StringUtils.isEmpty(token)) {
-			token = input.stringNamed(GenericFieldNames.TOKEN_HEADER);
+			token = input.get(GenericFieldNames.TOKEN_HEADER);
 		}
 		
 		Authentication auth = authRepo.retrieveByForeignKey(Authentication.TOKEN, token);
@@ -75,7 +75,7 @@ public class TokenAuthStrategy implements AuthenticationStrategy {
 			AuthenticationManager.renewAuthentication(context, auth);
 			SafeRepositoryHelper.save(authRepo, auth, context);
 			
-			Login login = loginRepo.retrieve(auth.get(Authentication.LOGIN_ID));
+			Login login = loginRepo.retrieve(auth.get(Authentication.LOGIN_ID).toString());
 			
 			Fields outputFields = Fields.empty();
 			outputFields.put(GenericFieldNames.TOKEN_HEADER, token);

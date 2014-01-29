@@ -64,16 +64,14 @@ public class UniqueCheckerCommand<T extends DomainEntity> extends Command {
 	@Override
 	public Fields execute(Fields input) throws CommandException {
 		Loggers.xsystem.info("EXECUTING Command:" + this.getClass().getSimpleName());
-		Loggers.xsystem.info("INPUT: " + input.asString());
+		Loggers.xsystem.info("INPUT: " + input.toString());
 		
 		validate(input);
 		
-		String value = input.stringNamed(_key);
+		String value = input.get(_key);
 		if (value == null) {
 			
-			@SuppressWarnings("unchecked")
-			HashMap<String, Object> entityMap = (HashMap<String, Object>) 
-					input.valueFor(EntityClassNameTranslator.toFieldName(_entityClass.getSimpleName()));
+			HashMap<String, Object> entityMap = input.get(EntityClassNameTranslator.toFieldName(_entityClass.getSimpleName()));
 			
 			value = (String) entityMap.get(_key);
 		}
@@ -88,17 +86,15 @@ public class UniqueCheckerCommand<T extends DomainEntity> extends Command {
 		result.put(GenericFieldNames.RESPONSE, new ArrayList<DomainEntity>());
 		result.putAll(input);
 		
-		Loggers.xsystem.info("OUTPUT after execution: " + result.asString());
+		Loggers.xsystem.info("OUTPUT after execution: " + result.toString());
 		Loggers.xsystem.info("END Command:" + this.getClass().getSimpleName());
 		return result;
 	}
 
 	private void validate(Fields input) throws CommandException {
-		if (input.valueFor(EntityClassNameTranslator.toFieldName(_entityClass.getSimpleName())) != null) {
+		if (input.get(EntityClassNameTranslator.toFieldName(_entityClass.getSimpleName())) != null) {
 			
-			@SuppressWarnings("unchecked")
-			HashMap<String, Object> entityMap = (HashMap<String, Object>) 
-					input.valueFor(EntityClassNameTranslator.toFieldName(_entityClass.getSimpleName()));
+			HashMap<String, Object> entityMap = input.get(EntityClassNameTranslator.toFieldName(_entityClass.getSimpleName()));
 			
 			if (entityMap.get(_key) == null) {
 				throw CommandExceptionsFactory.createExpectedFieldNotFound(_key);

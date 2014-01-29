@@ -87,7 +87,7 @@ public abstract class AbstractRepository<T extends DomainEntity> implements Repo
 				if (filledFieldKey==null) {
 					result = getAll();
 				} else {
-					result = getEntitiesByForeignKey(filledFieldKey, repoEntity.get(filledFieldKey));
+					result = getEntitiesByForeignKey(filledFieldKey, repoEntity.get(filledFieldKey).toString());
 				}
 				
 //				result = getAll();

@@ -85,7 +85,7 @@ public class RequestPasswordResetCommand extends Command {
 	public Fields execute(Fields input) throws CommandException {
 		logInput(input);
 		
-		String userEmail = input.stringNamed(Login.USER_EMAIL);
+		String userEmail = input.get(Login.USER_EMAIL);
 		Login login = _loginRepo.retrieveByForeignKey(Login.USER_EMAIL, userEmail);
 		if (login == null) {
 			throw CommandExceptionsFactory.createEntityNotFound(Login.class.getSimpleName(), Login.USER_EMAIL, userEmail);
@@ -111,7 +111,7 @@ public class RequestPasswordResetCommand extends Command {
 			ContentBuilder contentBuilder = new ContentBuilder(mailTemplate, contentMap);
 			
 			EmailFiller filler = new EmailFiller();
-			filler.addTo(login.get(Login.USER_EMAIL));
+			filler.addTo(login.get(Login.USER_EMAIL).toString());
 			filler.setFrom("no-reply@engaged.it");
 			filler.setContent(contentBuilder.buildBody());
 			filler.setSubject(contentBuilder.buildTitle());

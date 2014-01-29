@@ -60,13 +60,13 @@ public class SendPushCommand extends Command {
 	public Fields execute(Fields input) throws CommandException {
 		logInput(input);
 
-		Queue pushQueue = _context.get(input.stringNamed(GenericFieldNames.QUEUE_NAME));
+		Queue pushQueue = _context.get(input.get(GenericFieldNames.QUEUE_NAME).toString());
 		
 		Fields pushFields;
 		while((pushFields = pushQueue.popFields()) != null) {
-			String userToken = pushFields.stringNamed(PushService.USER_TOKEN);
-			String content = pushFields.stringNamed(GenericFieldNames.CONTENT);
-			String production = pushFields.stringNamed(PushService.PRODUCTION);
+			String userToken = pushFields.get(PushService.USER_TOKEN);
+			String content = pushFields.get(GenericFieldNames.CONTENT);
+			String production = pushFields.get(PushService.PRODUCTION);
 
 			try {
 				if (StringUtils.isEmpty(userToken)) {

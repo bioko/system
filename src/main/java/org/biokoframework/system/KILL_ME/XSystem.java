@@ -82,10 +82,10 @@ public class XSystem {
 
 	public Fields execute(Fields input) throws SystemException {
 		Fields output = Fields.empty();
-		String commandName = (String)input.stringNamed(FieldNames.COMMAND_NAME);
+		String commandName = input.get(FieldNames.COMMAND_NAME);
 		try {
 			_logger.info("----- Executing Command: " + commandName + " -----");
-			_logger.info("Command input: " + input.asString());
+			_logger.info("Command input: " + input.toString());
 			Command command = _commandHandler.getByName(commandName);
 			if (command == null) {
 				Fields fields = Fields.single(ErrorEntity.ERROR_MESSAGE, "Command " + commandName + " not found.");
@@ -145,7 +145,7 @@ public class XSystem {
 			_logger.error("Generic exception",exception);
 			throw new CommandException(exception);
 		}
-		_logger.info("Command output: " + output.asString());
+		_logger.info("Command output: " + output.toString());
 		_logger.info("----- Command execution finished -----");
 		return output;
 	}

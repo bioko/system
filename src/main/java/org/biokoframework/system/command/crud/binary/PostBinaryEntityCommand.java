@@ -62,7 +62,7 @@ public class PostBinaryEntityCommand extends Command {
 		Logger logger = _context.get(Context.LOGGER);
 		
 		try {
-			logger.info("INPUT: " + input.asJson());
+			logger.info("INPUT: " + input.toJSONString());
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -70,7 +70,7 @@ public class PostBinaryEntityCommand extends Command {
 		
 		ArrayList<BinaryEntity> response = new ArrayList<BinaryEntity>();
 		
-		BinaryEntity blob = (BinaryEntity) input.objectNamed(_blobFieldName);
+		BinaryEntity blob = input.get(_blobFieldName);
 
 		if (!blob.isValid()) {
 			throw CommandExceptionsFactory.createNotCompleteEntity(blob.getClass().getSimpleName());
@@ -83,7 +83,7 @@ public class PostBinaryEntityCommand extends Command {
 		response.add(blob);
 		
 		result.put(GenericFieldNames.RESPONSE, response);
-		logger.info("OUTPUT after execution: " + result.asString());
+		logger.info("OUTPUT after execution: " + result.toString());
 		logger.info("END CRUD Command:" + this.getClass().getSimpleName());
 		return result;
 	}

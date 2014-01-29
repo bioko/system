@@ -56,7 +56,7 @@ public class DissolvedCommand extends Command {
 	@Override
 	public Fields execute(Fields input) throws CommandException {
 		Loggers.xsystem.info("EXECUTING Command:" + this.getClass().getSimpleName());	
-		Loggers.xsystem.info("INPUT: " + input.asString());		
+		Loggers.xsystem.info("INPUT: " + input.toString());		
 		
 		ArrayList<Object> response = new ArrayList<Object>();
 		
@@ -70,7 +70,7 @@ public class DissolvedCommand extends Command {
 		
 		Fields result = Fields.single(GenericFieldNames.RESPONSE, response);
 		
-		Loggers.xsystem.info("OUTPUT after execution: " + result.asString());
+		Loggers.xsystem.info("OUTPUT after execution: " + result.toString());
 		Loggers.xsystem.info("END Command:" + this.getClass().getSimpleName());
 		return result;
 	}

@@ -51,12 +51,12 @@ public class PrintRepositoryCommand extends Command {
 		Fields fields = Fields.successful();
 		Loggers.xsystem.info(_repository.report());
 		
-		String previousReport = input.stringNamed(GenericFieldNames.REPOSITORY_REPORT);
+		String previousReport = input.get(GenericFieldNames.REPOSITORY_REPORT);
 		fields.put(GenericFieldNames.REPOSITORY_REPORT, previousReport + _repository.report());
 		
-		Loggers.xsystem.info("INPUT" + input.asString());
+		Loggers.xsystem.info("INPUT" + input.toJSONString());
 		Fields result = fields.putAll(input);
-		Loggers.xsystem.info("RESULT" + result.asString());
+		Loggers.xsystem.info("RESULT" + result.toJSONString());
 		return result;
 	}
 	

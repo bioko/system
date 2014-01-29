@@ -58,7 +58,7 @@ public class ContextImpl extends Context {
 	@Override
 	@SuppressWarnings("unchecked")
 	public <T> T get(String name) {		
-		return (T) _contextMap.objectNamed(name);
+		return (T) _contextMap.get(name);
 	}
 	
 	@Override
@@ -68,18 +68,18 @@ public class ContextImpl extends Context {
 	
 	@Override
 	public Logger getLogger() {
-		return (Logger) _contextMap.objectNamed(LOGGER);
+		return _contextMap.get(LOGGER);
 	}
 	
 	@Override
 	public String getSystemName() {
-		return _contextMap.stringNamed(SYSTEM_NAME);
+		return _contextMap.get(SYSTEM_NAME);
 	}
 	
 	@Override
 	@SuppressWarnings("unchecked")
 	public void addRepository(String repoName, AbstractRepository<?> repo) {
-		HashMap<String, AbstractRepository<?>> repoMap = (HashMap<String, AbstractRepository<?>>) _contextMap.objectNamed(REPOSITORIES);
+		HashMap<String, AbstractRepository<?>> repoMap = _contextMap.get(REPOSITORIES);
 		repoMap.put(repoName, repo);
 	}
 	
@@ -87,7 +87,7 @@ public class ContextImpl extends Context {
 	@SuppressWarnings("unchecked")
 	public <DE extends DomainEntity> Repository<DE> getRepository(String repoName) {
 				
-		HashMap<String, AbstractRepository<?>> repoMap = (HashMap<String, AbstractRepository<?>>) _contextMap.objectNamed(REPOSITORIES);
+		HashMap<String, AbstractRepository<?>> repoMap = _contextMap.get(REPOSITORIES);
 		Repository<?> repo = repoMap.get(repoName);
 		
 		return (Repository<DE>) repo;
@@ -100,32 +100,32 @@ public class ContextImpl extends Context {
 
 	@Override
 	public AbstractCommandHandler getCommandHandler() {		
-		return (AbstractCommandHandler) _contextMap.objectNamed(COMMAND_HANDLER);
+		return _contextMap.get(COMMAND_HANDLER);
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override 
 	public void setSystemProperty(String name, String value) {
-		HashMap<String, String> properties = (HashMap<String, String>) _contextMap.objectNamed(SYSTEM_PROPERTIES);
+		HashMap<String, String> properties = _contextMap.get(SYSTEM_PROPERTIES);
 		properties.put(name, value);
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	public String getSystemProperty(String name) {
-		HashMap<String, String> properties = (HashMap<String, String>) _contextMap.objectNamed(SYSTEM_PROPERTIES);
+		HashMap<String, String> properties = _contextMap.get(SYSTEM_PROPERTIES);
 		return properties.get(name);
 	}
 	
 	@SuppressWarnings("unchecked")
 	public void addSystemListener(SystemListener listener) {
-		List<SystemListener> listeners = (List<SystemListener>) _contextMap.objectNamed(SYSTEM_LISTENERS);
+		List<SystemListener> listeners = _contextMap.get(SYSTEM_LISTENERS);
 		listeners.add(listener);
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<SystemListener> getSystemListeners() {
-		return (List<SystemListener>) _contextMap.objectNamed(SYSTEM_LISTENERS);
+		return _contextMap.get(SYSTEM_LISTENERS);
 	}
 	
 }

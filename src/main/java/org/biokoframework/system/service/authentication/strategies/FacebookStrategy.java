@@ -60,7 +60,7 @@ public class FacebookStrategy implements AuthenticationStrategy {
 	public Fields authenticate(Context context, Fields input, boolean failSilently) throws CommandException {
 		Repository<Login> loginRepository = context.getRepository(GenericRepositoryNames.LOGIN_REPOSITORY);
 		
-		String fbToken = input.stringNamed(GenericFieldNames.FACEBOOK_TOKEN);
+		String fbToken = input.get(GenericFieldNames.FACEBOOK_TOKEN);
 		String fbId = retrieveFBUser(fbToken).getId();
 		
 		Login login = loginRepository.retrieveByForeignKey(Login.FACEBOOK_ID, fbId);
@@ -87,7 +87,7 @@ public class FacebookStrategy implements AuthenticationStrategy {
 
 	@Override
 	public Login createNewLogin(Context context, Fields input) throws CommandException {
-		String fbToken = input.stringNamed(GenericFieldNames.FACEBOOK_TOKEN);
+		String fbToken = input.get(GenericFieldNames.FACEBOOK_TOKEN);
 		User fbUser = retrieveFBUser(fbToken);
 		
 		Login login = new Login(input);

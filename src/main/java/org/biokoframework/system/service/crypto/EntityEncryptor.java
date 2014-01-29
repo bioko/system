@@ -63,7 +63,7 @@ public class EntityEncryptor {
 			for (String aFieldName : plainEntity.fields().keys()) {
 				Map<String, String> fieldHints = hints.get(aFieldName);
 				if (fieldHints != null && fieldHints.containsKey(HINT)) {
-					encryptedEntity.set(aFieldName, encryptField(plainEntity.get(aFieldName), fieldHints.get(HINT)));
+					encryptedEntity.set(aFieldName, encryptField(plainEntity.get(aFieldName).toString(), fieldHints.get(HINT)));
 				} else {
 					encryptedEntity.set(aFieldName, plainEntity.get(aFieldName));
 				}
@@ -85,11 +85,11 @@ public class EntityEncryptor {
 			for (String aFieldName : allFieldNames) {
 				Map<String, String> fieldHints = hints.get(aFieldName);
 				if (fieldHints != null && fieldHints.containsKey(HINT)) {
-					if (!checkField(plainEntity.get(aFieldName), encryptedEntity.get(aFieldName), fieldHints.get(HINT))) {
+					if (!checkField(plainEntity.get(aFieldName).toString(), encryptedEntity.get(aFieldName).toString(), fieldHints.get(HINT))) {
 						return false;
 					}
 				} else {
-					if (!StringUtils.equals(plainEntity.get(aFieldName), encryptedEntity.get(aFieldName))) {
+					if (!StringUtils.equals(plainEntity.get(aFieldName).toString(), encryptedEntity.get(aFieldName).toString())) {
 						return false;
 					}
 				}
@@ -113,7 +113,7 @@ public class EntityEncryptor {
 			for (String aFieldName : encryptedEntity.fields().keys()) {
 				Map<String, String> fieldHints = hints.get(aFieldName);
 				if (fieldHints != null && StringUtils.equals(fieldHints.get(HINT), TWO_WAY_HINT)) {
-					decryptedEntity.set(aFieldName, decryptField(encryptedEntity.get(aFieldName)));
+					decryptedEntity.set(aFieldName, decryptField(encryptedEntity.get(aFieldName).toString()));
 				} else {
 					decryptedEntity.set(aFieldName, encryptedEntity.get(aFieldName));
 				}

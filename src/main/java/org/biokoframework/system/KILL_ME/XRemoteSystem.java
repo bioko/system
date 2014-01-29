@@ -62,11 +62,11 @@ public class XRemoteSystem extends UnicastRemoteObject implements XRmiServerInte
 	public Fields execute(Fields anInput) {
 		Fields output = Fields.empty();
 		try {
-			String commandName = (String)anInput.stringNamed(FieldNames.COMMAND_NAME);
+			String commandName = anInput.get(FieldNames.COMMAND_NAME);
 			Command command = _commandHandler.getByName(commandName);
-				_logger.info("EXECUTING command: " + commandName + " with INPUT " + anInput.asString());
+				_logger.info("EXECUTING command: " + commandName + " with INPUT " + anInput.toString());
 				output = command.execute(anInput);
-				_logger.info("EXECUTED command: " + commandName + " with OUTPUT " + output.asString());
+				_logger.info("EXECUTED command: " + commandName + " with OUTPUT " + output.toString());
 		} catch (Exception e) {
 			_logger.error("Exception occurred: " + StackTracePrinter.print(e));
 			anInput.putAll(Fields.failed(FieldsErrors.EMPTY_COMMAND));

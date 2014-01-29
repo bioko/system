@@ -43,7 +43,7 @@ public class EmailUniqueInLoginRepoValidator extends AbstractValidator {
 	public void validate(Fields input, List<ErrorEntity> errors) {
 
 		Repository<Login> loginRepo = _context.getRepository(GenericRepositoryNames.LOGIN_REPOSITORY);
-		String valueToTest = input.stringNamed(Login.USER_EMAIL);
+		String valueToTest = input.get(Login.USER_EMAIL);
 		List<Login> result = loginRepo.getEntitiesByForeignKey(Login.USER_EMAIL, valueToTest);
 
 		if (!result.isEmpty())

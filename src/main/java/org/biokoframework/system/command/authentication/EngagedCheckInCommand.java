@@ -69,14 +69,14 @@ public class EngagedCheckInCommand extends Command {
 	public Fields execute(Fields input) throws CommandException {
 		Logger logger = _context.get(Context.LOGGER);
 		logger.info("EXECUTING Command:" + this.getClass().getSimpleName());
-		logger.info("INPUT: " + input.asString());
+		logger.info("INPUT: " + input.toString());
 		
 		Fields result = Fields.empty();
 		List<Map<String, String>> response = new ArrayList<Map<String,String>>();
 		
 		AuthenticationStrategy authStrategy = AuthenticationStrategyFactory.retrieveCheckInStrategy(input);
 		
-		Login login = (Login) authStrategy.authenticate(_context, input, false).objectNamed(Login.class.getSimpleName());
+		Login login = (Login) authStrategy.authenticate(_context, input, false).get(Login.class.getSimpleName());
 		
 		Authentication authentication = insertNewAuthenticationFor(_context, login);
 	
@@ -87,15 +87,15 @@ public class EngagedCheckInCommand extends Command {
 		
 		map.put(GenericFieldNames.AUTH_TOKEN, token);
 		map.put(GenericFieldNames.AUTH_TOKEN_EXPIRE, tokenExpire);
-		if (!StringUtils.isEmpty(login.get(Login.ROLES))) {
-			map.put(Login.ROLES, login.get(Login.ROLES));
+		if (!StringUtils.isEmpty(login.get(Login.ROLES).toString())) {
+			map.put(Login.ROLES, login.get(Login.ROLES).toString());
 		}
 		response = Arrays.asList(map);
 		result.put(GenericFieldNames.TOKEN_HEADER, token);
 		result.put(GenericFieldNames.TOKEN_EXPIRE_HEADER, tokenExpire);
  		
 		result.put(GenericFieldNames.RESPONSE, response);
-		Loggers.xsystem.info("OUTPUT after execution: " + result.asString());
+		Loggers.xsystem.info("OUTPUT after execution: " + result.toString());
 		Loggers.xsystem.info("END Command:" + this.getClass().getSimpleName());
 		return result;
 	}

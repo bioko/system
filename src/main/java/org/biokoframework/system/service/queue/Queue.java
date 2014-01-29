@@ -57,12 +57,12 @@ public class Queue {
 		List<QueuedItem> items = _baseRepository.getAll();
 		
 		for (QueuedItem anItem : items) {
-			if (Long.parseLong(anItem.get(QueuedItem.IDX)) == tail) {
-				tail = Long.parseLong(anItem.get(QueuedItem.IDX)) + 1;
+			if (Long.parseLong(anItem.get(QueuedItem.IDX).toString()) == tail) {
+				tail = Long.parseLong(anItem.get(QueuedItem.IDX).toString()) + 1;
 			}
 			
-			if (head > Long.parseLong(anItem.get(QueuedItem.IDX))) {
-				head = Long.parseLong(anItem.get(QueuedItem.IDX));
+			if (head > Long.parseLong(anItem.get(QueuedItem.IDX).toString())) {
+				head = Long.parseLong(anItem.get(QueuedItem.IDX).toString());
 			}
 		}
 		
@@ -110,7 +110,7 @@ public class Queue {
 	
 	public void pushFields(Fields fields) {
 		try {
-			push(fields.asJson());
+			push(fields.toJSONString());
 		} catch (Exception exception) {
 			Loggers.engagedServer.error("Error pushing Fields", exception);
 		}

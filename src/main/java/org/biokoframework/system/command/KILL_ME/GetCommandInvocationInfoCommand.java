@@ -64,9 +64,9 @@ public class GetCommandInvocationInfoCommand extends Command {
 		Fields result = Fields.empty();
 		
 		Fields commandEntityFields = Fields.empty();
-		commandEntityFields.put(GenericFieldNames.NAME, input.stringNamed(GenericFieldNames.COMMAND));
+		commandEntityFields.put(GenericFieldNames.NAME, input.get(GenericFieldNames.COMMAND));
 
-		String commandName = input.stringNamed(GenericFieldNames.COMMAND);
+		String commandName = input.get(GenericFieldNames.COMMAND);
 		if (commandName == null) {
 			throw CommandExceptionsFactory.createExpectedFieldNotFound(GenericFieldNames.COMMAND);
 		}
@@ -95,24 +95,19 @@ public class GetCommandInvocationInfoCommand extends Command {
 	private ArrayList<ParameterEntity> extractInputParameters(String commandName, Command command) {
 		ArrayList<ParameterEntity> parameters = null;
 		if (command instanceof SetCommand) {
-			parameters = (ArrayList<ParameterEntity>) ((SetCommand)command)
-					.componingInputKeys(commandName).valueFor(GenericFieldNames.INPUT);
+			parameters = ((SetCommand)command).componingInputKeys(commandName).get(GenericFieldNames.INPUT);
 		} else {
-			parameters = ((ArrayList<ParameterEntity>) command
-					.componingInputKeys().valueFor(GenericFieldNames.INPUT));
+			parameters = command.componingInputKeys().get(GenericFieldNames.INPUT);
 		}
 		return parameters;
 	}
 
-	@SuppressWarnings("unchecked")
 	private ArrayList<ParameterEntity> extractOutputParameters(String commandName, Command command) {
 		ArrayList<ParameterEntity> parameters = null;
 		if (command instanceof SetCommand) {
-			parameters = (ArrayList<ParameterEntity>) ((SetCommand)command)
-					.componingOutputKeys(commandName).valueFor(GenericFieldNames.OUTPUT);
+			parameters = ((SetCommand)command).componingOutputKeys(commandName).get(GenericFieldNames.OUTPUT);
 		} else {
-			parameters = ((ArrayList<ParameterEntity>) command
-					.componingOutputKeys().valueFor(GenericFieldNames.OUTPUT));
+			parameters = command.componingOutputKeys().get(GenericFieldNames.OUTPUT);
 		}
 		return parameters;
 	}

@@ -78,9 +78,9 @@ public class TokenAuthFilter extends AbstractFilter {
 		
 		_authenticated = false;
 		
-		_currentToken = input.stringNamed(GenericFieldNames.AUTH_TOKEN);
+		_currentToken = input.get(GenericFieldNames.AUTH_TOKEN);
 		if (StringUtils.isEmpty(_currentToken)) {
-			_currentToken = input.stringNamed(GenericFieldNames.TOKEN_HEADER);
+			_currentToken = input.get(GenericFieldNames.TOKEN_HEADER);
 		}
 		
 		ArrayList<Authentication> authentications = _authenticationRepository.getEntitiesByForeignKey(GenericFieldNames.AUTH_TOKEN, _currentToken);
@@ -93,7 +93,7 @@ public class TokenAuthFilter extends AbstractFilter {
 			_currentAuthentication = authentications.get(0);
 
 			if (!_commandRoles.isEmpty()) {
-				String userRolesAsString = StringUtils.defaultString(_currentAuthentication.get(Authentication.ROLES));
+				String userRolesAsString = StringUtils.defaultString(_currentAuthentication.get(Authentication.ROLES).toString());
 
 				LinkedList<String> userRoles = new LinkedList<String>(Arrays.asList(userRolesAsString.split(GenericConstants.USER_ROLE_SEPARATOR)));
 				userRoles.retainAll(_commandRoles);

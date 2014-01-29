@@ -78,7 +78,7 @@ public abstract class Command {
 	protected void logInput(Fields input) { 
 		Logger logger = _context.getLogger();
 		logger.info("EXECUTING Command:" + this.getClass().getSimpleName());
-		logger.info("INPUT: " + input.asString());
+		logger.info("INPUT: " + input.toString());
 	}
 	
 	protected void logOutput(Fields output) { 
@@ -87,7 +87,7 @@ public abstract class Command {
 		if (output==null)		
 			logger.info("OUTPUT after execution: (nothing)");
 		else
-			logger.info("OUTPUT after execution: "+output.asString());
+			logger.info("OUTPUT after execution: " + output.toString());
 		
 		logger.info("END Command:" + this.getClass().getSimpleName());
 	}

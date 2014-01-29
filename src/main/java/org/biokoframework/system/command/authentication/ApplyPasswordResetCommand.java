@@ -64,17 +64,17 @@ public class ApplyPasswordResetCommand extends Command {
 	public Fields execute(Fields input) throws CommandException {
 		logInput(input);
 		
-		String token = input.stringNamed(PasswordReset.TOKEN);
+		String token = input.get(PasswordReset.TOKEN);
 		PasswordReset passwordReset = _passwordResetRepo.retrieveByForeignKey(PasswordReset.TOKEN, token);
 		
 		if (passwordReset != null) {
 			_passwordResetRepo.delete(passwordReset.getId());
 
-			DateTime tokenExpireTime = DateTime.parse(passwordReset.get(PasswordReset.TOKEN_EXPIRATION), DateTimeFormat.forPattern(Validator.ISO_TIMESTAMP));
+			DateTime tokenExpireTime = DateTime.parse(passwordReset.get(PasswordReset.TOKEN_EXPIRATION).toString(), DateTimeFormat.forPattern(Validator.ISO_TIMESTAMP));
 			DateTime now = _currentTimeService.getCurrentTimeAsDateTime();
 			if (now.isBefore(tokenExpireTime)) {
-				Login login = _loginRepo.retrieve(passwordReset.get(PasswordReset.LOGIN_ID));
-				login.set(Login.PASSWORD, input.stringNamed(Login.PASSWORD));
+				Login login = _loginRepo.retrieve(passwordReset.get(PasswordReset.LOGIN_ID).toString());
+				login.set(Login.PASSWORD, input.get(Login.PASSWORD).toString());
 				SafeRepositoryHelper.save(_loginRepo, login, _context);
 			}
 		} else {

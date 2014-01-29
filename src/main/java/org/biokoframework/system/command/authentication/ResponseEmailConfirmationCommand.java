@@ -65,11 +65,11 @@ public class ResponseEmailConfirmationCommand extends Command {
 	public Fields execute(Fields input) throws CommandException {
 		logInput(input);
 		
-		String loginUserEmail = input.stringNamed(Login.USER_EMAIL);
-		String token = input.stringNamed(EmailConfirmation.TOKEN);
+		String loginUserEmail = input.get(Login.USER_EMAIL);
+		String token = input.get(EmailConfirmation.TOKEN);
 		
 		EmailConfirmation confirmation = _emailConfirmationRepo.retrieveByForeignKey(EmailConfirmation.TOKEN, token);
-		Login login = _loginRepo.retrieve(confirmation.get(EmailConfirmation.LOGIN_ID));
+		Login login = _loginRepo.retrieve(confirmation.get(EmailConfirmation.LOGIN_ID).toString());
 		if (login != null && login.get(Login.USER_EMAIL).equals(loginUserEmail)) {
 			String timestamp = _currentTimeService.getCurrentTimeAsDateTime().toString(Validator.ISO_TIMESTAMP);
 			

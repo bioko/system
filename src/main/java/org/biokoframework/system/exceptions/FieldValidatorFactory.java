@@ -33,7 +33,7 @@ import org.biokoframework.utils.fields.Fields;
 public class FieldValidatorFactory {
 
 	public static void fieldsContainsKey(Fields fields, String keyName) throws CommandException {
-		if (fields.valueFor(keyName) == null) {
+		if (fields.get(keyName) == null) {
 			throw CommandExceptionsFactory.createExpectedFieldNotFound(keyName);
 		}
 	}

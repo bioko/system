@@ -62,7 +62,7 @@ public class AnnotatedEntityResolver implements EntityResolver {
 		
 		for (Entry<String, Class<? extends DomainEntity>> aForeignKey : foreignKeys) {
 			if (currentKeys.contains(aForeignKey.getKey())) {
-				Object keyValue = fields.objectNamed(aForeignKey.getKey());
+				Object keyValue = fields.get(aForeignKey.getKey());
 				if (!aForeignKey.getClass().isInstance(keyValue)) {
 					if (keyValue instanceof List) {
 						ArrayList<Object> targets = new ArrayList<Object>();
