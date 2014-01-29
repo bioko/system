@@ -27,19 +27,14 @@
 
 package org.biokoframework.system.exceptions;
 
+import org.biokoframework.system.KILL_ME.exception.SystemException;
 import org.biokoframework.utils.domain.ErrorEntity;
 
 
 @SuppressWarnings("serial")
-public class SystemNotFoundException extends Exception {
+public class SystemNotFoundException extends SystemException {
 	
-	private ErrorEntity _error;
-
 	public SystemNotFoundException(ErrorEntity error) {
-		_error = error;
-	}
-	
-	public ErrorEntity error() {
-		return _error;
+		super(error);
 	}
 }

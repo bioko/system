@@ -28,11 +28,21 @@
 package org.biokoframework.system.exceptions;
 
 import org.biokoframework.system.KILL_ME.XSystemIdentityCard;
+import org.biokoframework.system.KILL_ME.exception.SystemException;
 import org.biokoframework.utils.domain.ErrorEntity;
 import org.biokoframework.utils.fields.Fields;
 
 public class SystemExceptionsFactory {
 
+	public static SystemException createSystemBootException(Exception exception) {
+		String message = new StringBuilder()
+							.append("Error while creating system: ")
+							.append(exception.getMessage())
+							.toString();
+		ErrorEntity error = new ErrorEntity(Fields.single(ErrorEntity.ERROR_MESSAGE, message));
+		return new SystemException(error, exception);
+	}
+	
 	public static SystemNotFoundException createSystemNotFound(XSystemIdentityCard xSystemIdentityCard) {
 
 		String message = new StringBuilder()
