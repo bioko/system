@@ -34,7 +34,6 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.biokoframework.system.KILL_ME.exception.CommandNotFoundException;
-import org.biokoframework.system.KILL_ME.exception.SystemException;
 import org.biokoframework.system.command.AbstractCommandHandler;
 import org.biokoframework.system.command.AbstractFilter;
 import org.biokoframework.system.command.Command;
@@ -43,6 +42,7 @@ import org.biokoframework.system.context.Context;
 import org.biokoframework.system.event.SystemListener;
 import org.biokoframework.system.service.validation.AbstractValidator;
 import org.biokoframework.utils.domain.ErrorEntity;
+import org.biokoframework.utils.exception.BiokoException;
 import org.biokoframework.utils.exception.ValidationException;
 import org.biokoframework.utils.fields.FieldNames;
 import org.biokoframework.utils.fields.Fields;
@@ -80,8 +80,8 @@ public class XSystem {
 			_commandsFilters = new HashMap<String, List<AbstractFilter>>();
 	}
 
-	public Fields execute(Fields input) throws SystemException {
-		Fields output = Fields.empty();
+	public Fields execute(Fields input) throws BiokoException {
+		Fields output = new Fields();
 		String commandName = input.get(FieldNames.COMMAND_NAME);
 		try {
 			_logger.info("----- Executing Command: " + commandName + " -----");
@@ -118,7 +118,7 @@ public class XSystem {
 				}
 			}
 			
-			if (validationErrors!=null && !validationErrors.isEmpty())
+			if (validationErrors != null && !validationErrors.isEmpty())
 				throw new ValidationException(validationErrors);
 			
 			
@@ -138,11 +138,11 @@ public class XSystem {
 			}
 			
 			
-		} catch (SystemException systemException) {
-			_logger.error("System exception",systemException);
+		} catch (BiokoException systemException) {
+			_logger.error("System exception", systemException);
 			throw systemException;
 		} catch (Exception exception) {
-			_logger.error("Generic exception",exception);
+			_logger.error("Generic exception", exception);
 			throw new CommandException(exception);
 		}
 		_logger.info("Command output: " + output.toString());

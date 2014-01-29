@@ -58,7 +58,7 @@ public class PutBinaryEntityCommand extends Command {
 
 	@Override
 	public Fields execute(Fields input) throws CommandException {
-		Fields result = Fields.empty();
+		Fields result = new Fields();
 
 		Logger logger = _context.get(Context.LOGGER);
 		
@@ -107,12 +107,12 @@ public class PutBinaryEntityCommand extends Command {
 	
 	@Override
 	public Fields componingInputKeys() {
-		return Fields.empty();
+		return new Fields();
 	}
 	
 	@Override
 	public Fields componingOutputKeys() {		
-		return Fields.empty();
+		return new Fields();
 	}
 
 }

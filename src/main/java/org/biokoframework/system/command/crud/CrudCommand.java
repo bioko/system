@@ -63,7 +63,7 @@ public class CrudCommand<T extends DomainEntity> extends SetCommand {
 
 	@Override
 	public Fields execute(Fields input) throws CommandException {
-		Fields result = Fields.empty();
+		Fields result = new Fields();
 		CrudMethod crudMethod = CrudMethod.fromRestCommand(input.get(FieldNames.COMMAND_NAME).toString());
 
 		Logger logger = _context.get(Context.LOGGER);

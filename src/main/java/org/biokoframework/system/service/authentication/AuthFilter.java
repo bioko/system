@@ -32,7 +32,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.biokoframework.system.KILL_ME.commons.GenericConstants;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.command.AbstractFilter;
@@ -74,7 +74,7 @@ public class AuthFilter extends AbstractFilter {
 		if (authenticationFields != null) {
 			Login login = authenticationFields.get(Login.class.getSimpleName());
 			if (!_commandRoles.isEmpty()) {
-				String userRolesAsString = StringUtils.defaultString(login.get(Login.ROLES).toString());
+				String userRolesAsString = ObjectUtils.toString(login.get(Login.ROLES));
 
 				LinkedList<String> userRoles = new LinkedList<String>(Arrays.asList(userRolesAsString.split(GenericConstants.USER_ROLE_SEPARATOR)));
 				userRoles.retainAll(_commandRoles);

@@ -50,7 +50,7 @@ public abstract class AbstractContextFactory implements ContextFactory {
 	public Context create(XSystemIdentityCard identityCard) throws BiokoException {
 
 
-		Fields identityFields = Fields.empty();
+		Fields identityFields = new Fields();
 		identityFields.put(Context.SYSTEM_CONFIGURATION, identityCard.getSystemConfiguration());
 		identityFields.put(Context.SYSTEM_NAME, identityCard.getSystemName());
 		identityFields.put(Context.SYSTEM_VERSION, identityCard.getSystemVersion());

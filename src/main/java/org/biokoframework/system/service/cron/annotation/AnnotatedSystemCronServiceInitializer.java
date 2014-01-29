@@ -67,7 +67,7 @@ public class AnnotatedSystemCronServiceInitializer {
 				String expression = _checkForCronExpression(identityCard.getSystemConfiguration(), cronAnnotation.expressions());
 				if (expression!=null) {
 					org.biokoframework.system.command.Command commandInstance = commandHandler.getByName(commandName);
-					Fields inputFields = Fields.empty();
+					Fields inputFields = new Fields();
 					if (!StringUtils.isEmpty(cronAnnotation.input()))
 						inputFields.fromJson(cronAnnotation.input());
 

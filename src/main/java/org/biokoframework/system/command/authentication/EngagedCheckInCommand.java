@@ -33,7 +33,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.biokoframework.system.KILL_ME.commons.GenericCommandNames;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
@@ -71,7 +70,7 @@ public class EngagedCheckInCommand extends Command {
 		logger.info("EXECUTING Command:" + this.getClass().getSimpleName());
 		logger.info("INPUT: " + input.toString());
 		
-		Fields result = Fields.empty();
+		Fields result = new Fields();
 		List<Map<String, String>> response = new ArrayList<Map<String,String>>();
 		
 		AuthenticationStrategy authStrategy = AuthenticationStrategyFactory.retrieveCheckInStrategy(input);
@@ -87,7 +86,7 @@ public class EngagedCheckInCommand extends Command {
 		
 		map.put(GenericFieldNames.AUTH_TOKEN, token);
 		map.put(GenericFieldNames.AUTH_TOKEN_EXPIRE, tokenExpire);
-		if (!StringUtils.isEmpty(login.get(Login.ROLES).toString())) {
+		if (login.get(Login.ROLES) != null) {
 			map.put(Login.ROLES, login.get(Login.ROLES).toString());
 		}
 		response = Arrays.asList(map);
@@ -128,10 +127,8 @@ public class EngagedCheckInCommand extends Command {
 		parameters.add(builder.build(false));
 		builder.set(ParameterEntity.NAME, GenericFieldNames.AUTH_TOKEN_EXPIRE);
 		parameters.add(builder.build(false));
-		
-		Fields fields = Fields.empty();		
-		fields.put(GenericFieldNames.OUTPUT, parameters);
-		return fields;	
+				
+		return Fields.single(GenericFieldNames.OUTPUT, parameters);	
 	}
 	
 	@Override
