@@ -54,7 +54,7 @@ public class TokenAuthStrategy implements AuthenticationStrategy {
 	public Fields authenticate(Context context, Fields input, boolean failSilently) throws CommandException {
 		Repository<Login> loginRepo = context.getRepository(GenericRepositoryNames.LOGIN_REPOSITORY);
 		Repository<Authentication> authRepo = context.getRepository(GenericRepositoryNames.AUTHENTICATION_REPOSITORY);
-		Fields authFields = Fields.empty();
+		Fields authFields = new Fields();
 
 		String token = input.get(GenericFieldNames.AUTH_TOKEN);
 		if (StringUtils.isEmpty(token)) {
@@ -77,7 +77,7 @@ public class TokenAuthStrategy implements AuthenticationStrategy {
 			
 			Login login = loginRepo.retrieve(auth.get(Authentication.LOGIN_ID).toString());
 			
-			Fields outputFields = Fields.empty();
+			Fields outputFields = new Fields();
 			outputFields.put(GenericFieldNames.TOKEN_HEADER, token);
 			outputFields.put(GenericFieldNames.TOKEN_EXPIRE_HEADER, auth.get(Authentication.TOKEN_EXPIRE));
 			authFields.put(Login.class.getSimpleName(), login);

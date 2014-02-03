@@ -72,7 +72,7 @@ public class Queue {
 	}
 	
 	public void push(String content) throws ValidationException, RepositoryException {
-		QueuedItem item = new QueuedItem(Fields.empty());
+		QueuedItem item = new QueuedItem(new Fields());
 		item.set(QueuedItem.CONTENT, content);
 		synchronized (pushLock) {
 			synchronized (tail) {
@@ -105,7 +105,7 @@ public class Queue {
 			return null;
 		}
 		
-		return Fields.empty().fromJson(popped);
+		return Fields.fromJson(popped);
 	}
 	
 	public void pushFields(Fields fields) {

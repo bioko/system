@@ -40,7 +40,7 @@ public class AuthenticationManager {
 	public static Authentication createAuthenticationFor(Context context, Login login) {
 		Long validityIntervalSecs = Long.parseLong(context.getSystemProperty(Context.AUTHENTICATION_VALIDITY_INTERVAL_SECS));
 		
-		Fields fields = Fields.empty();
+		Fields fields = new Fields();
 		fields.put(GenericFieldNames.LOGIN_ID, login.get(Login.ID));
 		fields.put(Authentication.ROLES, login.get(Login.ROLES));
 		fields.put(GenericFieldNames.AUTH_TOKEN, UUID.randomUUID().toString());

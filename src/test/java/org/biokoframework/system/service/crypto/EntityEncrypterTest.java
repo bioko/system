@@ -80,7 +80,7 @@ public class EntityEncrypterTest {
 		String password = "GinoPoni";
 		EntityEncryptor encrypter = new EntityEncryptor();
 		
-		DummyDecryptableEntity plainEntity = new DummyDecryptableEntity(Fields.empty());
+		DummyDecryptableEntity plainEntity = new DummyDecryptableEntity(new Fields());
 		plainEntity.set(DummyDecryptableEntity.A_PLAIN_FIELD, "plain");
 		plainEntity.set(DummyDecryptableEntity.A_TWO_WAY_ENCRYPTED_FIELD, "twoWayValue");
 		

@@ -48,7 +48,7 @@ public class MultipleCommand extends Command {
 		Loggers.xsystem.info("Executing MultipleCommand: " + this.getClass().getSimpleName());
 		Loggers.xsystem.info("Steps: " + _steps.size());
 		for (Entry<String,Command> step : _steps.entrySet()) {
-			Fields output = Fields.empty();
+			Fields output = new Fields();
 			Loggers.xsystem.info("Executing step: " + step.getKey());
 			output = step.getValue().execute(input);
 			if (output.contains(FieldsErrors.FAILURE)) {

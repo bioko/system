@@ -43,7 +43,7 @@ import org.biokoframework.utils.fields.Fields;
 public abstract class AbstractSystemFactory {
 
 	protected Context createContext(XSystemIdentityCard systemCard) {
-		Fields contextFields = Fields.empty();
+		Fields contextFields = new Fields();
 		contextFields.put(Context.SYSTEM_NAME, systemCard.getSystemName());
 		contextFields.put(Context.SYSTEM_VERSION, systemCard.getSystemVersion());
 		contextFields.put(Context.SYSTEM_CONFIGURATION, systemCard.getSystemConfiguration());

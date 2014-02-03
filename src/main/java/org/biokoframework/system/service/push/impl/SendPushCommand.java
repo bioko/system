@@ -81,7 +81,7 @@ public class SendPushCommand extends Command {
 		}
 			
 		logOutput();
-		return Fields.empty();
+		return new Fields();
 	}
 
 	@Override
@@ -92,7 +92,7 @@ public class SendPushCommand extends Command {
 	private void sendPush(String userToken, String message, String production) throws NotificationFailureException {
 		try {
 			
-			Fields fields = Fields.empty();
+			Fields fields = new Fields();
 			fields.put(ProdNotificationImplementation.APP_TOKEN, _appToken);
 			fields.put(ProdNotificationImplementation.APP_SECRET, _appSecret);
 			fields.put(ProdNotificationImplementation.USER_TOKEN, userToken);
@@ -121,7 +121,7 @@ public class SendPushCommand extends Command {
 	private void sendBroadcastPush(String message, String production) throws NotificationFailureException {
 		try {
 			
-			Fields fields = Fields.empty();
+			Fields fields = new Fields();
 			fields.put(ProdNotificationImplementation.APP_TOKEN, _appToken);
 			fields.put(ProdNotificationImplementation.APP_SECRET, _appSecret);
 			fields.put(ProdNotificationImplementation.MESSAGE, message);

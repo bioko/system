@@ -58,7 +58,7 @@ public class GetBinaryEntityCommand extends Command {
 
 	@Override
 	public Fields execute(Fields input) throws CommandException {
-		Fields result = Fields.empty();
+		Fields result = new Fields();
 
 		Logger logger = _context.get(Context.LOGGER);
 		
@@ -99,7 +99,7 @@ public class GetBinaryEntityCommand extends Command {
 	public Fields componingInputKeys() {
 		ArrayList<ParameterEntity> parameters = new ArrayList<ParameterEntity>(); 
 		
-		ParameterEntity parameter = new ParameterEntity(Fields.empty());
+		ParameterEntity parameter = new ParameterEntity(new Fields());
 		parameter.set(ParameterEntity.NAME, DomainEntity.ID);
 		parameter.set(ParameterEntity.HTTP_PARAMETER_TYPE, GenericFieldValues.URL_PATH);
 		parameters.add(parameter);

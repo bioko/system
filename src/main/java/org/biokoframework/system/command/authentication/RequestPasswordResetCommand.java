@@ -93,7 +93,7 @@ public class RequestPasswordResetCommand extends Command {
 		
 		DateTime now = _currentTimeService.getCurrentTimeAsDateTime();
 		
-		PasswordReset passwordReset = new PasswordReset(Fields.empty());
+		PasswordReset passwordReset = new PasswordReset(new Fields());
 		passwordReset.set(PasswordReset.LOGIN_ID, login.getId());
 		passwordReset.set(PasswordReset.TOKEN_EXPIRATION, now.plusDays(1).toString(Validator.ISO_TIMESTAMP));
 		String randomToken = _randomTokenService.generateString(PASSWORD_RESET_TOKEN, 20);

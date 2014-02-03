@@ -51,14 +51,14 @@ public abstract class SetCommand extends Command {
 		if (_inputKeysMap.containsKey(aCommandName)) {
 			return _inputKeysMap.get(aCommandName); 
 		}
-		return Fields.empty();
+		return new Fields();
 	}
 
 	public Fields componingOutputKeys(String aCommandName) {
 		if (_outputKeysMap.containsKey(aCommandName)) {
 			return _outputKeysMap.get(aCommandName);
 		}
-		return Fields.empty();
+		return new Fields();
 	}
 	
 }

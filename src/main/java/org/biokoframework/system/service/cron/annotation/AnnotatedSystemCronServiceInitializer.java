@@ -68,8 +68,9 @@ public class AnnotatedSystemCronServiceInitializer {
 				if (expression!=null) {
 					org.biokoframework.system.command.Command commandInstance = commandHandler.getByName(commandName);
 					Fields inputFields = new Fields();
-					if (!StringUtils.isEmpty(cronAnnotation.input()))
-						inputFields.fromJson(cronAnnotation.input());
+					if (!StringUtils.isEmpty(cronAnnotation.input())) {
+						inputFields = Fields.fromJson(cronAnnotation.input());
+					}
 
 					cron.register(commandInstance, inputFields, expression, cronAnnotation.notifyTo());
 				} else {

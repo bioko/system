@@ -66,12 +66,12 @@ public class PrintRepositoryCommand extends Command {
 
 	@Override
 	public Fields componingInputKeys() {
-		return Fields.empty();
+		return new Fields();
 	}
 
 	@Override
 	public Fields componingOutputKeys() {
-		return Fields.empty();
+		return new Fields();
 	}
 
 	@Override

@@ -57,7 +57,7 @@ public class EntityEncryptor {
 	public <DE extends DomainEntity> DE encryptEntity(DE plainEntity) {
 		DE encryptedEntity = null;
 		try {
-			encryptedEntity = (DE) plainEntity.getClass().getConstructor(Fields.class).newInstance(Fields.empty());
+			encryptedEntity = (DE) plainEntity.getClass().getConstructor(Fields.class).newInstance(new Fields());
 			
 			Map<String, Map<String, String>> hints = HintFactory.createMap(plainEntity.getClass());
 			for (String aFieldName : plainEntity.fields().keys()) {
@@ -107,7 +107,7 @@ public class EntityEncryptor {
 	public <DE extends DomainEntity> DE decryptEntity(DE encryptedEntity) {
 		DE decryptedEntity = null;
 		try {
-			decryptedEntity = (DE) encryptedEntity.getClass().getConstructor(Fields.class).newInstance(Fields.empty());
+			decryptedEntity = (DE) encryptedEntity.getClass().getConstructor(Fields.class).newInstance(new Fields());
 			
 			Map<String, Map<String, String>> hints = HintFactory.createMap(encryptedEntity.getClass());
 			for (String aFieldName : encryptedEntity.fields().keys()) {

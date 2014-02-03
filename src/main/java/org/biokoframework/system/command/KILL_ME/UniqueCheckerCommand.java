@@ -82,7 +82,7 @@ public class UniqueCheckerCommand<T extends DomainEntity> extends Command {
 			}
 		}
 		
-		Fields result = Fields.empty();
+		Fields result = new Fields();
 		result.put(GenericFieldNames.RESPONSE, new ArrayList<DomainEntity>());
 		result.putAll(input);
 		
@@ -113,7 +113,7 @@ public class UniqueCheckerCommand<T extends DomainEntity> extends Command {
 	public Fields componingInputKeys() {
 		ArrayList<ParameterEntity> parameters = new ArrayList<ParameterEntity>();
 		
-		ParameterEntity parameter = new ParameterEntity(Fields.empty());
+		ParameterEntity parameter = new ParameterEntity(new Fields());
 		parameter.set(ParameterEntity.NAME, _key);
 		parameter.set(ParameterEntity.HTTP_PARAMETER_TYPE, GenericFieldValues.QUERY_STRING);
 		parameters.add(parameter);

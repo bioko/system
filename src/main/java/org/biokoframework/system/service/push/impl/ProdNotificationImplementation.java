@@ -77,7 +77,7 @@ public class ProdNotificationImplementation implements PushServiceImplementation
 	public void addPushReceiver(String userToken, String deviceToken, boolean pushStatus) throws NotificationFailureException {
 		try {
 		
-			Fields fields = Fields.empty();
+			Fields fields = new Fields();
 			fields.put(APP_TOKEN, _appToken);
 			fields.put(PushService.DEVICE_TOKEN, deviceToken);
 			fields.put(DEVICE_TYPE, IOS_TYPE);
@@ -106,7 +106,7 @@ public class ProdNotificationImplementation implements PushServiceImplementation
 
 	@Override
 	public void sendPush(String userToken, String message) throws NotificationFailureException {
-		Fields sendMailInputFields = Fields.empty();
+		Fields sendMailInputFields = new Fields();
 		sendMailInputFields.put(PushService.USER_TOKEN, userToken);
 		sendMailInputFields.put(GenericFieldNames.CONTENT, message);
 		sendMailInputFields.put(PushService.PRODUCTION, _production);
@@ -117,7 +117,7 @@ public class ProdNotificationImplementation implements PushServiceImplementation
 
 	@Override
 	public void sendBroadcastPush(String message) throws NotificationFailureException {
-		Fields sendMailInputFields = Fields.empty();
+		Fields sendMailInputFields = new Fields();
 		sendMailInputFields.put(GenericFieldNames.CONTENT, message);
 		sendMailInputFields.put(PushService.PRODUCTION, _production);
 		

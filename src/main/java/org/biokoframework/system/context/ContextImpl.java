@@ -46,7 +46,7 @@ public class ContextImpl extends Context {
 	private static final String SYSTEM_PROPERTIES = "systemProperties";
 	private static final String SYSTEM_LISTENERS = "systemListeners";
 	
-	private Fields _contextMap = Fields.empty();	
+	private Fields _contextMap = new Fields();	
 
 	public ContextImpl(Fields contextFields) {
 		_contextMap = contextFields.copy();

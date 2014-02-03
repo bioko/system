@@ -70,7 +70,7 @@ public class SendMailCommand extends Command {
 		}
 			
 		logOutput();
-		return Fields.empty();
+		return new Fields();
 	}
 
 	@Override

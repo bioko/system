@@ -61,9 +61,9 @@ public class GetCommandInvocationInfoCommand extends Command {
 	@Override
 	public Fields execute(Fields input) throws CommandException {
 		Loggers.xsystem.info("EXECUTING Command:" + this.getClass().getSimpleName());
-		Fields result = Fields.empty();
+		Fields result = new Fields();
 		
-		Fields commandEntityFields = Fields.empty();
+		Fields commandEntityFields = new Fields();
 		commandEntityFields.put(GenericFieldNames.NAME, input.get(GenericFieldNames.COMMAND));
 
 		String commandName = input.get(GenericFieldNames.COMMAND);
@@ -91,7 +91,6 @@ public class GetCommandInvocationInfoCommand extends Command {
 		return input.putAll(result);
 	}
 
-	@SuppressWarnings("unchecked")
 	private ArrayList<ParameterEntity> extractInputParameters(String commandName, Command command) {
 		ArrayList<ParameterEntity> parameters = null;
 		if (command instanceof SetCommand) {
@@ -116,7 +115,7 @@ public class GetCommandInvocationInfoCommand extends Command {
 	public Fields componingInputKeys() {
 		ArrayList<ParameterEntity> request = new ArrayList<ParameterEntity>(); 
 		
-		ParameterEntity parameter = new ParameterEntity(Fields.empty());
+		ParameterEntity parameter = new ParameterEntity(new Fields());
 		parameter.set(ParameterEntity.NAME, GenericFieldNames.COMMAND);
 		parameter.set(ParameterEntity.HTTP_PARAMETER_TYPE, GenericFieldValues.QUERY_STRING);
 		request.add(parameter);

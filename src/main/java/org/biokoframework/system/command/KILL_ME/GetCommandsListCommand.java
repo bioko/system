@@ -62,13 +62,13 @@ public class GetCommandsListCommand extends Command {
 	@Override
 	public Fields execute(Fields input) throws CommandException {
 		Loggers.xsystem.info("EXECUTING Command:" + this.getClass().getSimpleName());
-		Fields result = Fields.empty();
+		Fields result = new Fields();
 		
 		// Meta linguaggio? Il comando descrive il command handler con lo stesso meccanismo con cui
 		// descriverebbe qualunque altra cosa
 		ArrayList<DomainEntity> response = new ArrayList<DomainEntity>();
 		for (String aCommandName : _commandHandler.keys()) {
-			CommandEntity commandEntity = new CommandEntity(Fields.empty());
+			CommandEntity commandEntity = new CommandEntity(new Fields());
 			commandEntity.set(CommandEntity.NAME, aCommandName);
 			response.add(commandEntity);
 		}
@@ -96,9 +96,7 @@ public class GetCommandsListCommand extends Command {
 		builder.set(ParameterEntity.NAME, ParameterEntity.NAME);
 		response.add(builder.build(false));
 		
-		Fields fields = Fields.empty();
-		fields.put(GenericFieldNames.OUTPUT, response);
-		return fields;
+		return Fields.single(GenericFieldNames.OUTPUT, response);
 	}
 
 	@Override

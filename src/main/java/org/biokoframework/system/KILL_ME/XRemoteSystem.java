@@ -60,7 +60,7 @@ public class XRemoteSystem extends UnicastRemoteObject implements XRmiServerInte
 	}
 
 	public Fields execute(Fields anInput) {
-		Fields output = Fields.empty();
+		Fields output = new Fields();
 		try {
 			String commandName = anInput.get(FieldNames.COMMAND_NAME);
 			Command command = _commandHandler.getByName(commandName);

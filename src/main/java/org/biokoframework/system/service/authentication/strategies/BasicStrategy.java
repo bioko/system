@@ -81,7 +81,7 @@ public class BasicStrategy implements AuthenticationStrategy {
 		String userName = input.get(GenericFieldNames.USER_EMAIL);
 		String password = input.get(GenericFieldNames.PASSWORD);
 		
-		Login login = new Login(Fields.empty());
+		Login login = new Login(new Fields());
 		login.set(Login.USER_EMAIL, userName);
 		login.set(Login.PASSWORD, password);
 		

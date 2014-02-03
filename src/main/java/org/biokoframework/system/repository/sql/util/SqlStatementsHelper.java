@@ -83,7 +83,7 @@ public class SqlStatementsHelper {
 		}
 		
 		while (!result.isClosed() && result.next()) {
-			Fields entityFields = Fields.empty();
+			Fields entityFields = new Fields();
 			
 			for (Entry<String, Field> aFieldEntry : fields) {
 				String fieldName = aFieldEntry.getKey();

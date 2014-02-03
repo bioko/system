@@ -106,12 +106,11 @@ public class ResolvableCommand extends Command {
 		return _baseCommand.getName() + '-' + GenericCommandNames.RESOLVABLE;
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public Fields componingInputKeys() {
 		Fields componingInputKeys = _baseCommand.componingInputKeys();
 		
-		ParameterEntity parameter = new ParameterEntity(Fields.empty());
+		ParameterEntity parameter = new ParameterEntity(new Fields());
 		parameter.set(ParameterEntity.NAME, GenericFieldNames.RESOLVE_ENTITIES);
 		parameter.set(ParameterEntity.HTTP_PARAMETER_TYPE, GenericFieldValues.QUERY_STRING);
 		

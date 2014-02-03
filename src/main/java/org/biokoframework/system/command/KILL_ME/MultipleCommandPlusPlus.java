@@ -67,7 +67,7 @@ public class MultipleCommandPlusPlus extends Command {
 		if (_commandHandler==null)
 			_commandHandler = _context.getCommandHandler();
 		
-		Fields result = Fields.empty();
+		Fields result = new Fields();
 		ArrayList<Object> response = new ArrayList<Object>();
 		
 		Fields stepInput = input.copy();

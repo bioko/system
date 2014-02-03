@@ -51,11 +51,11 @@ public abstract class Command {
 	}
 	
 	public Fields componingInputKeys() {
-		return Fields.empty();
+		return new Fields();
 	}
 
 	public Fields componingOutputKeys() {
-		return Fields.empty();
+		return new Fields();
 	}
 
 	

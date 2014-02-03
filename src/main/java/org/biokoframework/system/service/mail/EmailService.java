@@ -41,7 +41,7 @@ public class EmailService {
 	}
 	
 	public void sendMail(String destinationAddress, String sourceAddress, String content, String subject) {
-		Fields sendMailInputFields = Fields.empty();
+		Fields sendMailInputFields = new Fields();
 		sendMailInputFields.put(SendMailCommand.FROM, sourceAddress);
 		sendMailInputFields.put(SendMailCommand.TO, destinationAddress);
 		sendMailInputFields.put(SendMailCommand.CONTENT, content);
