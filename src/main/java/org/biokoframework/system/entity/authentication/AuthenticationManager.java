@@ -45,12 +45,12 @@ public class AuthenticationManager {
 		fields.put(Authentication.ROLES, login.get(Login.ROLES));
 		fields.put(GenericFieldNames.AUTH_TOKEN, UUID.randomUUID().toString());
 		long utcTimeSecs = System.currentTimeMillis() / 1000 + validityIntervalSecs;
-		fields.put(GenericFieldNames.AUTH_TOKEN_EXPIRE, Long.toString(utcTimeSecs));
+		fields.put(GenericFieldNames.AUTH_TOKEN_EXPIRE, utcTimeSecs);
 		return new Authentication(fields);
 	}
 	
 	public static boolean isExpired(Authentication authentication) {
-		long expireTimeSecs = Long.parseLong(authentication.get(GenericFieldNames.AUTH_TOKEN_EXPIRE).toString());
+		long expireTimeSecs = authentication.get(GenericFieldNames.AUTH_TOKEN_EXPIRE);
 		long nowSecs = System.currentTimeMillis() / 1000;
 		return nowSecs < expireTimeSecs;
 	}
@@ -59,6 +59,6 @@ public class AuthenticationManager {
 		Long validityIntervalSecs = Long.parseLong(context.getSystemProperty(Context.AUTHENTICATION_VALIDITY_INTERVAL_SECS));
 		
 		long nowSecs = System.currentTimeMillis() / 1000;
-		authentication.fields().put(GenericFieldNames.AUTH_TOKEN_EXPIRE, Long.toString(nowSecs + validityIntervalSecs));
+		authentication.fields().put(GenericFieldNames.AUTH_TOKEN_EXPIRE, nowSecs + validityIntervalSecs);
 	}
 }
