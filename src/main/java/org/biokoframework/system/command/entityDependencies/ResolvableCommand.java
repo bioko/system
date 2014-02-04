@@ -54,7 +54,6 @@ public class ResolvableCommand extends Command {
 	}
 
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public Fields execute(Fields input) throws CommandException {
 		Loggers.xsystem.info("EXECUTING Command:" + this.getClass().getSimpleName());	
