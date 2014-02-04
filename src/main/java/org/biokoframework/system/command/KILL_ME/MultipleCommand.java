@@ -51,11 +51,11 @@ public class MultipleCommand extends Command {
 			Fields output = new Fields();
 			Loggers.xsystem.info("Executing step: " + step.getKey());
 			output = step.getValue().execute(input);
-			if (output.contains(FieldsErrors.FAILURE)) {
+			if (output.containsKey(FieldsErrors.FAILURE)) {
 				output.put(FieldNames.FAILED_COMMAND, step.getValue().getClass().getSimpleName());
 				Loggers.xsystem.info("Step " + step.getKey() + " execution failed!");
 				return overAllOutput.putAll(Fields.failed()).putAll(output);
-			} else if (output.contains(FieldsErrors.ERROR)) {
+			} else if (output.containsKey(FieldsErrors.ERROR)) {
 				output.put(FieldNames.ERROR_COMMAND, step.getValue().getClass().getSimpleName());
 				Loggers.xsystem.info("Step " + step.getKey() + " execution error!");
 				return overAllOutput.putAll(Fields.failed()).putAll(output);

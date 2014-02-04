@@ -60,7 +60,7 @@ public class ResolvableCommand extends Command {
 		Loggers.xsystem.info("INPUT: " + input.toString());
 		
 		boolean doResolve = false;
-		if (input.contains(GenericFieldNames.RESOLVE_ENTITIES)) {
+		if (input.containsKey(GenericFieldNames.RESOLVE_ENTITIES)) {
 			doResolve = Boolean.parseBoolean(input.get(GenericFieldNames.RESOLVE_ENTITIES).toString());
 		}
 		
