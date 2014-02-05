@@ -25,23 +25,31 @@
  * 
  */
 
-package org.biokoframework.system.repository.sql.translator.annotation;
+package org.biokoframework.system.repository.memory.manytypes;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
+import org.biokoframework.utils.domain.EntityBuilder;
 
-import org.biokoframework.utils.domain.annotation.field.Field;
+/**
+ * 
+ * @author Mikol Faro <mikol.faro@gmail.com>
+ * @date Feb 5, 2014
+ *
+ */
+public class ManyTypesEntityBuilder extends EntityBuilder<ManyTypesEntity> {
 
-public interface Translator {
+	public static final String EXAMPLE_1 = "example1";
+	public static final String EXAMPLE_2 = "example2";
 
-	public void setTo(String to);
-	
-	public String selectDBType(String fieldName, Field fieldAnnotation, List<String> additionalConstraints);
+	public ManyTypesEntityBuilder() {
+		super(ManyTypesEntity.class);
+		
+		putExample(EXAMPLE_1, "{'id':'1','intField':12, 'longField':30}");
+		putExample(EXAMPLE_2, "{'id':'2','intField':24, 'longField':60}");
+	}
 
-	public Object convertFromDBValue(String fieldName, ResultSet resultset, Field fieldAnnotation) throws SQLException;
-	public void insertIntoStatement(String fieldName, Object fieldValue, Field fieldAnnotation, PreparedStatement statement, int queryIndex) throws SQLException;
-
+	@Override
+	public EntityBuilder<ManyTypesEntity> loadDefaultExample() {
+		return loadExample(EXAMPLE_1);
+	}
 
 }

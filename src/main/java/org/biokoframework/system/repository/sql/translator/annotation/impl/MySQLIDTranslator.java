@@ -64,9 +64,9 @@ public class MySQLIDTranslator implements Translator {
 	}
 
 	@Override
-	public void insertIntoStatement(String fieldName, String fieldValue, Field fieldAnnotation, PreparedStatement statement, int sqlIndex) throws NumberFormatException, SQLException {
+	public void insertIntoStatement(String fieldName, Object fieldValue, Field fieldAnnotation, PreparedStatement statement, int sqlIndex) throws NumberFormatException, SQLException {
 		if (fieldValue != null) {
-			statement.setInt(sqlIndex, Integer.parseInt(fieldValue));
+			statement.setInt(sqlIndex, Integer.parseInt((String) fieldValue));
 		} else {
 			statement.setNull(sqlIndex, Types.INTEGER);
 		}

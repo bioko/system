@@ -48,8 +48,8 @@ public class BooleanTranslator implements Translator {
 	}
 
 	@Override
-	public void insertIntoStatement(String fieldName, String fieldValue, Field fieldAnnotation, PreparedStatement statement, int sqlIndex) throws SQLException {
-		statement.setBoolean(sqlIndex, Boolean.parseBoolean(fieldValue));
+	public void insertIntoStatement(String fieldName, Object fieldValue, Field fieldAnnotation, PreparedStatement statement, int sqlIndex) throws SQLException {
+		statement.setBoolean(sqlIndex, (Boolean) fieldValue);
 	}
 
 	@Override

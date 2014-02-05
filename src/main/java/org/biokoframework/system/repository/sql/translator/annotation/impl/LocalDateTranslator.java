@@ -34,7 +34,6 @@ import java.util.List;
 
 import org.biokoframework.system.repository.sql.translator.annotation.Translator;
 import org.biokoframework.utils.domain.annotation.field.Field;
-import org.biokoframework.utils.validator.Validator;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 
@@ -48,11 +47,11 @@ public class LocalDateTranslator implements Translator {
 	}
 
 	@Override
-	public void insertIntoStatement(String fieldName, String fieldValue, Field fieldAnnotation, PreparedStatement statement, int sqlIndex) throws SQLException {
+	public void insertIntoStatement(String fieldName, Object fieldValue, Field fieldAnnotation, PreparedStatement statement, int sqlIndex) throws SQLException {
 		if (fieldValue == null) {
 			statement.setObject(sqlIndex, null);
 		} else {
-			LocalDate timestamp = DateTimeFormat.forPattern(Validator.ISO_DATE).parseLocalDate(fieldValue);
+			LocalDate timestamp = (LocalDate) fieldValue;
 			statement.setString(sqlIndex, timestamp.toString(DateTimeFormat.forPattern(MYSQL_DATE)));
 		}
 	}

@@ -68,8 +68,8 @@ public class DoubleTranslator implements Translator {
 	}
 
 	@Override
-	public void insertIntoStatement(String fieldName, String fieldValue, Field fieldAnnotation, PreparedStatement statement, int sqlIndex) throws SQLException {
-		statement.setDouble(sqlIndex, Double.parseDouble(fieldValue));
+	public void insertIntoStatement(String fieldName, Object fieldValue, Field fieldAnnotation, PreparedStatement statement, int sqlIndex) throws SQLException {
+		statement.setDouble(sqlIndex, (Double) fieldValue);
 	}
 
 }

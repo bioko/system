@@ -76,8 +76,9 @@ public class XSystem {
 		_inputValidatorRules = (Map<String, Map<String, ValidatorRule>>)  _context.get(Context.INPUT_VALIDATOR_RULES);
 		_customCommandValidators = (Map<String, List<AbstractValidator>>) _context.get(Context.CUSTOM_COMMAND_VALIDATORS);
 		_commandsFilters = (Map<String, List<AbstractFilter>> ) _context.get(Context.COMMANDS_FILTERS);
-		if (_commandsFilters==null)
+		if (_commandsFilters == null) {
 			_commandsFilters = new HashMap<String, List<AbstractFilter>>();
+		}
 	}
 
 	public Fields execute(Fields input) throws BiokoException {

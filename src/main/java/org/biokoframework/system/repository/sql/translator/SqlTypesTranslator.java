@@ -76,7 +76,7 @@ public class SqlTypesTranslator {
 		}
 	}
 	
-	public String convertFromDBValue(String fieldName, ResultSet resultset, Field fieldAnnotation) throws SQLException {
+	public Object convertFromDBValue(String fieldName, ResultSet resultset, Field fieldAnnotation) throws SQLException {
 		
 		if (fieldName.equals(DomainEntity.ID) || DomainEntity.class.isAssignableFrom(fieldAnnotation.type())) {
 			return _idTranslator.convertFromDBValue(fieldName, resultset, fieldAnnotation);

@@ -25,23 +25,27 @@
  * 
  */
 
-package org.biokoframework.system.repository.sql.translator.annotation;
+package org.biokoframework.system.repository.memory.manytypes;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
-
+import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.domain.annotation.field.Field;
+import org.biokoframework.utils.fields.Fields;
 
-public interface Translator {
+/**
+ * @author Mikol Faro <mikol.faro@gmail.com>
+ * @date Feb 5, 2014
+ */
+@SuppressWarnings("serial")
+public class ManyTypesEntity extends DomainEntity {
 
-	public void setTo(String to);
+	@Field(type = Long.class)
+	public static final String INT_FIELD = "intField";
 	
-	public String selectDBType(String fieldName, Field fieldAnnotation, List<String> additionalConstraints);
-
-	public Object convertFromDBValue(String fieldName, ResultSet resultset, Field fieldAnnotation) throws SQLException;
-	public void insertIntoStatement(String fieldName, Object fieldValue, Field fieldAnnotation, PreparedStatement statement, int queryIndex) throws SQLException;
-
-
+	@Field(type = Long.class)
+	public static final String LONG_FIELD = "longField";
+	
+	public ManyTypesEntity(Fields fields) {
+		super(fields);
+	}
+	
 }

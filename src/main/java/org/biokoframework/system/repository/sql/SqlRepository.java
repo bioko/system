@@ -158,7 +158,7 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 		try {
 			connection = _dbConnector.getConnection();
 			PreparedStatement retrieveStatement = SqlStatementsHelper.preparedRetrieveByIdStatement(_entityClass, _tableName, connection);
-			retrieveStatement.setString(1, anEntityKey);
+			retrieveStatement.setObject(1, anEntityKey);
 			retrieveStatement.execute();
 			
 			entities = SqlStatementsHelper.retrieveEntities(retrieveStatement.getResultSet(), _entityClass, _translator);
@@ -225,7 +225,7 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 	}
 
 	@Override
-	public ArrayList<DE> getEntitiesByForeignKey(String foreignKeyName, String foreignKeyValue) {
+	public ArrayList<DE> getEntitiesByForeignKey(String foreignKeyName, Object foreignKeyValue) {
 		ArrayList<DE> entities = new ArrayList<DE>();
 		Connection connection = null;
 		PreparedStatement retrieveStatement = null;
@@ -233,7 +233,7 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 			connection = _dbConnector.getConnection();
 			retrieveStatement = SqlStatementsHelper.prepareRetrieveByForeignKey(_entityClass, _tableName, connection, foreignKeyName);
 
-			retrieveStatement.setString(1, foreignKeyValue);
+			retrieveStatement.setObject(1, foreignKeyValue);
 			retrieveStatement.execute();
 			
 			entities = SqlStatementsHelper.retrieveEntities(retrieveStatement.getResultSet(), _entityClass, _translator);

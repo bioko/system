@@ -53,11 +53,11 @@ public class HSQLDBDateTimeTranslator implements Translator {
 	}
 
 	@Override
-	public void insertIntoStatement(String fieldName, String fieldValue, Field fieldAnnotation, PreparedStatement statement, int sqlIndex) throws SQLException {
+	public void insertIntoStatement(String fieldName, Object fieldValue, Field fieldAnnotation, PreparedStatement statement, int sqlIndex) throws SQLException {
 		if (fieldValue == null) {
 			statement.setObject(sqlIndex, null);
 		} else {		
-			DateTime timestamp = DateTimeFormat.forPattern(Validator.ISO_TIMESTAMP).parseDateTime(fieldValue);
+			DateTime timestamp = (DateTime) fieldValue;
 			statement.setString(sqlIndex, timestamp.toString(DateTimeFormat.forPattern(MYSQL_TIMESTAMP)));
 		}
 	}

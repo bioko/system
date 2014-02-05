@@ -54,13 +54,13 @@ public class PlainTranslator implements Translator {
 	}
 
 	@Override
-	public void insertIntoStatement(String fieldName, String fieldValue, Field fieldAnnotation, PreparedStatement statement, int sqlIndex) throws SQLException {
-		statement.setString(sqlIndex, fieldValue);
+	public void insertIntoStatement(String fieldName, Object fieldValue, Field fieldAnnotation, PreparedStatement statement, int sqlIndex) throws SQLException {
+		statement.setObject(sqlIndex, fieldValue);
 	}
 
 	@Override
-	public String convertFromDBValue(String fieldName, ResultSet resultset, Field fieldAnnotation) throws SQLException {
-		return resultset.getString(fieldName);
+	public Object convertFromDBValue(String fieldName, ResultSet resultset, Field fieldAnnotation) throws SQLException {
+		return resultset.getObject(fieldName);
 	}
 
 }

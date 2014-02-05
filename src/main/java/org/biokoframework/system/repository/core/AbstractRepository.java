@@ -54,7 +54,7 @@ public abstract class AbstractRepository<T extends DomainEntity> implements Repo
 //	public abstract T retrieveByForeignKey(String foreignKeyName, String foreignKeyValue, boolean ignoreCase);
 
 	@Override
-	public abstract ArrayList<T> getEntitiesByForeignKey(String foreignKeyName, String foreignKeyValue);
+	public abstract ArrayList<T> getEntitiesByForeignKey(String foreignKeyName, Object foreignKeyValue);
 	
 //	public abstract ArrayList<T> getEntitiesByForeignKey(String foreignKeyName, String foreignKeyValue, boolean ignoreCase);
 
