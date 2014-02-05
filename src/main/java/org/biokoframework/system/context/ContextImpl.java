@@ -77,7 +77,6 @@ public class ContextImpl extends Context {
 	}
 	
 	@Override
-	@SuppressWarnings("unchecked")
 	public void addRepository(String repoName, AbstractRepository<?> repo) {
 		HashMap<String, AbstractRepository<?>> repoMap = _contextMap.get(REPOSITORIES);
 		repoMap.put(repoName, repo);
@@ -103,27 +102,25 @@ public class ContextImpl extends Context {
 		return _contextMap.get(COMMAND_HANDLER);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override 
 	public void setSystemProperty(String name, String value) {
 		HashMap<String, String> properties = _contextMap.get(SYSTEM_PROPERTIES);
 		properties.put(name, value);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public String getSystemProperty(String name) {
 		HashMap<String, String> properties = _contextMap.get(SYSTEM_PROPERTIES);
 		return properties.get(name);
 	}
 	
-	@SuppressWarnings("unchecked")
+	@Override
 	public void addSystemListener(SystemListener listener) {
 		List<SystemListener> listeners = _contextMap.get(SYSTEM_LISTENERS);
 		listeners.add(listener);
 	}
 	
-	@SuppressWarnings("unchecked")
+	@Override
 	public List<SystemListener> getSystemListeners() {
 		return _contextMap.get(SYSTEM_LISTENERS);
 	}

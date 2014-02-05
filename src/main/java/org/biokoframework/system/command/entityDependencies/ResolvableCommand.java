@@ -54,14 +54,13 @@ public class ResolvableCommand extends Command {
 	}
 
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public Fields execute(Fields input) throws CommandException {
 		Loggers.xsystem.info("EXECUTING Command:" + this.getClass().getSimpleName());	
 		Loggers.xsystem.info("INPUT: " + input.toString());
 		
 		boolean doResolve = false;
-		if (input.contains(GenericFieldNames.RESOLVE_ENTITIES)) {
+		if (input.containsKey(GenericFieldNames.RESOLVE_ENTITIES)) {
 			doResolve = Boolean.parseBoolean(input.get(GenericFieldNames.RESOLVE_ENTITIES).toString());
 		}
 		

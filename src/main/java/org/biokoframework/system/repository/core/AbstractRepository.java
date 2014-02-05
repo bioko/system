@@ -108,7 +108,7 @@ public abstract class AbstractRepository<T extends DomainEntity> implements Repo
 	private String getFirstNotVoidFieldKey(Fields fields) {
 		String foundKey=null;
 		for (String fieldKey: fields.keys()) {
-			if (fields.contains(fieldKey)) {
+			if (fields.containsKey(fieldKey)) {
 				foundKey=fieldKey;
 				break;
 			}

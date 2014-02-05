@@ -41,7 +41,7 @@ import org.biokoframework.utils.fields.Fields;
 @SuppressWarnings("serial")
 public class BinaryEntity extends DomainEntity {
 
-	private static final String MEDIA_TYPE_REGEXP = "^[a-z]+\\/[\\S]+$";
+	private static final String MEDIA_TYPE_REGEXP = "^[a-zA-Z0-9!#$%^&\\*_\\+-{}\\|'.`~]+/[a-zA-Z0-9!#$%^&\\*_\\+-{}\\|'.`~]+$";
 	
 	public static final String ENTITY_KEY = "blobId";
 	
