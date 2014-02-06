@@ -39,7 +39,7 @@ public class SystemExceptionsFactory {
 							.append("Error while creating system: ")
 							.append(exception.getClass().getSimpleName())
 							.toString();
-		ErrorEntity error = new ErrorEntity(Fields.single(ErrorEntity.ERROR_MESSAGE, message));
+		ErrorEntity error = new ErrorEntity(new Fields(ErrorEntity.ERROR_MESSAGE, message));
 		return new SystemException(error, exception);
 	}
 	
@@ -51,7 +51,7 @@ public class SystemExceptionsFactory {
 							.append(" not found")
 							.toString();
 		
-		Fields fields = Fields.single(ErrorEntity.ERROR_MESSAGE, message);		
+		Fields fields = new Fields(ErrorEntity.ERROR_MESSAGE, message);		
 		return new SystemNotFoundException(new ErrorEntity(fields));
 	}
 

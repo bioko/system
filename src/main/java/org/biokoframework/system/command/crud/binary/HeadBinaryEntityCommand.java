@@ -103,8 +103,7 @@ public class HeadBinaryEntityCommand extends Command {
 		parameter.set(ParameterEntity.HTTP_PARAMETER_TYPE, GenericFieldValues.URL_PATH);
 		parameters.add(parameter);
 		
-		Fields resultFields = Fields.single(GenericFieldNames.INPUT, parameters);
-		return resultFields;
+		return new Fields(GenericFieldNames.INPUT, parameters);
 	}
 	
 	@Override

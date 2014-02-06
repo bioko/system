@@ -104,8 +104,7 @@ public class GetBinaryEntityCommand extends Command {
 		parameter.set(ParameterEntity.HTTP_PARAMETER_TYPE, GenericFieldValues.URL_PATH);
 		parameters.add(parameter);
 		
-		Fields resultFields = Fields.single(GenericFieldNames.INPUT, parameters);
-		return resultFields;
+		return new Fields(GenericFieldNames.INPUT, parameters);
 	}
 	
 	@Override
@@ -116,8 +115,7 @@ public class GetBinaryEntityCommand extends Command {
 		builder.set(ParameterEntity.NAME, EntityClassNameTranslator.toFieldName(BinaryEntity.class.getSimpleName()));
 		parameters.add(builder.build(false));
 				
-		Fields fields = Fields.single(GenericFieldNames.OUTPUT, parameters);
-		return fields;
+		return new Fields(GenericFieldNames.OUTPUT, parameters);
 	}
 
 }

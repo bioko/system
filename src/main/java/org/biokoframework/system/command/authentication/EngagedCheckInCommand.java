@@ -63,7 +63,6 @@ public class EngagedCheckInCommand extends Command {
 		_authenticationRepository = _context.getRepository(GenericRepositoryNames.AUTHENTICATION_REPOSITORY);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public Fields execute(Fields input) throws CommandException {
 		Logger logger = _context.get(Context.LOGGER);
@@ -116,8 +115,7 @@ public class EngagedCheckInCommand extends Command {
 		builder.set(ParameterEntity.NAME, GenericFieldNames.FACEBOOK_TOKEN);
 		parameters.add(builder.build(false));
 		
-		Fields resultFields = Fields.single(GenericFieldNames.INPUT, parameters);
-		return resultFields;
+		return new Fields(GenericFieldNames.INPUT, parameters);
 	}
 
 	public Fields componingOutputKeys() {
@@ -128,7 +126,7 @@ public class EngagedCheckInCommand extends Command {
 		builder.set(ParameterEntity.NAME, GenericFieldNames.AUTH_TOKEN_EXPIRE);
 		parameters.add(builder.build(false));
 				
-		return Fields.single(GenericFieldNames.OUTPUT, parameters);	
+		return new Fields(GenericFieldNames.OUTPUT, parameters);	
 	}
 	
 	@Override

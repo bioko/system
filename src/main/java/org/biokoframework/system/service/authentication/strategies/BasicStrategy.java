@@ -73,7 +73,7 @@ public class BasicStrategy implements AuthenticationStrategy {
 			throw CommandExceptionsFactory.createInvalidLoginException();
 		}
 		
-		return Fields.single(Login.class.getSimpleName(), login);
+		return new Fields(Login.class.getSimpleName(), login);
 	}
 
 	@Override
