@@ -39,7 +39,7 @@ public abstract class AbstractConstraint<DE extends DomainEntity> implements Con
 	}
 
 	@Override
-	public Query<DE> isNotEqual(String value) {
+	public Query<DE> isNotEqual(Object value) {
 		return not().isEqual(value);
 	}
 	
@@ -49,7 +49,7 @@ public abstract class AbstractConstraint<DE extends DomainEntity> implements Con
 	}
 	
 	@Override
-	public Query<DE> notLike(String value) {
+	public Query<DE> notLike(Object value) {
 		return not().like(value);
 	}
 

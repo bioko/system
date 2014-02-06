@@ -57,7 +57,7 @@ public class HSQLDBDateTimeTranslator implements Translator {
 		if (fieldValue == null) {
 			statement.setObject(sqlIndex, null);
 		} else {		
-			DateTime timestamp = (DateTime) fieldValue;
+			DateTime timestamp = DateTimeFormat.forPattern(Validator.ISO_TIMESTAMP).parseDateTime((String) fieldValue);
 			statement.setString(sqlIndex, timestamp.toString(DateTimeFormat.forPattern(MYSQL_TIMESTAMP)));
 		}
 	}
