@@ -71,7 +71,7 @@ public class EngagedCheckInCommand extends Command {
 		logger.info("INPUT: " + input.toString());
 		
 		Fields result = new Fields();
-		List<Map<String, String>> response = new ArrayList<Map<String,String>>();
+		List<Map<String, Object>> response = new ArrayList<Map<String,Object>>();
 		
 		AuthenticationStrategy authStrategy = AuthenticationStrategyFactory.retrieveCheckInStrategy(input);
 		
@@ -79,10 +79,10 @@ public class EngagedCheckInCommand extends Command {
 		
 		Authentication authentication = insertNewAuthenticationFor(_context, login);
 	
-		Map<String, String> map = new HashMap<String, String>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		
 		String token = authentication.get(GenericFieldNames.AUTH_TOKEN);
-		String tokenExpire = authentication.get(GenericFieldNames.AUTH_TOKEN_EXPIRE);
+		Long tokenExpire = authentication.get(GenericFieldNames.AUTH_TOKEN_EXPIRE);
 		
 		map.put(GenericFieldNames.AUTH_TOKEN, token);
 		map.put(GenericFieldNames.AUTH_TOKEN_EXPIRE, tokenExpire);

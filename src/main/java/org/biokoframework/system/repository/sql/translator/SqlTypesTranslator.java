@@ -68,7 +68,7 @@ public class SqlTypesTranslator {
 		}
 	}
 
-	public void insertIntoStatement(String fieldName, String fieldValue, Field fieldAnnotation, PreparedStatement statement, int queryIndex) throws SQLException {
+	public void insertIntoStatement(String fieldName, Object fieldValue, Field fieldAnnotation, PreparedStatement statement, int queryIndex) throws SQLException {
 		if (fieldName.equals(DomainEntity.ID) || DomainEntity.class.isAssignableFrom(fieldAnnotation.type())) {
 			_idTranslator.insertIntoStatement(fieldName, fieldValue, fieldAnnotation, statement, queryIndex);
 		} else {

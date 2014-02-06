@@ -95,7 +95,7 @@ public class RequestPasswordResetCommand extends Command {
 		
 		PasswordReset passwordReset = new PasswordReset(new Fields());
 		passwordReset.set(PasswordReset.LOGIN_ID, login.getId());
-		passwordReset.set(PasswordReset.TOKEN_EXPIRATION, now.plusDays(1).toString(Validator.ISO_TIMESTAMP));
+		passwordReset.set(PasswordReset.TOKEN_EXPIRATION, now.plusDays(1));
 		String randomToken = _randomTokenService.generateString(PASSWORD_RESET_TOKEN, 20);
 		passwordReset.set(PasswordReset.TOKEN, randomToken);
 		SafeRepositoryHelper.save(_passwordResetRepo, passwordReset, _context);
