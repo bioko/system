@@ -29,14 +29,11 @@ package org.biokoframework.system.repository.service;
 
 import org.biokoframework.system.services.Service;
 
-import com.google.inject.Singleton;
-
 /**
  * @author Mikol Faro <mikol.faro@gmail.com>
  * @date Feb 6, 2014
  *
  */
-@Singleton
 public interface RepositoryService extends Service {
 
 }
