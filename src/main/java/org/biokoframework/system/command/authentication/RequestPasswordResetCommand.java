@@ -52,8 +52,8 @@ import org.biokoframework.system.service.random.RandomGeneratorService;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.repository.Repository;
-import org.biokoframework.utils.validator.Validator;
 import org.joda.time.DateTime;
+import org.joda.time.format.ISODateTimeFormat;
 
 public class RequestPasswordResetCommand extends Command {
 
@@ -95,7 +95,7 @@ public class RequestPasswordResetCommand extends Command {
 		
 		PasswordReset passwordReset = new PasswordReset(new Fields());
 		passwordReset.set(PasswordReset.LOGIN_ID, login.getId());
-		passwordReset.set(PasswordReset.TOKEN_EXPIRATION, now.plusDays(1));
+		passwordReset.set(PasswordReset.TOKEN_EXPIRATION, now.plusDays(1).toString(ISODateTimeFormat.dateTimeNoMillis()));
 		String randomToken = _randomTokenService.generateString(PASSWORD_RESET_TOKEN, 20);
 		passwordReset.set(PasswordReset.TOKEN, randomToken);
 		SafeRepositoryHelper.save(_passwordResetRepo, passwordReset, _context);
