@@ -111,8 +111,9 @@ public class CrudComponingKeysBuilder {
 			parameters.add(builder.build(false));
 		}
 		
-		Fields resultFields = Fields.single(FieldNames.COMMAND_NAME, getCrudName(domainEntityClass));
-		resultFields.put(GenericFieldNames.INPUT, parameters);
+		Fields resultFields = new Fields(
+				FieldNames.COMMAND_NAME, getCrudName(domainEntityClass),
+				GenericFieldNames.INPUT, parameters);
 		return resultFields;
 	}
 
@@ -138,7 +139,7 @@ public class CrudComponingKeysBuilder {
 		idParameter.set(ParameterEntity.HTTP_PARAMETER_TYPE, GenericFieldValues.URL_PATH);
 		parameters.add(idParameter);
 		
-		Fields resultFields = Fields.single(FieldNames.COMMAND_NAME, getCrudName(domainEntityClass));
+		Fields resultFields = new Fields(FieldNames.COMMAND_NAME, getCrudName(domainEntityClass));
 		resultFields.put(GenericFieldNames.INPUT, parameters);
 		return resultFields;
 	}
@@ -151,7 +152,7 @@ public class CrudComponingKeysBuilder {
 		parameter.set(ParameterEntity.HTTP_PARAMETER_TYPE, GenericFieldValues.URL_PATH);
 		parameters.add(parameter);
 		
-		Fields resultFields = Fields.single(FieldNames.COMMAND_NAME, getCrudName(domainEntityClass));
+		Fields resultFields = new Fields(FieldNames.COMMAND_NAME, getCrudName(domainEntityClass));
 		resultFields.put(GenericFieldNames.INPUT, parameters);
 		return resultFields;
 	}
@@ -164,8 +165,9 @@ public class CrudComponingKeysBuilder {
 		parameter.set(ParameterEntity.HTTP_PARAMETER_TYPE, GenericFieldValues.URL_PATH);
 		parameters.add(parameter);
 		
-		Fields resultFields = Fields.single(FieldNames.COMMAND_NAME, getCrudName(domainEntityClass));
-		resultFields.put(GenericFieldNames.INPUT, parameters);
+		Fields resultFields = new Fields(
+				FieldNames.COMMAND_NAME, getCrudName(domainEntityClass),
+				GenericFieldNames.INPUT, parameters);
 		return resultFields;
 	}
 	
@@ -188,7 +190,7 @@ public class CrudComponingKeysBuilder {
 		builder.set(ParameterEntity.NAME, DomainEntity.ID);
 		parameters.add(builder.build(false));
 		
-		return Fields.single(GenericFieldNames.OUTPUT, parameters);
+		return new Fields(GenericFieldNames.OUTPUT, parameters);
 	}
 	
 	private static <T extends DomainEntity> Fields putOutputKeys(Class<T> domainEntityClass) {
@@ -210,7 +212,7 @@ public class CrudComponingKeysBuilder {
 		builder.set(ParameterEntity.NAME, DomainEntity.ID);
 		parameters.add(builder.build(false));
 		
-		return Fields.single(GenericFieldNames.OUTPUT, parameters);
+		return new Fields(GenericFieldNames.OUTPUT, parameters);
 	}
 
 	private static <T extends DomainEntity> Fields deleteOutputKeys(Class<T> domainEntityClass) {
@@ -232,7 +234,7 @@ public class CrudComponingKeysBuilder {
 		builder.set(ParameterEntity.NAME, DomainEntity.ID);
 		parameters.add(builder.build(false));
 		
-		return Fields.single(GenericFieldNames.OUTPUT, parameters);
+		return new Fields(GenericFieldNames.OUTPUT, parameters);
 	}
 	
 	private static <T extends DomainEntity> Fields getOutputKeys(Class<T> domainEntityClass) {
@@ -254,7 +256,7 @@ public class CrudComponingKeysBuilder {
 		builder.set(ParameterEntity.NAME, DomainEntity.ID);
 		parameters.add(builder.build(false));
 		
-		return Fields.single(GenericFieldNames.OUTPUT, parameters);
+		return new Fields(GenericFieldNames.OUTPUT, parameters);
 	}
 	
 	private static <T extends DomainEntity> String getCrudName(Class<T> domainEntityClass) {

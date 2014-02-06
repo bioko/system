@@ -68,7 +68,7 @@ public class DissolvedCommand extends Command {
 			throw CommandExceptionsFactory.createContainerException(exception);
 		}
 		
-		Fields result = Fields.single(GenericFieldNames.RESPONSE, response);
+		Fields result = new Fields(GenericFieldNames.RESPONSE, response);
 		
 		Loggers.xsystem.info("OUTPUT after execution: " + result.toString());
 		Loggers.xsystem.info("END Command:" + this.getClass().getSimpleName());
@@ -116,8 +116,7 @@ public class DissolvedCommand extends Command {
 			parameters.add(entityParameter.build(false));
 		}
 		
-		Fields fields = Fields.single(GenericFieldNames.INPUT, parameters);
-		return fields;
+		return new Fields(GenericFieldNames.INPUT, parameters);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -147,8 +146,7 @@ public class DissolvedCommand extends Command {
 			parameters.add(entityParameter.build(false));
 		}
 		
-		Fields fields = Fields.single(GenericFieldNames.OUTPUT, parameters);
-		return fields;
+		return new Fields(GenericFieldNames.OUTPUT, parameters);
 	}
 	
 }

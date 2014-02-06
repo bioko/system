@@ -120,8 +120,9 @@ public class GetCommandInvocationInfoCommand extends Command {
 		parameter.set(ParameterEntity.HTTP_PARAMETER_TYPE, GenericFieldValues.QUERY_STRING);
 		request.add(parameter);
 		
-		Fields fields = Fields.single(FieldNames.COMMAND_NAME, GenericCommandNames.GET_COMMAND_LIST);
-		fields.put(GenericFieldNames.INPUT, request);
+		Fields fields = new Fields(
+				FieldNames.COMMAND_NAME, GenericCommandNames.GET_COMMAND_LIST,
+				GenericFieldNames.INPUT, request);
 		return fields;
 	}
 
@@ -137,8 +138,7 @@ public class GetCommandInvocationInfoCommand extends Command {
 			response.add(builder.build(false));
 		}		
 		
-		Fields fields = Fields.single(GenericFieldNames.OUTPUT, response);
-		return fields;
+		return new Fields(GenericFieldNames.OUTPUT, response);
 	}
 
 	@Override

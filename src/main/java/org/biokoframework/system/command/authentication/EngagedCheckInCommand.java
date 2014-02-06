@@ -116,8 +116,7 @@ public class EngagedCheckInCommand extends Command {
 		builder.set(ParameterEntity.NAME, GenericFieldNames.FACEBOOK_TOKEN);
 		parameters.add(builder.build(false));
 		
-		Fields resultFields = Fields.single(GenericFieldNames.INPUT, parameters);
-		return resultFields;
+		return new Fields(GenericFieldNames.INPUT, parameters);
 	}
 
 	public Fields componingOutputKeys() {
@@ -128,7 +127,7 @@ public class EngagedCheckInCommand extends Command {
 		builder.set(ParameterEntity.NAME, GenericFieldNames.AUTH_TOKEN_EXPIRE);
 		parameters.add(builder.build(false));
 				
-		return Fields.single(GenericFieldNames.OUTPUT, parameters);	
+		return new Fields(GenericFieldNames.OUTPUT, parameters);	
 	}
 	
 	@Override

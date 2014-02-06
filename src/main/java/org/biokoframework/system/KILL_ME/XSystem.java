@@ -88,8 +88,9 @@ public class XSystem {
 			_logger.info("Command input: " + input.toString());
 			Command command = _commandHandler.getByName(commandName);
 			if (command == null) {
-				Fields fields = Fields.single(ErrorEntity.ERROR_MESSAGE, "Command " + commandName + " not found.");
-				fields.put(ErrorEntity.ERROR_CODE, "101");
+				Fields fields = new Fields(
+						ErrorEntity.ERROR_MESSAGE, "Command " + commandName + " not found.",
+						ErrorEntity.ERROR_CODE, "101");
 				throw new CommandNotFoundException(new ErrorEntity(fields));
 			}
 			

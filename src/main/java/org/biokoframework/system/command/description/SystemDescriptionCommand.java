@@ -43,7 +43,7 @@ public class SystemDescriptionCommand extends Command {
 		JsonSystemDescriptor descriptor = new JsonSystemDescriptor();
 		JsonSystemDescription description = descriptor.describeSystem(_context);
 		
-		Fields output = Fields.single(GenericFieldNames.RESPONSE, description);
+		Fields output = new Fields(GenericFieldNames.RESPONSE, description);
 		logOutput(output);
 		return output;
 	}

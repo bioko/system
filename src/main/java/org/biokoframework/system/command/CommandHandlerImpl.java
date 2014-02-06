@@ -59,7 +59,7 @@ public class CommandHandlerImpl extends AbstractCommandHandler {
 		try {
 			return _commands.get(aCommandName);
 		} catch (NullPointerException npe) {
-			Fields fields = Fields.single(ErrorEntity.ERROR_MESSAGE, "Command name not found: " + aCommandName);
+			Fields fields = new Fields(ErrorEntity.ERROR_MESSAGE, "Command name not found: " + aCommandName);
 			throw new CommandException(new ErrorEntity(fields), npe);
 		}
 	}

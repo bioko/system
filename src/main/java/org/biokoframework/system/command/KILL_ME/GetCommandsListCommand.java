@@ -83,8 +83,9 @@ public class GetCommandsListCommand extends Command {
 	public Fields componingInputKeys() {
 		ArrayList<ParameterEntity> request = new ArrayList<ParameterEntity>(); 
 		
-		Fields fields = Fields.single(FieldNames.COMMAND_NAME, GenericCommandNames.GET_COMMAND_LIST);
-		fields.put(GenericFieldNames.INPUT, request);
+		Fields fields = new Fields(
+				FieldNames.COMMAND_NAME, GenericCommandNames.GET_COMMAND_LIST,
+				GenericFieldNames.INPUT, request);
 		return fields;
 	}
 
@@ -96,7 +97,7 @@ public class GetCommandsListCommand extends Command {
 		builder.set(ParameterEntity.NAME, ParameterEntity.NAME);
 		response.add(builder.build(false));
 		
-		return Fields.single(GenericFieldNames.OUTPUT, response);
+		return new Fields(GenericFieldNames.OUTPUT, response);
 	}
 
 	@Override

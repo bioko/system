@@ -77,7 +77,7 @@ public class ResolvableCommand extends Command {
 					resolvedEntities.add(aResolvedEntity);
 				}
 				
-				result = Fields.single(GenericFieldNames.RESPONSE, resolvedEntities);
+				result = new Fields(GenericFieldNames.RESPONSE, resolvedEntities);
 			} catch (Exception exception) {
 				throw CommandExceptionsFactory.createContainerException(exception);
 			}

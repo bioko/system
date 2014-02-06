@@ -72,7 +72,7 @@ public class FacebookStrategy implements AuthenticationStrategy {
 			}
 		}
 		
-		return Fields.single(Login.class.getSimpleName(), login);
+		return new Fields(Login.class.getSimpleName(), login);
 	}
 
 	private User retrieveFBUser(String token) throws CommandException {
