@@ -54,7 +54,7 @@ public class SqlConstraint<DE extends DomainEntity> extends AbstractConstraint<D
 	private String _placeholder;
 	private int _sqlIndex;
 	
-	private String _value;
+	private Object _value;
 	
 	public SqlConstraint(SqlQuery<DE> baseQuery) {
 		_baseQuery = baseQuery;
@@ -72,7 +72,7 @@ public class SqlConstraint<DE extends DomainEntity> extends AbstractConstraint<D
 	}
 	
 	@Override
-	public SqlQuery<DE> isEqual(String value) {
+	public SqlQuery<DE> isEqual(Object value) {
 		_placeholder = new UID().toString();
 		isEqual().placeholder(_placeholder);
 		_value = value;
@@ -86,7 +86,7 @@ public class SqlConstraint<DE extends DomainEntity> extends AbstractConstraint<D
 	}
 	
 	@Override
-	public SqlQuery<DE> like(String value) {
+	public SqlQuery<DE> like(Object value) {
 		_placeholder = new UID().toString();
 		like().placeholder(_placeholder);
 		_value = value;
@@ -94,7 +94,7 @@ public class SqlConstraint<DE extends DomainEntity> extends AbstractConstraint<D
 	}
 	
 	@Override
-	public SqlQuery<DE> ilike(String value) {
+	public SqlQuery<DE> ilike(Object value) {
 		_placeholder = new UID().toString();
 		ilike().placeholder(_placeholder);
 		_value = value;
@@ -108,7 +108,7 @@ public class SqlConstraint<DE extends DomainEntity> extends AbstractConstraint<D
 	}
 	
 	@Override
-	public Query<DE> slike(String value) {
+	public Query<DE> slike(Object value) {
 		_placeholder = new UID().toString();
 		slike().placeholder(_placeholder);
 		_value = value;
@@ -122,7 +122,7 @@ public class SqlConstraint<DE extends DomainEntity> extends AbstractConstraint<D
 	}
 	
 	@Override
-	public Query<DE> lt(String value) {
+	public Query<DE> lt(Object value) {
 		_placeholder = new UID().toString();
 		lt().placeholder(_placeholder);
 		_value = value;
@@ -136,7 +136,7 @@ public class SqlConstraint<DE extends DomainEntity> extends AbstractConstraint<D
 	}
 	
 	@Override
-	public Query<DE> lte(String value) {
+	public Query<DE> lte(Object value) {
 		_placeholder = new UID().toString();
 		lte().placeholder(_placeholder);
 		_value = value;
@@ -153,7 +153,7 @@ public class SqlConstraint<DE extends DomainEntity> extends AbstractConstraint<D
 	
 	
 	@Override
-	public Query<DE> gt(String value) {
+	public Query<DE> gt(Object value) {
 		_placeholder = new UID().toString();
 		gt().placeholder(_placeholder);
 		_value = value;
@@ -167,7 +167,7 @@ public class SqlConstraint<DE extends DomainEntity> extends AbstractConstraint<D
 	}
 	
 	@Override
-	public Query<DE> gte(String value) {
+	public Query<DE> gte(Object value) {
 		_placeholder = new UID().toString();
 		gte().placeholder(_placeholder);
 		_value = value;
@@ -236,7 +236,7 @@ public class SqlConstraint<DE extends DomainEntity> extends AbstractConstraint<D
 		translator.insertIntoStatement(_fieldName, _value, fieldAnnotations.get(_fieldName), statement, _sqlIndex);
 	}
 	
-	public void setValue(String placeholder, String value, int sqlIndex) {
+	public void setValue(String placeholder, Object value, int sqlIndex) {
 		if (_placeholder.equals(placeholder)) {
 			_value = value;
 			_sqlIndex = sqlIndex;

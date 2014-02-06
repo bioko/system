@@ -148,7 +148,7 @@ public class SqlQuery<DE extends DomainEntity> implements Query<DE> {
 	}
 
 	@Override
-	public void setValue(String placeholder, String value) {
+	public void setValue(String placeholder, Object value) {
 		
 		retrievePlaceHolders();
 		
