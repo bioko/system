@@ -28,20 +28,20 @@
 package org.biokoframework.system.command.description;
 
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
-import org.biokoframework.system.command.Command;
+import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.CommandException;
 import org.biokoframework.system.service.description.JsonSystemDescription;
 import org.biokoframework.system.service.description.JsonSystemDescriptor;
 import org.biokoframework.utils.fields.Fields;
 
-public class SystemDescriptionCommand extends Command {
+public class SystemDescriptionCommand extends AbstractCommand {
 
 	@Override
 	public Fields execute(Fields input) throws CommandException {
 		logInput(input);
 		
 		JsonSystemDescriptor descriptor = new JsonSystemDescriptor();
-		JsonSystemDescription description = descriptor.describeSystem(_context);
+		JsonSystemDescription description = descriptor.describeSystem(fContext);
 		
 		Fields output = new Fields(GenericFieldNames.RESPONSE, description);
 		logOutput(output);

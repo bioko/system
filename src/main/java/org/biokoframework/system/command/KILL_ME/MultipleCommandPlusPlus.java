@@ -34,14 +34,15 @@ import java.util.Map.Entry;
 
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.KILL_ME.commons.logger.Loggers;
+import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.AbstractCommandHandler;
-import org.biokoframework.system.command.Command;
 import org.biokoframework.system.command.CommandException;
+import org.biokoframework.system.command.ICommand;
 import org.biokoframework.system.exceptions.CommandExceptionsFactory;
 import org.biokoframework.utils.fields.FieldNames;
 import org.biokoframework.utils.fields.Fields;
 
-public class MultipleCommandPlusPlus extends Command {
+public class MultipleCommandPlusPlus extends AbstractCommand {
 
 	private String _name;
 	private AbstractCommandHandler _commandHandler;
@@ -65,7 +66,7 @@ public class MultipleCommandPlusPlus extends Command {
 		Loggers.xsystem.info("INPUT: " + input.toString());
 		
 		if (_commandHandler==null)
-			_commandHandler = _context.getCommandHandler();
+			_commandHandler = fContext.getCommandHandler();
 		
 		Fields result = new Fields();
 		ArrayList<Object> response = new ArrayList<Object>();
@@ -74,7 +75,7 @@ public class MultipleCommandPlusPlus extends Command {
 		for (Entry<String, String> aStep: _steps.entrySet()) {
 			Loggers.xsystem.info("Executing step: " + aStep.getKey());
 						
-			Command stepCommand = _commandHandler.getByName(aStep.getValue());
+			ICommand stepCommand = _commandHandler.getByName(aStep.getValue());
 			if (stepCommand == null) {
 				throw CommandExceptionsFactory.createCommandNotFoundException(aStep.getValue());
 			} else {

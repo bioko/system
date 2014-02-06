@@ -29,17 +29,25 @@ package org.biokoframework.system.command;
 
 import org.apache.log4j.Logger;
 import org.biokoframework.system.context.Context;
+import org.biokoframework.system.repository.service.RepositoryService;
 import org.biokoframework.utils.fields.FieldNames;
 import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.json.JSonBuilder;
 
+import com.google.inject.Inject;
 
-public abstract class Command {
+
+public abstract class AbstractCommand implements ICommand {
 	
-	protected Context _context;
-	protected String _commandName;
+	protected Context fContext;
+	protected String fCommandName;
 	
-	public abstract Fields execute(Fields input) throws CommandException;
+	private RepositoryService fService;
+	
+	@Inject
+	public final void setRepositoryService(RepositoryService service) {
+		fService = service;
+	}
 	
 	public void fillInvocationInfo(Fields output) {
 		try {
@@ -60,15 +68,15 @@ public abstract class Command {
 
 	
 	public String getName() {
-		return _commandName;
+		return fCommandName;
 	}
 	
 	public void setCommandName(String commandName) {
-		_commandName = commandName;
+		fCommandName = commandName;
 	}
 	
 	public void setContext(Context context) {
-		_context = context;
+		fContext = context;
 	}
 	
 	public void onContextInitialized() {
@@ -76,15 +84,15 @@ public abstract class Command {
 	}
 	
 	protected void logInput(Fields input) { 
-		Logger logger = _context.getLogger();
+		Logger logger = fContext.getLogger();
 		logger.info("EXECUTING Command:" + this.getClass().getSimpleName());
 		logger.info("INPUT: " + input.toString());
 	}
 	
 	protected void logOutput(Fields output) { 
-		Logger logger = _context.getLogger();
+		Logger logger = fContext.getLogger();
 		
-		if (output==null)		
+		if (output == null)		
 			logger.info("OUTPUT after execution: (nothing)");
 		else
 			logger.info("OUTPUT after execution: " + output.toString());

@@ -30,12 +30,12 @@ package org.biokoframework.system.service.mail;
 import javax.mail.internet.MimeMessage;
 
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
-import org.biokoframework.system.command.Command;
+import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.CommandException;
 import org.biokoframework.system.service.queue.Queue;
 import org.biokoframework.utils.fields.Fields;
 
-public class SendMailCommand extends Command {
+public class SendMailCommand extends AbstractCommand {
 
 	public static final String CONTENT = GenericFieldNames.CONTENT;
 	public static final String TO = "to";
@@ -47,7 +47,7 @@ public class SendMailCommand extends Command {
 	public Fields execute(Fields input) throws CommandException {
 		logInput(input);
 
-		Queue mailQueue = _context.get(input.get(GenericFieldNames.QUEUE_NAME).toString());
+		Queue mailQueue = fContext.get(input.get(GenericFieldNames.QUEUE_NAME).toString());
 		
 		Fields mailFields;
 		while((mailFields = mailQueue.popFields()) != null) {

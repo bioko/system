@@ -25,42 +25,24 @@
  * 
  */
 
-package org.biokoframework.system.service.cron.quartz;
+package org.biokoframework.system.services;
 
-import org.biokoframework.system.KILL_ME.commons.logger.Loggers;
-import org.biokoframework.system.command.AbstractCommand;
-import org.biokoframework.utils.fields.Fields;
-import org.quartz.DisallowConcurrentExecution;
-import org.quartz.Job;
-import org.quartz.JobDataMap;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
-import org.quartz.PersistJobDataAfterExecution;
+import org.biokoframework.system.repository.service.RepositoryService;
 
-@PersistJobDataAfterExecution
-@DisallowConcurrentExecution
-public class CommandRunnerJob implements Job {
+import com.google.inject.AbstractModule;
 
-	public static final String COMMAND = "command";
-	public static final String COMMAND_INPUT = "commandInput";
-	public static final String COMMAND_OUTPUT = "commandOutput";
+/**
+ * 
+ * @author Mikol Faro <mikol.faro@gmail.com>
+ * @date Feb 6, 2014
+ *
+ */
+public class RepositoryModule extends AbstractModule {
 
 	@Override
-	public void execute(JobExecutionContext context) throws JobExecutionException {
-		JobDataMap data = context.getJobDetail().getJobDataMap();
-		
-		try {
-			AbstractCommand command = (AbstractCommand) data.get(COMMAND);
-			Fields input = (Fields) data.get(COMMAND_INPUT);
-		
-			Fields output = command.execute(input);
-			
-			data.put(COMMAND_OUTPUT, output);
-		
-		} catch (Exception exception) {
-			Loggers.jobs.error("Job execution", exception);
-			
-			throw new JobExecutionException(exception);
-		}
+	protected void configure() {
+		bind(RepositoryService.class).
+		to(DefaultRepositoryService.class);
 	}
+
 }

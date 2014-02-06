@@ -37,7 +37,7 @@ import org.biokoframework.system.KILL_ME.commons.GenericCommandNames;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldValues;
 import org.biokoframework.system.KILL_ME.commons.logger.Loggers;
-import org.biokoframework.system.command.Command;
+import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.CommandException;
 import org.biokoframework.system.entity.EntityClassNameTranslator;
 import org.biokoframework.system.entity.description.ParameterEntity;
@@ -48,7 +48,7 @@ import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.repository.Repository;
 
 @Deprecated
-public class UniqueCheckerCommand<T extends DomainEntity> extends Command {
+public class UniqueCheckerCommand<T extends DomainEntity> extends AbstractCommand {
 
 	private String _key;
 	private Repository<T> _repository;

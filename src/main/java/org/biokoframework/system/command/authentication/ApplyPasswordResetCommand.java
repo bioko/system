@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import org.biokoframework.system.KILL_ME.commons.GenericConstants;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.KILL_ME.commons.GenericRepositoryNames;
-import org.biokoframework.system.command.Command;
+import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.CommandException;
 import org.biokoframework.system.entity.authentication.PasswordReset;
 import org.biokoframework.system.entity.login.Login;
@@ -46,7 +46,7 @@ import org.biokoframework.utils.validator.Validator;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 
-public class ApplyPasswordResetCommand extends Command {
+public class ApplyPasswordResetCommand extends AbstractCommand {
 
 	private Repository<Login> _loginRepo;
 	private Repository<PasswordReset> _passwordResetRepo;
@@ -54,10 +54,10 @@ public class ApplyPasswordResetCommand extends Command {
 
 	@Override
 	public void onContextInitialized() {
-		_loginRepo = _context.getRepository(GenericRepositoryNames.LOGIN_REPOSITORY);
-		_passwordResetRepo = _context.getRepository(GenericRepositoryNames.PASSWORD_RESET);
+		_loginRepo = fContext.getRepository(GenericRepositoryNames.LOGIN_REPOSITORY);
+		_passwordResetRepo = fContext.getRepository(GenericRepositoryNames.PASSWORD_RESET);
 		
-		_currentTimeService = (CurrentTimeService) _context.get(GenericConstants.CONTEXT_CURRENT_TIME_SERVICE);
+		_currentTimeService = (CurrentTimeService) fContext.get(GenericConstants.CONTEXT_CURRENT_TIME_SERVICE);
 	}
 	
 	@Override
@@ -75,7 +75,7 @@ public class ApplyPasswordResetCommand extends Command {
 			if (now.isBefore(tokenExpireTime)) {
 				Login login = _loginRepo.retrieve(passwordReset.get(PasswordReset.LOGIN_ID).toString());
 				login.set(Login.PASSWORD, input.get(Login.PASSWORD).toString());
-				SafeRepositoryHelper.save(_loginRepo, login, _context);
+				SafeRepositoryHelper.save(_loginRepo, login, fContext);
 			}
 		} else {
 			throw CommandExceptionsFactory.createEntityNotFound(PasswordReset.class.getSimpleName(), PasswordReset.TOKEN, token);

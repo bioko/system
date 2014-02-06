@@ -34,6 +34,7 @@ import org.biokoframework.system.ConfigurationEnum;
 import org.biokoframework.system.KILL_ME.XSystemIdentityCard;
 import org.biokoframework.system.KILL_ME.exception.SystemException;
 import org.biokoframework.system.command.AbstractCommandHandler;
+import org.biokoframework.system.command.ICommand;
 import org.biokoframework.system.context.Context;
 import org.biokoframework.system.service.cron.CronService;
 import org.biokoframework.utils.fields.Fields;
@@ -66,7 +67,7 @@ public class AnnotatedSystemCronServiceInitializer {
 				String commandName = classField.get(null).toString();
 				String expression = _checkForCronExpression(identityCard.getSystemConfiguration(), cronAnnotation.expressions());
 				if (expression!=null) {
-					org.biokoframework.system.command.Command commandInstance = commandHandler.getByName(commandName);
+					ICommand commandInstance = commandHandler.getByName(commandName);
 					Fields inputFields = new Fields();
 					if (!StringUtils.isEmpty(cronAnnotation.input())) {
 						inputFields = Fields.fromJson(cronAnnotation.input());

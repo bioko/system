@@ -43,13 +43,15 @@ import org.biokoframework.system.service.validation.AbstractValidator;
 import org.biokoframework.utils.exception.BiokoException;
 import org.biokoframework.utils.validator.ValidatorRule;
 
+import com.google.inject.Injector;
+
 public class AnnotatedSystemFactory {
 
-	public static XSystem createSystem(XSystemIdentityCard identityCard, ContextFactory _systemContextFactory, Class<?> annotatedSystemCommands) throws IllegalArgumentException, IllegalAccessException, InstantiationException, ClassNotFoundException, BiokoException {
+	public static XSystem createSystem(XSystemIdentityCard identityCard, ContextFactory _systemContextFactory, Class<?> annotatedSystemCommands, Injector injector) throws IllegalArgumentException, IllegalAccessException, InstantiationException, ClassNotFoundException, BiokoException {
 		
 		Context context = _systemContextFactory.create(identityCard);
 		context.put(Context.COMMANDS_CLASS, annotatedSystemCommands);
-		AbstractCommandHandler commandHandler = AnnotatedCommandHandlerFactory.create(annotatedSystemCommands, new ProxyContext(context), identityCard);		
+		AbstractCommandHandler commandHandler = AnnotatedCommandHandlerFactory.create(annotatedSystemCommands, new ProxyContext(context), identityCard, injector);		
 		context.setCommandHandler(new ProxyCommandHandler(commandHandler));
 		AnnotatedSystemCronServiceInitializer.initCronService(identityCard, context, annotatedSystemCommands);
 		

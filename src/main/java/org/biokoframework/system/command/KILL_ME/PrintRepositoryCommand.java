@@ -30,12 +30,12 @@ package org.biokoframework.system.command.KILL_ME;
 import org.biokoframework.system.KILL_ME.commons.GenericCommandNames;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.KILL_ME.commons.logger.Loggers;
-import org.biokoframework.system.command.Command;
+import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.CommandException;
 import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.repository.Repository;
 
-public class PrintRepositoryCommand extends Command {
+public class PrintRepositoryCommand extends AbstractCommand {
 
 	private final Repository<?> _repository;
 	private String _repositoryName;

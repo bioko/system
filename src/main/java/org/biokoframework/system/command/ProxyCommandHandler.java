@@ -32,34 +32,34 @@ import java.util.Set;
 
 public class ProxyCommandHandler extends AbstractCommandHandler {
 
-	private AbstractCommandHandler _commandHandler;
+	private AbstractCommandHandler fCommandHandler;
 
 	public ProxyCommandHandler(AbstractCommandHandler commandHandler) {
-		_commandHandler = commandHandler;
+		fCommandHandler = commandHandler;
 	}
 	
 	@Override
-	public final void put(String aCommandName, Command aCommand) {
+	public final void put(String aCommandName, ICommand aCommand) {
 		throw new UnsupportedOperationException();		
 	}
 
 	@Override
-	public Command getByName(String aCommandName) throws CommandException {
-		return _commandHandler.getByName(aCommandName);
+	public ICommand getByName(String aCommandName) throws CommandException {
+		return fCommandHandler.getByName(aCommandName);
 	}
 
 	@Override
 	public String report() {
-		return _commandHandler.report();
+		return fCommandHandler.report();
 	}
 
 	@Override
 	public Set<String> keys() {
-		return new HashSet<String>(_commandHandler.keys());
+		return new HashSet<String>(fCommandHandler.keys());
 	}
 
 	@Override
-	public void putRest(String aRestCommandName, Command aCommand) {
+	public void putRest(String aRestCommandName, ICommand aCommand) {
 		throw new UnsupportedOperationException();
 		
 	}

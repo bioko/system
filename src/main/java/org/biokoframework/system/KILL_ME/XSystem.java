@@ -36,8 +36,8 @@ import org.apache.log4j.Logger;
 import org.biokoframework.system.KILL_ME.exception.CommandNotFoundException;
 import org.biokoframework.system.command.AbstractCommandHandler;
 import org.biokoframework.system.command.AbstractFilter;
-import org.biokoframework.system.command.Command;
 import org.biokoframework.system.command.CommandException;
+import org.biokoframework.system.command.ICommand;
 import org.biokoframework.system.context.Context;
 import org.biokoframework.system.event.SystemListener;
 import org.biokoframework.system.service.validation.AbstractValidator;
@@ -87,7 +87,7 @@ public class XSystem {
 		try {
 			_logger.info("----- Executing Command: " + commandName + " -----");
 			_logger.info("Command input: " + input.toString());
-			Command command = _commandHandler.getByName(commandName);
+			ICommand command = _commandHandler.getByName(commandName);
 			if (command == null) {
 				Fields fields = new Fields(
 						ErrorEntity.ERROR_MESSAGE, "Command " + commandName + " not found.",

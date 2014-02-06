@@ -38,7 +38,7 @@ import org.biokoframework.system.KILL_ME.commons.GenericCommandNames;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.KILL_ME.commons.GenericRepositoryNames;
 import org.biokoframework.system.KILL_ME.commons.logger.Loggers;
-import org.biokoframework.system.command.Command;
+import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.CommandException;
 import org.biokoframework.system.context.Context;
 import org.biokoframework.system.entity.authentication.Authentication;
@@ -54,18 +54,18 @@ import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.repository.Repository;
 
 
-public class EngagedCheckInCommand extends Command {
+public class EngagedCheckInCommand extends AbstractCommand {
 
 	private Repository<Authentication> _authenticationRepository;
 
 	@Override
 	public void onContextInitialized() {
-		_authenticationRepository = _context.getRepository(GenericRepositoryNames.AUTHENTICATION_REPOSITORY);
+		_authenticationRepository = fContext.getRepository(GenericRepositoryNames.AUTHENTICATION_REPOSITORY);
 	}
 	
 	@Override
 	public Fields execute(Fields input) throws CommandException {
-		Logger logger = _context.get(Context.LOGGER);
+		Logger logger = fContext.get(Context.LOGGER);
 		logger.info("EXECUTING Command:" + this.getClass().getSimpleName());
 		logger.info("INPUT: " + input.toString());
 		
@@ -74,9 +74,9 @@ public class EngagedCheckInCommand extends Command {
 		
 		AuthenticationStrategy authStrategy = AuthenticationStrategyFactory.retrieveCheckInStrategy(input);
 		
-		Login login = (Login) authStrategy.authenticate(_context, input, false).get(Login.class.getSimpleName());
+		Login login = (Login) authStrategy.authenticate(fContext, input, false).get(Login.class.getSimpleName());
 		
-		Authentication authentication = insertNewAuthenticationFor(_context, login);
+		Authentication authentication = insertNewAuthenticationFor(fContext, login);
 	
 		Map<String, Object> map = new HashMap<String, Object>();
 		
@@ -100,7 +100,7 @@ public class EngagedCheckInCommand extends Command {
 
 	private Authentication insertNewAuthenticationFor(Context context, Login login) throws CommandException {
 		Authentication newAuth = AuthenticationManager.createAuthenticationFor(context, login);
-		newAuth = SafeRepositoryHelper.save(_authenticationRepository, newAuth, _context);
+		newAuth = SafeRepositoryHelper.save(_authenticationRepository, newAuth, fContext);
 		return newAuth;
 	}
 

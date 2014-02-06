@@ -36,13 +36,13 @@ import org.biokoframework.utils.fields.Fields;
 
 public class CommandHandlerImpl extends AbstractCommandHandler {
 
-	private LinkedHashMap<String,Command> _commands = new LinkedHashMap<String, Command>();
-	private String _system;
-	private String _version;
+	private LinkedHashMap<String, ICommand> fCommands = new LinkedHashMap<String, ICommand>();
+	private String fSystem;
+	private String fVersion;
 
 	public CommandHandlerImpl(String system, String version) {
-		_system = system;
-		_version = version;
+		fSystem = system;
+		fVersion = version;
 	}
 
 	public static CommandHandlerImpl empty(String aSystem, String aVersion) {
@@ -50,14 +50,14 @@ public class CommandHandlerImpl extends AbstractCommandHandler {
 	}
 	
 	@Override
-	public void put(String aCommandName, Command aCommand){
-		_commands.put(aCommandName, aCommand);
+	public void put(String aCommandName, ICommand aCommand){
+		fCommands.put(aCommandName, aCommand);
 	}
 
 	@Override
-	public Command getByName(String aCommandName) throws CommandException {
+	public ICommand getByName(String aCommandName) throws CommandException {
 		try {
-			return _commands.get(aCommandName);
+			return fCommands.get(aCommandName);
 		} catch (NullPointerException npe) {
 			Fields fields = new Fields(ErrorEntity.ERROR_MESSAGE, "Command name not found: " + aCommandName);
 			throw new CommandException(new ErrorEntity(fields), npe);
@@ -67,10 +67,10 @@ public class CommandHandlerImpl extends AbstractCommandHandler {
 	@Override
 	public String report() {
 		StringBuffer result = new StringBuffer(CommandHandlerImpl.class.getSimpleName());
-		result.append(": System=" + _system);
-		result.append(" Version=" + _version);
+		result.append(": System=" + fSystem);
+		result.append(" Version=" + fVersion);
 		result.append(": \n");
-		for (Entry<String, Command> each : _commands.entrySet()) {
+		for (Entry<String, ICommand> each : fCommands.entrySet()) {
 			result.append(each.getKey());
 			result.append("=");
 			result.append(each.getValue());
@@ -81,11 +81,11 @@ public class CommandHandlerImpl extends AbstractCommandHandler {
 
 	@Override
 	public Set<String> keys() {
-		return _commands.keySet();
+		return fCommands.keySet();
 	}
 
 	@Override
-	public void putRest(String aRestCommandName, Command aCommand) {
-		_commands.put(aRestCommandName, aCommand);
+	public void putRest(String aRestCommandName, ICommand aCommand) {
+		fCommands.put(aRestCommandName, aCommand);
 	}
 }

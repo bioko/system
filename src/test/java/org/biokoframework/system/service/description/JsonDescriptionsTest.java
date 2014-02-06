@@ -149,7 +149,7 @@ public class JsonDescriptionsTest {
 		
 		Context context = new DummyContextFactory().create(dummyIdentityCard);
 		context.put(Context.COMMANDS_CLASS, DummySystemCommands.class);
-		AbstractCommandHandler commandHandler = AnnotatedCommandHandlerFactory.create(DummySystemCommands.class, new ProxyContext(context), dummyIdentityCard);
+		AbstractCommandHandler commandHandler = AnnotatedCommandHandlerFactory.create(DummySystemCommands.class, new ProxyContext(context), dummyIdentityCard, null);
 		context.setCommandHandler(new ProxyCommandHandler(commandHandler));
 		
 		assertThat(descriptor.describeSystem(context).toJSONString(),

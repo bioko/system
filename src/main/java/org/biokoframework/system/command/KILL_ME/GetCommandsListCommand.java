@@ -32,8 +32,8 @@ import java.util.ArrayList;
 import org.biokoframework.system.KILL_ME.commons.GenericCommandNames;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.KILL_ME.commons.logger.Loggers;
+import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.AbstractCommandHandler;
-import org.biokoframework.system.command.Command;
 import org.biokoframework.system.command.CommandException;
 import org.biokoframework.system.entity.description.CommandEntity;
 import org.biokoframework.system.entity.description.ParameterEntity;
@@ -43,7 +43,7 @@ import org.biokoframework.utils.fields.FieldNames;
 import org.biokoframework.utils.fields.Fields;
 
 
-public class GetCommandsListCommand extends Command {
+public class GetCommandsListCommand extends AbstractCommand {
 	
 	private AbstractCommandHandler _commandHandler;
 
@@ -56,7 +56,7 @@ public class GetCommandsListCommand extends Command {
 	
 	@Override
 	public void onContextInitialized() {
-		_commandHandler = _context.getCommandHandler();
+		_commandHandler = fContext.getCommandHandler();
 	}
 
 	@Override

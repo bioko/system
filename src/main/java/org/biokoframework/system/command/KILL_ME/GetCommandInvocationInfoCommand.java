@@ -34,9 +34,10 @@ import org.biokoframework.system.KILL_ME.commons.GenericCommandNames;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldValues;
 import org.biokoframework.system.KILL_ME.commons.logger.Loggers;
+import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.AbstractCommandHandler;
-import org.biokoframework.system.command.Command;
 import org.biokoframework.system.command.CommandException;
+import org.biokoframework.system.command.ICommand;
 import org.biokoframework.system.entity.description.CommandEntity;
 import org.biokoframework.system.entity.description.CommandEntityBuilder;
 import org.biokoframework.system.entity.description.ParameterEntity;
@@ -46,13 +47,13 @@ import org.biokoframework.utils.fields.FieldNames;
 import org.biokoframework.utils.fields.Fields;
 
 
-public class GetCommandInvocationInfoCommand extends Command {
+public class GetCommandInvocationInfoCommand extends AbstractCommand {
 	
 	private AbstractCommandHandler _commandHandler;
 
 	@Override
 	public void onContextInitialized() {
-		_commandHandler = _context.getCommandHandler();
+		_commandHandler = fContext.getCommandHandler();
 	}
 
 	// TODO MATTO I
@@ -70,7 +71,7 @@ public class GetCommandInvocationInfoCommand extends Command {
 		if (commandName == null) {
 			throw CommandExceptionsFactory.createExpectedFieldNotFound(GenericFieldNames.COMMAND);
 		}
-		Command command = _commandHandler.getByName(commandName);
+		ICommand command = _commandHandler.getByName(commandName);
 		if (command == null) {
 			Loggers.xsystem.error("Command " + commandName + " not found");
 			throw CommandExceptionsFactory.createCommandNotFoundException(commandName);
@@ -91,7 +92,7 @@ public class GetCommandInvocationInfoCommand extends Command {
 		return input.putAll(result);
 	}
 
-	private ArrayList<ParameterEntity> extractInputParameters(String commandName, Command command) {
+	private ArrayList<ParameterEntity> extractInputParameters(String commandName, ICommand command) {
 		ArrayList<ParameterEntity> parameters = null;
 		if (command instanceof SetCommand) {
 			parameters = ((SetCommand)command).componingInputKeys(commandName).get(GenericFieldNames.INPUT);
@@ -101,7 +102,7 @@ public class GetCommandInvocationInfoCommand extends Command {
 		return parameters;
 	}
 
-	private ArrayList<ParameterEntity> extractOutputParameters(String commandName, Command command) {
+	private ArrayList<ParameterEntity> extractOutputParameters(String commandName, ICommand command) {
 		ArrayList<ParameterEntity> parameters = null;
 		if (command instanceof SetCommand) {
 			parameters = ((SetCommand)command).componingOutputKeys(commandName).get(GenericFieldNames.OUTPUT);

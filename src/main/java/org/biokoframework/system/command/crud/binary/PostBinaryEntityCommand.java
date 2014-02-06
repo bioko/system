@@ -33,7 +33,7 @@ import org.apache.log4j.Logger;
 import org.biokoframework.system.KILL_ME.commons.GenericCommandNames;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.KILL_ME.commons.HttpMethod;
-import org.biokoframework.system.command.Command;
+import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.CommandException;
 import org.biokoframework.system.context.Context;
 import org.biokoframework.system.entity.EntityClassNameTranslator;
@@ -43,7 +43,7 @@ import org.biokoframework.system.factory.binary.BinaryEntityRepository;
 import org.biokoframework.system.repository.core.SafeRepositoryHelper;
 import org.biokoframework.utils.fields.Fields;
 
-public class PostBinaryEntityCommand extends Command {
+public class PostBinaryEntityCommand extends AbstractCommand {
 
 	private final Context _context;
 	private final BinaryEntityRepository _blobRepo;

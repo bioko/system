@@ -29,11 +29,11 @@ package org.biokoframework.system.command.KILL_ME;
 
 import java.util.LinkedHashMap;
 
-import org.biokoframework.system.command.Command;
+import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.utils.fields.Fields;
 
 
-public abstract class SetCommand extends Command {
+public abstract class SetCommand extends AbstractCommand {
 
 	private LinkedHashMap<String, Fields> _inputKeysMap;
 	private LinkedHashMap<String, Fields> _outputKeysMap;

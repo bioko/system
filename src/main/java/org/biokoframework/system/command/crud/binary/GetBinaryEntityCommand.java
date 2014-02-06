@@ -34,7 +34,7 @@ import org.biokoframework.system.KILL_ME.commons.GenericCommandNames;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldValues;
 import org.biokoframework.system.KILL_ME.commons.HttpMethod;
-import org.biokoframework.system.command.Command;
+import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.CommandException;
 import org.biokoframework.system.context.Context;
 import org.biokoframework.system.entity.EntityClassNameTranslator;
@@ -46,7 +46,7 @@ import org.biokoframework.system.factory.binary.BinaryEntityRepository;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.fields.Fields;
 
-public class GetBinaryEntityCommand extends Command {
+public class GetBinaryEntityCommand extends AbstractCommand {
 
 	private final Context _context;
 	private final BinaryEntityRepository _blobRepo;

@@ -29,8 +29,8 @@ package org.biokoframework.system.factory;
 
 import org.biokoframework.system.KILL_ME.commons.GenericCommandNames;
 import org.biokoframework.system.KILL_ME.commons.HttpMethod;
+import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.AbstractCommandHandler;
-import org.biokoframework.system.command.Command;
 import org.biokoframework.system.command.crud.CrudCommand;
 import org.biokoframework.system.command.crud.binary.DeleteBinaryEntityCommand;
 import org.biokoframework.system.command.crud.binary.GetBinaryEntityCommand;
@@ -70,7 +70,7 @@ public abstract class GenericCommandHandlerFactory {
 //		commandHandler.putRest(GenericCommandNames.OPTIONS_COMMAND_LIST, new GetCommandsListCommand(commandHandler));
 	}
 	
-	protected ResolvableCommand resolvable(Command command) {
+	protected ResolvableCommand resolvable(AbstractCommand command) {
 		return new ResolvableCommand(command);
 	}
 

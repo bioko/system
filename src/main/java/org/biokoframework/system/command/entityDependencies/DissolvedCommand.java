@@ -33,7 +33,7 @@ import java.util.List;
 import org.biokoframework.system.KILL_ME.commons.GenericCommandNames;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.KILL_ME.commons.logger.Loggers;
-import org.biokoframework.system.command.Command;
+import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.CommandException;
 import org.biokoframework.system.entity.EntityClassNameTranslator;
 import org.biokoframework.system.entity.description.ComposedParameterEntityBuilder;
@@ -46,7 +46,7 @@ import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.repository.Repository;
 
-public class DissolvedCommand extends Command {
+public class DissolvedCommand extends AbstractCommand {
 
 	private static final String COMPONING_KEYS_METHOD = "componingKeys";
 	

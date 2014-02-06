@@ -36,7 +36,7 @@ import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 import org.biokoframework.system.KILL_ME.exception.SystemException;
-import org.biokoframework.system.command.Command;
+import org.biokoframework.system.command.ICommand;
 import org.biokoframework.system.context.Context;
 import org.biokoframework.system.service.cron.quartz.CommandRunnerJob;
 import org.biokoframework.system.service.cron.quartz.QuartzCronListenerWrapper;
@@ -75,11 +75,11 @@ public class CronService {
 		_context = context;
 	}
 	
-	public void register(Command command, Fields commandInput, String cronExpression, String notificationEmail) throws SystemException {
+	public void register(ICommand command, Fields commandInput, String cronExpression, String notificationEmail) throws SystemException {
 		register(command, commandInput, cronExpression, notificationEmail, null);
 	}
 
-	public void register(Command command, Fields commandInput, String cronExpression, String notificationEmail, ArrayList<CronJobListener> listeners) throws SystemException {
+	public void register(ICommand command, Fields commandInput, String cronExpression, String notificationEmail, ArrayList<CronJobListener> listeners) throws SystemException {
 		if (listeners == null) {
 			listeners = new ArrayList<CronJobListener>();
 		}

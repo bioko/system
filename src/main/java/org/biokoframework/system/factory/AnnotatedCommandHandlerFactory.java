@@ -36,6 +36,7 @@ import org.biokoframework.system.KILL_ME.commons.GenericCommandNames;
 import org.biokoframework.system.KILL_ME.commons.HttpMethod;
 import org.biokoframework.system.command.AbstractCommandHandler;
 import org.biokoframework.system.command.CommandHandlerImpl;
+import org.biokoframework.system.command.ICommand;
 import org.biokoframework.system.command.annotation.Command;
 import org.biokoframework.system.command.crud.annotation.CrudCommand;
 import org.biokoframework.system.command.crud.binary.DeleteBinaryEntityCommand;
@@ -51,9 +52,11 @@ import org.biokoframework.system.factory.binary.BinaryEntityRepository;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.repository.Repository;
 
+import com.google.inject.Injector;
+
 public class AnnotatedCommandHandlerFactory {
 
-	public static AbstractCommandHandler create(Class<?> annotatedSystemCommands, Context context, XSystemIdentityCard identityCard) 
+	public static AbstractCommandHandler create(Class<?> annotatedSystemCommands, Context context, XSystemIdentityCard identityCard, Injector injector) 
 			throws IllegalArgumentException, IllegalAccessException, InstantiationException, ClassNotFoundException {
 		
 		AbstractCommandHandler commandHandler = CommandHandlerImpl.empty(context.getSystemName(),  (String) context.get(Context.SYSTEM_VERSION));
@@ -61,22 +64,22 @@ public class AnnotatedCommandHandlerFactory {
 		Field[] classFields = annotatedSystemCommands.getFields();
 
 		for(Field classField: classFields) {
-			searchForCommands(commandHandler, context, classField, identityCard.getSystemConfiguration());
-			searchForCrudCommand(commandHandler, context, classField, identityCard.getSystemConfiguration());
-			searchForBlobCrudCommand(commandHandler, context, classField);
+			searchForCommands(commandHandler, context, classField, identityCard.getSystemConfiguration(), injector);
+			searchForCrudCommand(commandHandler, context, classField, identityCard.getSystemConfiguration(), injector);
+			searchForBlobCrudCommand(commandHandler, context, classField, injector);
 		}
 
 		return commandHandler;
 	}
 
-	private static void searchForCommands(AbstractCommandHandler commandHandler, Context context, Field classField, ConfigurationEnum currentConfiguration) throws IllegalArgumentException, IllegalAccessException, InstantiationException, ClassNotFoundException {
+	private static void searchForCommands(AbstractCommandHandler commandHandler, Context context, Field classField, ConfigurationEnum currentConfiguration, Injector injector) throws IllegalArgumentException, IllegalAccessException, InstantiationException, ClassNotFoundException {
 		Command commandAnnotation = classField.getAnnotation(Command.class);
 		if (commandAnnotation != null && !ArrayUtils.contains(commandAnnotation.hideOn(), currentConfiguration)) {
 			
 			String commandName = classField.get(null).toString();
-			Class<?> commandClass = commandAnnotation.impl();				
+			Class<? extends ICommand> commandClass = commandAnnotation.impl();				
 
-			org.biokoframework.system.command.Command commandInstance = (org.biokoframework.system.command.Command) Class.forName(commandClass.getName()).newInstance();
+			ICommand commandInstance = injector.getInstance(commandClass);
 			commandInstance.setContext(context);
 			commandInstance.setCommandName(commandName);
 
@@ -93,7 +96,7 @@ public class AnnotatedCommandHandlerFactory {
 
 
 	@SuppressWarnings("unchecked")
-	private static void searchForCrudCommand(AbstractCommandHandler commandHandler, Context context, Field classField, ConfigurationEnum currentConfiguration) throws IllegalArgumentException, IllegalAccessException {
+	private static void searchForCrudCommand(AbstractCommandHandler commandHandler, Context context, Field classField, ConfigurationEnum currentConfiguration, Injector injector) throws IllegalArgumentException, IllegalAccessException {
 		CrudCommand crudCommandAnnotation = classField.getAnnotation(CrudCommand.class);
 		
 		String crudName = classField.get(null).toString();
@@ -103,7 +106,7 @@ public class AnnotatedCommandHandlerFactory {
 			Class<DomainEntity> entity = (Class<DomainEntity>) crudCommandAnnotation.entity();
 			Repository<DomainEntity> repo = context.getRepository(crudCommandAnnotation.repoName());
 
-			org.biokoframework.system.command.crud.CrudCommand<DomainEntity> crudCommandInstance = new org.biokoframework.system.command.crud.CrudCommand<DomainEntity>(context, entity, repo);
+			ICommand crudCommandInstance = new org.biokoframework.system.command.crud.CrudCommand<DomainEntity>(context, entity, repo);
 			crudCommandInstance.setCommandName(crudName);
 			
 			if (crudCommandAnnotation.create())
@@ -123,7 +126,7 @@ public class AnnotatedCommandHandlerFactory {
 
 
 	private static void registerCommand(AbstractCommandHandler commandHandler, Context context,
-			String httpMethod, String commandName, Field classField, org.biokoframework.system.command.Command commandInstance) {
+			String httpMethod, String commandName, Field classField, ICommand commandInstance) {
 
 		commandHandler.putRest(composeCrudCommandName(httpMethod, commandName), commandInstance);
 //		Auth authAnnotation = classField.getAnnotation(Auth.class);
@@ -136,7 +139,7 @@ public class AnnotatedCommandHandlerFactory {
 		
 	}
 
-	private static void searchForBlobCrudCommand(AbstractCommandHandler commandHandler, Context context, Field classField) throws IllegalArgumentException, IllegalAccessException {
+	private static void searchForBlobCrudCommand(AbstractCommandHandler commandHandler, Context context, Field classField, Injector injector) throws IllegalArgumentException, IllegalAccessException {
 		BlobCrudCommand blobCrudCommandAnnotation = classField.getAnnotation(BlobCrudCommand.class);
 
 		String blobName = classField.get(null).toString();
@@ -147,27 +150,27 @@ public class AnnotatedCommandHandlerFactory {
 			
 
 			if (blobCrudCommandAnnotation.create()) {
-				org.biokoframework.system.command.Command commandInstance = new PostBinaryEntityCommand(context, blobRepo, blobName);
+				ICommand commandInstance = new PostBinaryEntityCommand(context, blobRepo, blobName);
 				commandInstance.setCommandName(blobName);
 				commandHandler.putRest(composeCrudCommandName(HttpMethod.POST.name(), blobName), commandInstance);
 			}
 			if (blobCrudCommandAnnotation.read()) {
-				org.biokoframework.system.command.Command commandInstance = new GetBinaryEntityCommand(context, blobRepo);
+				ICommand commandInstance = new GetBinaryEntityCommand(context, blobRepo);
 				commandInstance.setCommandName(blobName);
 				commandHandler.putRest(composeCrudCommandName(HttpMethod.GET.name(), blobName), commandInstance);
 			}
 			if (blobCrudCommandAnnotation.update()) {
-				org.biokoframework.system.command.Command commandInstance = new PutBinaryEntityCommand(context, blobRepo, blobName);
+				ICommand commandInstance = new PutBinaryEntityCommand(context, blobRepo, blobName);
 				commandInstance.setCommandName(blobName);
 				commandHandler.putRest(composeCrudCommandName(HttpMethod.PUT.name(), blobName), commandInstance);
 			}
 			if (blobCrudCommandAnnotation.delete()) {
-				org.biokoframework.system.command.Command commandInstance = new DeleteBinaryEntityCommand(context, blobRepo);
+				ICommand commandInstance = new DeleteBinaryEntityCommand(context, blobRepo);
 				commandInstance.setCommandName(blobName);
 				commandHandler.putRest(composeCrudCommandName(HttpMethod.DELETE.name(), blobName), commandInstance);
 			}
 			if (blobCrudCommandAnnotation.head()) {
-				org.biokoframework.system.command.Command commandInstance = new HeadBinaryEntityCommand(context, blobRepo);
+				org.biokoframework.system.command.AbstractCommand commandInstance = new HeadBinaryEntityCommand(context, blobRepo);
 				commandInstance.setCommandName(blobName);
 				commandHandler.putRest(composeCrudCommandName(HttpMethod.HEAD.name(), blobName), commandInstance);
 			}

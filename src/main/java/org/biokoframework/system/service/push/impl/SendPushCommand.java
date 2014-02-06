@@ -36,14 +36,14 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
-import org.biokoframework.system.command.Command;
+import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.CommandException;
 import org.biokoframework.system.service.push.NotificationFailureException;
 import org.biokoframework.system.service.push.PushService;
 import org.biokoframework.system.service.queue.Queue;
 import org.biokoframework.utils.fields.Fields;
 
-public class SendPushCommand extends Command {
+public class SendPushCommand extends AbstractCommand {
 
 	private String _pusherdrilloUrl;
 	private String _appToken;
@@ -51,16 +51,16 @@ public class SendPushCommand extends Command {
 
 	@Override
 	public void onContextInitialized() {
-		_pusherdrilloUrl = _context.getSystemProperty(ProdNotificationImplementation.PUSHERDRILLO_URL);
-		_appToken = _context.getSystemProperty(ProdNotificationImplementation.PUSHERDRILLO_APP_TOKEN);
-		_appSecret = _context.getSystemProperty(ProdNotificationImplementation.PUSHERDRILLO_APP_SECRET);
+		_pusherdrilloUrl = fContext.getSystemProperty(ProdNotificationImplementation.PUSHERDRILLO_URL);
+		_appToken = fContext.getSystemProperty(ProdNotificationImplementation.PUSHERDRILLO_APP_TOKEN);
+		_appSecret = fContext.getSystemProperty(ProdNotificationImplementation.PUSHERDRILLO_APP_SECRET);
 	}
 	
 	@Override
 	public Fields execute(Fields input) throws CommandException {
 		logInput(input);
 
-		Queue pushQueue = _context.get(input.get(GenericFieldNames.QUEUE_NAME).toString());
+		Queue pushQueue = fContext.get(input.get(GenericFieldNames.QUEUE_NAME).toString());
 		
 		Fields pushFields;
 		while((pushFields = pushQueue.popFields()) != null) {
@@ -75,7 +75,7 @@ public class SendPushCommand extends Command {
 					sendPush(userToken, content, production);
 				}
 			} catch (NotificationFailureException exception) {
-				_context.getLogger().error("Pushing", exception);
+				fContext.getLogger().error("Pushing", exception);
 			}
 			
 		}

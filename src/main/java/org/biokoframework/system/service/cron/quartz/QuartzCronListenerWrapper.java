@@ -30,7 +30,7 @@ package org.biokoframework.system.service.cron.quartz;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import org.biokoframework.system.command.Command;
+import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.service.cron.CronJobListener;
 import org.biokoframework.utils.fields.Fields;
 import org.quartz.JobDataMap;
@@ -58,7 +58,7 @@ public class QuartzCronListenerWrapper extends JobListenerSupport implements Job
     public void jobWasExecuted(JobExecutionContext context, JobExecutionException jobException) {
 		JobDataMap jobData = context.getJobDetail().getJobDataMap();
 		
-		Command command = (Command) jobData.get(CommandRunnerJob.COMMAND);
+		AbstractCommand command = (AbstractCommand) jobData.get(CommandRunnerJob.COMMAND);
 		//String commandName = command.getClass().getSimpleName();
 		String commandName = command.getName();
 		

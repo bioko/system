@@ -36,7 +36,7 @@ import java.rmi.server.UnicastRemoteObject;
 import org.apache.log4j.Logger;
 import org.biokoframework.system.KILL_ME.exception.StackTracePrinter;
 import org.biokoframework.system.command.AbstractCommandHandler;
-import org.biokoframework.system.command.Command;
+import org.biokoframework.system.command.ICommand;
 import org.biokoframework.utils.fields.FieldNames;
 import org.biokoframework.utils.fields.Fields;
 
@@ -63,7 +63,7 @@ public class XRemoteSystem extends UnicastRemoteObject implements XRmiServerInte
 		Fields output = new Fields();
 		try {
 			String commandName = anInput.get(FieldNames.COMMAND_NAME);
-			Command command = _commandHandler.getByName(commandName);
+			ICommand command = _commandHandler.getByName(commandName);
 				_logger.info("EXECUTING command: " + commandName + " with INPUT " + anInput.toString());
 				output = command.execute(anInput);
 				_logger.info("EXECUTED command: " + commandName + " with OUTPUT " + output.toString());

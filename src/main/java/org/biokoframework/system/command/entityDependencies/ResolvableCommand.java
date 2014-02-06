@@ -33,8 +33,9 @@ import org.biokoframework.system.KILL_ME.commons.GenericCommandNames;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldValues;
 import org.biokoframework.system.KILL_ME.commons.logger.Loggers;
-import org.biokoframework.system.command.Command;
+import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.CommandException;
+import org.biokoframework.system.command.ICommand;
 import org.biokoframework.system.entity.description.ParameterEntity;
 import org.biokoframework.system.entity.resolution.AnnotatedEntityResolver;
 import org.biokoframework.system.entity.resolution.EntityResolver;
@@ -43,14 +44,14 @@ import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.repository.Repository;
 
-public class ResolvableCommand extends Command {
+public class ResolvableCommand extends AbstractCommand {
 
-	protected Command _baseCommand;
-	private EntityResolver _resolver;
+	protected ICommand fBaseCommand;
+	private EntityResolver fResolver;
 
-	public ResolvableCommand(Command baseCommand) {
-		_baseCommand = baseCommand;
-		_resolver = new AnnotatedEntityResolver();
+	public ResolvableCommand(ICommand baseCommand) {
+		fBaseCommand = baseCommand;
+		fResolver = new AnnotatedEntityResolver();
 	}
 
 	
@@ -64,7 +65,7 @@ public class ResolvableCommand extends Command {
 			doResolve = Boolean.parseBoolean(input.get(GenericFieldNames.RESOLVE_ENTITIES).toString());
 		}
 		
-		Fields unresolvedResult = _baseCommand.execute(input);
+		Fields unresolvedResult = fBaseCommand.execute(input);
 		
 		Fields result;
 		if (doResolve) {
@@ -73,7 +74,7 @@ public class ResolvableCommand extends Command {
 			
 			try {
 				for (DomainEntity anEntity : entities) {
-					DomainEntity aResolvedEntity = _resolver.solve(anEntity, anEntity.getClass());
+					DomainEntity aResolvedEntity = fResolver.solve(anEntity, anEntity.getClass());
 					resolvedEntities.add(aResolvedEntity);
 				}
 				
@@ -91,23 +92,23 @@ public class ResolvableCommand extends Command {
 	}
 
 	public <DE extends DomainEntity> ResolvableCommand with(Repository<DE> repository, Class<DE> domainEntityClass) {
-		_resolver.with(repository, domainEntityClass);
+		fResolver.with(repository, domainEntityClass);
 		return this;
 	}
 
 	public ResolvableCommand maxDepth(int depthLimit) {
-		_resolver.maxDepth(depthLimit);
+		fResolver.maxDepth(depthLimit);
 		return this;
 	}
 	
 	@Override
 	public String getName() {
-		return _baseCommand.getName() + '-' + GenericCommandNames.RESOLVABLE;
+		return fBaseCommand.getName() + '-' + GenericCommandNames.RESOLVABLE;
 	}
 	
 	@Override
 	public Fields componingInputKeys() {
-		Fields componingInputKeys = _baseCommand.componingInputKeys();
+		Fields componingInputKeys = fBaseCommand.componingInputKeys();
 		
 		ParameterEntity parameter = new ParameterEntity(new Fields());
 		parameter.set(ParameterEntity.NAME, GenericFieldNames.RESOLVE_ENTITIES);
@@ -123,6 +124,6 @@ public class ResolvableCommand extends Command {
 
 	@Override
 	public Fields componingOutputKeys() {
-		return _baseCommand.componingOutputKeys();
+		return fBaseCommand.componingOutputKeys();
 	}
 }

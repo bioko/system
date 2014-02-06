@@ -34,11 +34,12 @@ import java.lang.annotation.Target;
 
 import org.biokoframework.system.ConfigurationEnum;
 import org.biokoframework.system.KILL_ME.commons.HttpMethod;
+import org.biokoframework.system.command.ICommand;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Command {
-	Class<? extends org.biokoframework.system.command.Command> impl();
+	Class<? extends ICommand> impl();
 	HttpMethod rest(); 
 	
 	ConfigurationEnum[] hideOn() default {};

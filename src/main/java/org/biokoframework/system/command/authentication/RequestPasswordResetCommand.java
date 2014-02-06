@@ -37,7 +37,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.biokoframework.system.KILL_ME.commons.GenericConstants;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.KILL_ME.commons.GenericRepositoryNames;
-import org.biokoframework.system.command.Command;
+import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.CommandException;
 import org.biokoframework.system.entity.authentication.PasswordReset;
 import org.biokoframework.system.entity.login.Login;
@@ -55,7 +55,7 @@ import org.biokoframework.utils.repository.Repository;
 import org.joda.time.DateTime;
 import org.joda.time.format.ISODateTimeFormat;
 
-public class RequestPasswordResetCommand extends Command {
+public class RequestPasswordResetCommand extends AbstractCommand {
 
 	public static final String PASSWORD_RESET_TOKEN = "passwordResetToken";
 
@@ -72,13 +72,13 @@ public class RequestPasswordResetCommand extends Command {
 
 	@Override
 	public void onContextInitialized() {
-		_loginRepo = _context.getRepository(GenericRepositoryNames.LOGIN_REPOSITORY);
-		_passwordResetRepo = _context.getRepository(GenericRepositoryNames.PASSWORD_RESET);
+		_loginRepo = fContext.getRepository(GenericRepositoryNames.LOGIN_REPOSITORY);
+		_passwordResetRepo = fContext.getRepository(GenericRepositoryNames.PASSWORD_RESET);
 		
-		_templateRepo = _context.getRepository(GenericRepositoryNames.TEMPLATE);
+		_templateRepo = fContext.getRepository(GenericRepositoryNames.TEMPLATE);
 		
-		_currentTimeService = (CurrentTimeService) _context.get(GenericConstants.CONTEXT_CURRENT_TIME_SERVICE);
-		_randomTokenService = (RandomGeneratorService) _context.get(GenericConstants.CONTEXT_RANDOM_GENERATOR_SERVICE);
+		_currentTimeService = (CurrentTimeService) fContext.get(GenericConstants.CONTEXT_CURRENT_TIME_SERVICE);
+		_randomTokenService = (RandomGeneratorService) fContext.get(GenericConstants.CONTEXT_RANDOM_GENERATOR_SERVICE);
 	}
 	
 	@Override
@@ -98,14 +98,14 @@ public class RequestPasswordResetCommand extends Command {
 		passwordReset.set(PasswordReset.TOKEN_EXPIRATION, now.plusDays(1).toString(ISODateTimeFormat.dateTimeNoMillis()));
 		String randomToken = _randomTokenService.generateString(PASSWORD_RESET_TOKEN, 20);
 		passwordReset.set(PasswordReset.TOKEN, randomToken);
-		SafeRepositoryHelper.save(_passwordResetRepo, passwordReset, _context);
+		SafeRepositoryHelper.save(_passwordResetRepo, passwordReset, fContext);
 
 
 		Template mailTemplate = _templateRepo.retrieveByForeignKey(Template.TRACK, PASSWORD_RESET_MAIL_TEMPLATE);
 		if (mailTemplate != null) {
 			
 			Map<String, Object> contentMap = new HashMap<String, Object>();
-			contentMap.put("url", StringUtils.defaultString(_context.getSystemProperty(RESET_PASSWORD_LANDING_PAGE_URL)));
+			contentMap.put("url", StringUtils.defaultString(fContext.getSystemProperty(RESET_PASSWORD_LANDING_PAGE_URL)));
 			contentMap.put("token", randomToken);
 			contentMap.put("userEmail", login.get(Login.USER_EMAIL));
 			ContentBuilder contentBuilder = new ContentBuilder(mailTemplate, contentMap);

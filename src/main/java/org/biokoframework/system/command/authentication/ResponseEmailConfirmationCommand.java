@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import org.biokoframework.system.KILL_ME.commons.GenericConstants;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.KILL_ME.commons.GenericRepositoryNames;
-import org.biokoframework.system.command.Command;
+import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.CommandException;
 import org.biokoframework.system.entity.authentication.EmailConfirmation;
 import org.biokoframework.system.entity.login.Login;
@@ -45,7 +45,7 @@ import org.biokoframework.utils.repository.Repository;
 import org.biokoframework.utils.validator.Validator;
 
 
-public class ResponseEmailConfirmationCommand extends Command {
+public class ResponseEmailConfirmationCommand extends AbstractCommand {
 
 	private Repository<Login> _loginRepo;
 	private Repository<EmailConfirmation> _emailConfirmationRepo;
@@ -55,10 +55,10 @@ public class ResponseEmailConfirmationCommand extends Command {
 	public void onContextInitialized() {
 		super.onContextInitialized();
 		
-		_loginRepo = _context.getRepository(GenericRepositoryNames.LOGIN_REPOSITORY);
-		_emailConfirmationRepo = _context.getRepository(GenericRepositoryNames.EMAIL_CONFIRMATION);
+		_loginRepo = fContext.getRepository(GenericRepositoryNames.LOGIN_REPOSITORY);
+		_emailConfirmationRepo = fContext.getRepository(GenericRepositoryNames.EMAIL_CONFIRMATION);
 		
-		_currentTimeService = _context.get(GenericConstants.CONTEXT_CURRENT_TIME_SERVICE);
+		_currentTimeService = fContext.get(GenericConstants.CONTEXT_CURRENT_TIME_SERVICE);
 	}
 
 	@Override
@@ -75,7 +75,7 @@ public class ResponseEmailConfirmationCommand extends Command {
 			
 			confirmation.set(EmailConfirmation.CONFIRMATION_TIMESTAMP, timestamp);
 			confirmation.set(EmailConfirmation.CONFIRMED, FieldValues.TRUE);
-			SafeRepositoryHelper.save(_emailConfirmationRepo, confirmation, _context);
+			SafeRepositoryHelper.save(_emailConfirmationRepo, confirmation, fContext);
 		}
 				
 		logOutput();

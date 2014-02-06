@@ -32,22 +32,22 @@ import java.util.Map.Entry;
 
 import org.biokoframework.system.KILL_ME.FieldsErrors;
 import org.biokoframework.system.KILL_ME.commons.logger.Loggers;
-import org.biokoframework.system.command.Command;
+import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.CommandException;
 import org.biokoframework.utils.fields.FieldNames;
 import org.biokoframework.utils.fields.Fields;
 
 
-public class MultipleCommand extends Command {
+public class MultipleCommand extends AbstractCommand {
 	
-	private LinkedHashMap<String, Command> _steps = new LinkedHashMap<String, Command>();
+	private LinkedHashMap<String, AbstractCommand> _steps = new LinkedHashMap<String, AbstractCommand>();
 	
 	@Override
 	public Fields execute(Fields input) throws CommandException {
 		Fields overAllOutput = Fields.successful();
 		Loggers.xsystem.info("Executing MultipleCommand: " + this.getClass().getSimpleName());
 		Loggers.xsystem.info("Steps: " + _steps.size());
-		for (Entry<String,Command> step : _steps.entrySet()) {
+		for (Entry<String,AbstractCommand> step : _steps.entrySet()) {
 			Fields output = new Fields();
 			Loggers.xsystem.info("Executing step: " + step.getKey());
 			output = step.getValue().execute(input);
@@ -70,7 +70,7 @@ public class MultipleCommand extends Command {
 		return overAllOutput;
 	}
 	
-	public void addStep(String aStepKey, Command aCommand) {
+	public void addStep(String aStepKey, AbstractCommand aCommand) {
 		Loggers.xsystem.info("Adding step: " + aStepKey + " to MultipleCommand " + this.getClass().getSimpleName());
 		_steps.put(aStepKey, aCommand);
 	}
