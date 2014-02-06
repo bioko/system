@@ -4,6 +4,8 @@
 	<groupId>org.biokoframework</groupId>
 	<artifactId>system</artifactId>
 	<version>0.1-SNAPSHOT</version>
+	<name>Biokio Framework</name>
+	<url>http://biokoframework.org</url>
 	<dependencies>
 		<dependency>
 			<groupId>org.biokoframework</groupId>
@@ -90,6 +92,4 @@
 			</plugin>
 		</plugins>
 	</build>
-	<name>Biokio Framework</name>
-	<url>http://biokoframework.org</url>
 </project>
