@@ -44,11 +44,13 @@ import org.biokoframework.utils.fields.FieldNames;
 import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.repository.Repository;
 
+import com.google.inject.TypeLiteral;
+
 public class CrudCommand<T extends DomainEntity> extends SetCommand {
 
-	private Class<T> _domainEntityClass;
-	private Repository<T> _domainEntityRepository;
-	private Context _context;
+	private Class<T> fDomainEntityClass;
+//	private Repository<T> _domainEntityRepository;
+	private Context fContext;
 
 
 	public CrudCommand(Context context, Class<T> domainEntityClass, Repository<T> domainEntityRepository) {
@@ -56,17 +58,18 @@ public class CrudCommand<T extends DomainEntity> extends SetCommand {
 		super(CrudComponingKeysBuilder.inputKeys(domainEntityClass),
 				CrudComponingKeysBuilder.outputKeys(domainEntityClass));
 
-		_context = context;
-		_domainEntityClass = domainEntityClass;
-		_domainEntityRepository = domainEntityRepository;
+		fContext = context;
+		fDomainEntityClass = domainEntityClass;
+//		_domainEntityRepository = domainEntityRepository;
 	}
 
 	@Override
 	public Fields execute(Fields input) throws CommandException {
 		Fields result = new Fields();
 		CrudMethod crudMethod = CrudMethod.fromRestCommand(input.get(FieldNames.COMMAND_NAME).toString());
+		Repository<T> repository = getRepository(fDomainEntityClass);
 
-		Logger logger = _context.get(Context.LOGGER);
+		Logger logger = fContext.get(Context.LOGGER);
 		
 		try {
 			logger.info("INPUT: " + input.toJSONString());
@@ -77,24 +80,24 @@ public class CrudCommand<T extends DomainEntity> extends SetCommand {
 		result.put(GenericCommandNames.CRUD_METHOD, crudMethod.value());
 		T actualEntity = null;
 		try {
-			actualEntity = _domainEntityClass.getConstructor(Fields.class).newInstance(input);
+			actualEntity = fDomainEntityClass.getConstructor(Fields.class).newInstance(input);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
 
 		if (crudMethod.equals(CrudMethod.OPTIONS)) {
-			result.put(GenericFieldNames.RESPONSE, new JsonSystemDescriptor().describeEntity(_domainEntityClass));
+			result.put(GenericFieldNames.RESPONSE, new JsonSystemDescriptor().describeEntity(fDomainEntityClass));
 		} else if (!actualEntity.isValid() && (crudMethod.equals(CrudMethod.POST) || crudMethod.equals(CrudMethod.PUT))) {
 			throw CommandExceptionsFactory.createContainerException( 
 					new ValidationException(actualEntity.getValidationErrors()));
 		} else {
 			// TODO MATTO ma che schifo di codice!!!!
-			List<T> response = SafeRepositoryHelper.call(_domainEntityRepository, actualEntity, crudMethod.value(), _context);
+			List<T> response = SafeRepositoryHelper.call(repository, actualEntity, crudMethod.value(), fContext);
 			if (response.size() > 0) {
 				result.put(GenericFieldNames.RESPONSE, response);
 			} else {
-				throw CommandExceptionsFactory.createEntityNotFound(_domainEntityClass.getSimpleName(), actualEntity.getId());
+				throw CommandExceptionsFactory.createEntityNotFound(fDomainEntityClass.getSimpleName(), actualEntity.getId());
 			}
 			result.putAll(input);
 		}
@@ -105,6 +108,6 @@ public class CrudCommand<T extends DomainEntity> extends SetCommand {
 
 	@Override
 	public String getName() {
-		return "CRUD_" + _domainEntityClass.getSimpleName();
+		return "CRUD_" + fDomainEntityClass.getSimpleName();
 	}
 }

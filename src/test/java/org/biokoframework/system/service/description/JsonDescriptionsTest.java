@@ -44,10 +44,20 @@ import org.biokoframework.system.service.description.dummy.DummyContextFactory;
 import org.biokoframework.system.service.description.dummy.DummyEntityWithLocation;
 import org.biokoframework.system.service.description.dummy.DummyReferencingEntity;
 import org.biokoframework.system.service.description.dummy.DummySystemCommands;
+import org.biokoframework.system.services.RepositoryModule;
+import org.biokoframework.utils.repository.RepositoryException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.google.inject.Guice;
+
 public class JsonDescriptionsTest {
+
+	public final class DummyRepositoryModule extends RepositoryModule {
+		@Override
+		protected void configureRepositories() throws RepositoryException {
+		}
+	}
 
 	@BeforeClass
 	public static void log4JtoConsole() {
@@ -149,7 +159,7 @@ public class JsonDescriptionsTest {
 		
 		Context context = new DummyContextFactory().create(dummyIdentityCard);
 		context.put(Context.COMMANDS_CLASS, DummySystemCommands.class);
-		AbstractCommandHandler commandHandler = AnnotatedCommandHandlerFactory.create(DummySystemCommands.class, new ProxyContext(context), dummyIdentityCard, null);
+		AbstractCommandHandler commandHandler = AnnotatedCommandHandlerFactory.create(DummySystemCommands.class, new ProxyContext(context), dummyIdentityCard, Guice.createInjector(new DummyRepositoryModule()));
 		context.setCommandHandler(new ProxyCommandHandler(commandHandler));
 		
 		assertThat(descriptor.describeSystem(context).toJSONString(),

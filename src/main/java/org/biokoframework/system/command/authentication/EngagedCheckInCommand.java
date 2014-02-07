@@ -36,7 +36,6 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.biokoframework.system.KILL_ME.commons.GenericCommandNames;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
-import org.biokoframework.system.KILL_ME.commons.GenericRepositoryNames;
 import org.biokoframework.system.KILL_ME.commons.logger.Loggers;
 import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.CommandException;
@@ -56,16 +55,10 @@ import org.biokoframework.utils.repository.Repository;
 
 public class EngagedCheckInCommand extends AbstractCommand {
 
-	private Repository<Authentication> _authenticationRepository;
-
-	@Override
-	public void onContextInitialized() {
-		_authenticationRepository = fContext.getRepository(GenericRepositoryNames.AUTHENTICATION_REPOSITORY);
-	}
-	
 	@Override
 	public Fields execute(Fields input) throws CommandException {
 		Logger logger = fContext.get(Context.LOGGER);
+		Repository<Authentication> authenticationRepository = getRepository(Authentication.class);
 		logger.info("EXECUTING Command:" + this.getClass().getSimpleName());
 		logger.info("INPUT: " + input.toString());
 		
@@ -76,7 +69,7 @@ public class EngagedCheckInCommand extends AbstractCommand {
 		
 		Login login = (Login) authStrategy.authenticate(fContext, input, false).get(Login.class.getSimpleName());
 		
-		Authentication authentication = insertNewAuthenticationFor(fContext, login);
+		Authentication authentication = insertNewAuthenticationFor(fContext, login, authenticationRepository);
 	
 		Map<String, Object> map = new HashMap<String, Object>();
 		
@@ -98,9 +91,9 @@ public class EngagedCheckInCommand extends AbstractCommand {
 		return result;
 	}
 
-	private Authentication insertNewAuthenticationFor(Context context, Login login) throws CommandException {
+	private Authentication insertNewAuthenticationFor(Context context, Login login, Repository<Authentication> authenticationRepository) throws CommandException {
 		Authentication newAuth = AuthenticationManager.createAuthenticationFor(context, login);
-		newAuth = SafeRepositoryHelper.save(_authenticationRepository, newAuth, fContext);
+		newAuth = SafeRepositoryHelper.save(authenticationRepository, newAuth, fContext);
 		return newAuth;
 	}
 

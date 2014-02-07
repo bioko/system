@@ -30,9 +30,11 @@ package org.biokoframework.system.command;
 import org.apache.log4j.Logger;
 import org.biokoframework.system.context.Context;
 import org.biokoframework.system.repository.service.RepositoryService;
+import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.fields.FieldNames;
 import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.json.JSonBuilder;
+import org.biokoframework.utils.repository.Repository;
 
 import com.google.inject.Inject;
 
@@ -42,11 +44,11 @@ public abstract class AbstractCommand implements ICommand {
 	protected Context fContext;
 	protected String fCommandName;
 	
-	private RepositoryService fService;
+	private RepositoryService fRepositoryService;
 	
 	@Inject
 	public final void setRepositoryService(RepositoryService service) {
-		fService = service;
+		fRepositoryService = service;
 	}
 	
 	public void fillInvocationInfo(Fields output) {
@@ -58,27 +60,32 @@ public abstract class AbstractCommand implements ICommand {
 		}
 	}
 	
+	@Override
 	public Fields componingInputKeys() {
 		return new Fields();
 	}
 
+	@Override
 	public Fields componingOutputKeys() {
 		return new Fields();
 	}
 
-	
+	@Override
 	public String getName() {
 		return fCommandName;
 	}
 	
+	@Override
 	public void setCommandName(String commandName) {
 		fCommandName = commandName;
 	}
 	
+	@Override
 	public void setContext(Context context) {
 		fContext = context;
 	}
 	
+	@Override
 	public void onContextInitialized() {
 		
 	}
@@ -104,6 +111,12 @@ public abstract class AbstractCommand implements ICommand {
 		logOutput(null);
 	}
 	
+	protected <DE extends DomainEntity, R extends Repository<DE>> R getRepository(Class<DE> entityClass) {
+		return fRepositoryService.getRepository(entityClass);
+	}
 	
+	protected <DE extends DomainEntity, R extends Repository<DE>> R getRepository(Class<DE> entityClass, String name) {
+		return fRepositoryService.getRepository(entityClass, name);
+	}
 	
 }

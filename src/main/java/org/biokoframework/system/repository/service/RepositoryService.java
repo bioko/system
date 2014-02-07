@@ -28,6 +28,8 @@
 package org.biokoframework.system.repository.service;
 
 import org.biokoframework.system.services.Service;
+import org.biokoframework.utils.domain.DomainEntity;
+import org.biokoframework.utils.repository.Repository;
 
 /**
  * @author Mikol Faro <mikol.faro@gmail.com>
@@ -35,5 +37,9 @@ import org.biokoframework.system.services.Service;
  *
  */
 public interface RepositoryService extends Service {
+	
+	public <DE extends DomainEntity, R extends Repository<DE>> R getRepository(Class<DE> entityClass);
+	
+	public <DE extends DomainEntity, R extends Repository<DE>> R getRepository(Class<DE> entityClass, String name);
 
 }

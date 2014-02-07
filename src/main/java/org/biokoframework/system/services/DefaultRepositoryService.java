@@ -28,6 +28,14 @@
 package org.biokoframework.system.services;
 
 import org.biokoframework.system.repository.service.RepositoryService;
+import org.biokoframework.utils.domain.DomainEntity;
+import org.biokoframework.utils.domain.reflection.DummyParameterizedType;
+import org.biokoframework.utils.repository.Repository;
+
+import com.google.inject.Inject;
+import com.google.inject.Injector;
+import com.google.inject.Key;
+import com.google.inject.name.Names;
 
 /**
  * 
@@ -37,4 +45,27 @@ import org.biokoframework.system.repository.service.RepositoryService;
  */
 public class DefaultRepositoryService implements RepositoryService {
 
+	private final Injector fInjector;
+
+	@Inject
+	public DefaultRepositoryService(Injector injector) {
+		fInjector = injector;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public <DE extends DomainEntity, R extends Repository<DE>> R getRepository(Class<DE> entityClass) {
+		Key<R> key = (Key<R>) Key.get(new DummyParameterizedType(Repository.class, entityClass));
+		
+		return fInjector.getInstance(key);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <DE extends DomainEntity, R extends Repository<DE>> R getRepository(Class<DE> entityClass, String name) {
+		Key<R> key = (Key<R>) Key.get(new DummyParameterizedType(Repository.class, entityClass), Names.named(name));
+		
+		return fInjector.getInstance(key);
+	}
+	
 }

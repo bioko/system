@@ -25,35 +25,12 @@
  * 
  */
 
-package org.biokoframework.system.service.currenttime;
+package org.biokoframework.system.services.currenttime;
 
-import org.biokoframework.system.ConfigurationEnum;
-import org.biokoframework.system.service.currenttime.impl.ProdCurrentTimeService;
-import org.biokoframework.system.service.currenttime.impl.TestCurrentTimeService;
 import org.joda.time.DateTime;
 
-public class CurrentTimeService {
+public interface ICurrentTimeService {
 	
-	CurrentTimeServiceImplementation _impl;
-	
-	public CurrentTimeService(ConfigurationEnum config) {
-		switch (config) {
-		case DEV:
-			_impl = new TestCurrentTimeService();
-			break;
-			
-		case PROD:
-		case DEMO:
-			_impl = new ProdCurrentTimeService();
-
-		default:
-			break;
-		}
-	}
-	
-	public DateTime getCurrentTimeAsDateTime() {
-		return _impl.getCurrentTimeAsCalendar();
-	}
-	
+	public DateTime getCurrentTimeAsDateTime();		
 
 }

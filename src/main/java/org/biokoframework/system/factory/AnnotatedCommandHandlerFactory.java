@@ -34,6 +34,7 @@ import org.biokoframework.system.ConfigurationEnum;
 import org.biokoframework.system.KILL_ME.XSystemIdentityCard;
 import org.biokoframework.system.KILL_ME.commons.GenericCommandNames;
 import org.biokoframework.system.KILL_ME.commons.HttpMethod;
+import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.AbstractCommandHandler;
 import org.biokoframework.system.command.CommandHandlerImpl;
 import org.biokoframework.system.command.ICommand;
@@ -49,6 +50,7 @@ import org.biokoframework.system.context.Context;
 import org.biokoframework.system.entity.EntityClassNameTranslator;
 import org.biokoframework.system.entity.binary.BinaryEntity;
 import org.biokoframework.system.factory.binary.BinaryEntityRepository;
+import org.biokoframework.system.repository.service.RepositoryService;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.repository.Repository;
 
@@ -106,7 +108,8 @@ public class AnnotatedCommandHandlerFactory {
 			Class<DomainEntity> entity = (Class<DomainEntity>) crudCommandAnnotation.entity();
 			Repository<DomainEntity> repo = context.getRepository(crudCommandAnnotation.repoName());
 
-			ICommand crudCommandInstance = new org.biokoframework.system.command.crud.CrudCommand<DomainEntity>(context, entity, repo);
+			AbstractCommand crudCommandInstance = new org.biokoframework.system.command.crud.CrudCommand<DomainEntity>(context, entity, repo);
+			crudCommandInstance.setRepositoryService(injector.getInstance(RepositoryService.class));
 			crudCommandInstance.setCommandName(crudName);
 			
 			if (crudCommandAnnotation.create())

@@ -25,14 +25,14 @@
  * 
  */
 
-package org.biokoframework.system.service.currenttime;
+package org.biokoframework.system.services.currenttime;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.biokoframework.system.ConfigurationEnum;
-import org.biokoframework.system.service.currenttime.impl.TestCurrentTimeService;
+import org.biokoframework.system.services.currenttime.impl.ProdCurrentTimeService;
+import org.biokoframework.system.services.currenttime.impl.TestCurrentTimeService;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.junit.Test;
@@ -46,7 +46,7 @@ public class CurrentTimeServiceTests {
 		String sourceTsPattern = "yyyy-MM-dd HH:mm:ss";
 		DateTime sourceTsAsDateTime = DateTimeFormat.forPattern(sourceTsPattern).parseDateTime(sourceTsAsString);
 		
-		CurrentTimeService ctService = new CurrentTimeService(ConfigurationEnum.DEV);
+		ICurrentTimeService ctService = new TestCurrentTimeService();
 		TestCurrentTimeService.setCalendar(sourceTsAsString, sourceTsPattern);
 		
 		DateTime currentTsAsDateTime = ctService.getCurrentTimeAsDateTime();
@@ -55,7 +55,7 @@ public class CurrentTimeServiceTests {
 	
 	@Test
 	public void calendarMockedProd() throws InterruptedException {
-		CurrentTimeService ctService = new CurrentTimeService(ConfigurationEnum.PROD);
+		ICurrentTimeService ctService = new ProdCurrentTimeService();
 		
 		DateTime firstTime = new DateTime();
 		

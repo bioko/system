@@ -29,15 +29,13 @@ package org.biokoframework.system.command.authentication;
 
 import java.util.ArrayList;
 
-import org.biokoframework.system.KILL_ME.commons.GenericConstants;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
-import org.biokoframework.system.KILL_ME.commons.GenericRepositoryNames;
 import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.CommandException;
 import org.biokoframework.system.entity.authentication.EmailConfirmation;
 import org.biokoframework.system.entity.login.Login;
 import org.biokoframework.system.repository.core.SafeRepositoryHelper;
-import org.biokoframework.system.service.currenttime.CurrentTimeService;
+import org.biokoframework.system.services.currenttime.ICurrentTimeService;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.fields.FieldValues;
 import org.biokoframework.utils.fields.Fields;
@@ -47,35 +45,36 @@ import org.biokoframework.utils.validator.Validator;
 
 public class ResponseEmailConfirmationCommand extends AbstractCommand {
 
-	private Repository<Login> _loginRepo;
-	private Repository<EmailConfirmation> _emailConfirmationRepo;
-	private CurrentTimeService _currentTimeService;
+	private ICurrentTimeService fCurrentTimeService;
 	
+	public ResponseEmailConfirmationCommand(ICurrentTimeService currentTimeService) {
+		fCurrentTimeService = currentTimeService;
+	}
+
 	@Override
 	public void onContextInitialized() {
 		super.onContextInitialized();
 		
-		_loginRepo = fContext.getRepository(GenericRepositoryNames.LOGIN_REPOSITORY);
-		_emailConfirmationRepo = fContext.getRepository(GenericRepositoryNames.EMAIL_CONFIRMATION);
-		
-		_currentTimeService = fContext.get(GenericConstants.CONTEXT_CURRENT_TIME_SERVICE);
 	}
 
 	@Override
 	public Fields execute(Fields input) throws CommandException {
 		logInput(input);
+
+		Repository<Login> loginRepo = getRepository(Login.class);
+		Repository<EmailConfirmation> emailConfirmationRepo = getRepository(EmailConfirmation.class);
 		
 		String loginUserEmail = input.get(Login.USER_EMAIL);
 		String token = input.get(EmailConfirmation.TOKEN);
 		
-		EmailConfirmation confirmation = _emailConfirmationRepo.retrieveByForeignKey(EmailConfirmation.TOKEN, token);
-		Login login = _loginRepo.retrieve(confirmation.get(EmailConfirmation.LOGIN_ID).toString());
+		EmailConfirmation confirmation = emailConfirmationRepo.retrieveByForeignKey(EmailConfirmation.TOKEN, token);
+		Login login = loginRepo.retrieve(confirmation.get(EmailConfirmation.LOGIN_ID).toString());
 		if (login != null && login.get(Login.USER_EMAIL).equals(loginUserEmail)) {
-			String timestamp = _currentTimeService.getCurrentTimeAsDateTime().toString(Validator.ISO_TIMESTAMP);
+			String timestamp = fCurrentTimeService.getCurrentTimeAsDateTime().toString(Validator.ISO_TIMESTAMP);
 			
 			confirmation.set(EmailConfirmation.CONFIRMATION_TIMESTAMP, timestamp);
 			confirmation.set(EmailConfirmation.CONFIRMED, FieldValues.TRUE);
-			SafeRepositoryHelper.save(_emailConfirmationRepo, confirmation, fContext);
+			SafeRepositoryHelper.save(emailConfirmationRepo, confirmation, fContext);
 		}
 				
 		logOutput();

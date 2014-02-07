@@ -36,7 +36,6 @@ import javax.mail.internet.MimeMessage;
 import org.apache.commons.lang3.StringUtils;
 import org.biokoframework.system.KILL_ME.commons.GenericConstants;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
-import org.biokoframework.system.KILL_ME.commons.GenericRepositoryNames;
 import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.CommandException;
 import org.biokoframework.system.entity.authentication.PasswordReset;
@@ -44,16 +43,18 @@ import org.biokoframework.system.entity.login.Login;
 import org.biokoframework.system.entity.template.Template;
 import org.biokoframework.system.exceptions.CommandExceptionsFactory;
 import org.biokoframework.system.repository.core.SafeRepositoryHelper;
-import org.biokoframework.system.service.currenttime.CurrentTimeService;
 import org.biokoframework.system.service.mail.ContentBuilder;
 import org.biokoframework.system.service.mail.EmailFiller;
 import org.biokoframework.system.service.mail.EmailServiceImplementation;
 import org.biokoframework.system.service.random.RandomGeneratorService;
+import org.biokoframework.system.services.currenttime.ICurrentTimeService;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.repository.Repository;
 import org.joda.time.DateTime;
 import org.joda.time.format.ISODateTimeFormat;
+
+import com.google.inject.Inject;
 
 public class RequestPasswordResetCommand extends AbstractCommand {
 
@@ -63,21 +64,16 @@ public class RequestPasswordResetCommand extends AbstractCommand {
 
 	private static final String RESET_PASSWORD_LANDING_PAGE_URL = "resetPasswordLandingPage";
 	
-	private Repository<Login> _loginRepo;
-	private Repository<PasswordReset> _passwordResetRepo;
-	private Repository<Template> _templateRepo;
-	private CurrentTimeService _currentTimeService;
+	private ICurrentTimeService fCurrentTimeService;
 	private RandomGeneratorService _randomTokenService;
 
+	@Inject
+	public RequestPasswordResetCommand(ICurrentTimeService currentTimeService) {
+		fCurrentTimeService = currentTimeService;
+	}
 
 	@Override
 	public void onContextInitialized() {
-		_loginRepo = fContext.getRepository(GenericRepositoryNames.LOGIN_REPOSITORY);
-		_passwordResetRepo = fContext.getRepository(GenericRepositoryNames.PASSWORD_RESET);
-		
-		_templateRepo = fContext.getRepository(GenericRepositoryNames.TEMPLATE);
-		
-		_currentTimeService = (CurrentTimeService) fContext.get(GenericConstants.CONTEXT_CURRENT_TIME_SERVICE);
 		_randomTokenService = (RandomGeneratorService) fContext.get(GenericConstants.CONTEXT_RANDOM_GENERATOR_SERVICE);
 	}
 	
@@ -85,13 +81,17 @@ public class RequestPasswordResetCommand extends AbstractCommand {
 	public Fields execute(Fields input) throws CommandException {
 		logInput(input);
 		
+		Repository<Login> _loginRepo = getRepository(Login.class);
+		Repository<PasswordReset> _passwordResetRepo = getRepository(PasswordReset.class);
+		Repository<Template> _templateRepo = getRepository(Template.class);
+		
 		String userEmail = input.get(Login.USER_EMAIL);
 		Login login = _loginRepo.retrieveByForeignKey(Login.USER_EMAIL, userEmail);
 		if (login == null) {
 			throw CommandExceptionsFactory.createEntityNotFound(Login.class.getSimpleName(), Login.USER_EMAIL, userEmail);
 		}
 		
-		DateTime now = _currentTimeService.getCurrentTimeAsDateTime();
+		DateTime now = fCurrentTimeService.getCurrentTimeAsDateTime();
 		
 		PasswordReset passwordReset = new PasswordReset(new Fields());
 		passwordReset.set(PasswordReset.LOGIN_ID, login.getId());

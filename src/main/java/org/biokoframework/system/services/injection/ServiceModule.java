@@ -25,16 +25,55 @@
  * 
  */
 
-package org.biokoframework.system.service.currenttime.impl;
+package org.biokoframework.system.services.injection;
 
-import org.biokoframework.system.service.currenttime.CurrentTimeServiceImplementation;
-import org.joda.time.DateTime;
+import org.biokoframework.system.ConfigurationEnum;
 
-public class ProdCurrentTimeService implements CurrentTimeServiceImplementation {
+import com.google.inject.AbstractModule;
+
+/**
+ * 
+ * @author Mikol Faro <mikol.faro@gmail.com>
+ * @date Feb 7, 2014
+ *
+ */
+
+public abstract class ServiceModule extends AbstractModule {
+
+	protected final ConfigurationEnum fConfig;
+
+	public ServiceModule(ConfigurationEnum config) {
+		fConfig = config;
+	}
 
 	@Override
-	public DateTime getCurrentTimeAsCalendar() {		
-		return new DateTime();
+	protected void configure() {
+		switch(fConfig) {
+		case DEV:
+			configureForDev();
+		case DEMO:
+			configureForDemo();
+		case PROD:
+			configureForProd();
+			
+		default:
+			break;
+		}
 	}
+
+	/**
+	 * Bind the service to its DEV implementation
+	 */
+	protected abstract void configureForDev();
+	
+	/**
+	 * Bind the service to its DEV implementation
+	 */
+	protected abstract void configureForDemo();
+	
+	/**
+	 * Bind the service to its DEV implementation
+	 */
+	protected abstract void configureForProd();
 
 }

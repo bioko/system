@@ -25,33 +25,40 @@
  * 
  */
 
-package org.biokoframework.system.services;
+package org.biokoframework.system.services.currenttime;
 
-import org.biokoframework.system.repository.service.RepositoryService;
-import org.biokoframework.utils.repository.RepositoryException;
+import org.biokoframework.system.ConfigurationEnum;
+import org.biokoframework.system.services.currenttime.impl.ProdCurrentTimeService;
+import org.biokoframework.system.services.currenttime.impl.TestCurrentTimeService;
+import org.biokoframework.system.services.injection.ServiceModule;
 
-import com.google.inject.AbstractModule;
+import com.google.inject.Module;
 
 /**
  * 
  * @author Mikol Faro <mikol.faro@gmail.com>
- * @date Feb 6, 2014
+ * @date Feb 7, 2014
  *
  */
-public abstract class RepositoryModule extends AbstractModule {
+public class CurrentTimeModule extends ServiceModule implements Module {
+
+	public CurrentTimeModule(ConfigurationEnum config) {
+		super(config);
+	}
 
 	@Override
-	protected void configure() {
-		bind(RepositoryService.class).
-		to(DefaultRepositoryService.class);
-		
-		try {
-			configureRepositories();
-		} catch (RepositoryException exception) {
-			addError(exception);
-		}
+	protected void configureForDev() {
+		bind(ICurrentTimeService.class).to(TestCurrentTimeService.class);
 	}
-	
-	protected abstract void configureRepositories() throws RepositoryException;
+
+	@Override
+	protected void configureForDemo() {
+		configureForProd();
+	}
+
+	@Override
+	protected void configureForProd() {
+		bind(ICurrentTimeService.class).to(ProdCurrentTimeService.class);
+	}
 
 }

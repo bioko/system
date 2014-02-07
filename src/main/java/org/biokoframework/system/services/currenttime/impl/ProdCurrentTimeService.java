@@ -25,31 +25,16 @@
  * 
  */
 
-package org.biokoframework.system.service.currenttime.impl;
+package org.biokoframework.system.services.currenttime.impl;
 
-import org.biokoframework.system.service.currenttime.CurrentTimeServiceImplementation;
-import org.biokoframework.utils.validator.Validator;
+import org.biokoframework.system.services.currenttime.ICurrentTimeService;
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
 
-public class TestCurrentTimeService implements CurrentTimeServiceImplementation {
+public class ProdCurrentTimeService implements ICurrentTimeService {
 
-	private static DateTime _calendar = new DateTime();
-	
-	public static void setCalendar(String dateAsString, String dateFormat) {
-		_calendar = DateTimeFormat.forPattern(dateFormat).parseDateTime(dateAsString);
-	}
-	
-	
 	@Override
-	public DateTime getCurrentTimeAsCalendar() {		
-		return _calendar;
+	public DateTime getCurrentTimeAsDateTime() {		
+		return new DateTime();
 	}
 
-
-	public static void setCalendar(String dateAsString) {
-		setCalendar(dateAsString, Validator.ISO_TIMESTAMP);
-	}
-
-	
 }
