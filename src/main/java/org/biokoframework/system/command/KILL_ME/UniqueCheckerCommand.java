@@ -118,8 +118,9 @@ public class UniqueCheckerCommand<T extends DomainEntity> extends AbstractComman
 		parameter.set(ParameterEntity.HTTP_PARAMETER_TYPE, GenericFieldValues.QUERY_STRING);
 		parameters.add(parameter);
 		
-		Fields fields = Fields.single(FieldNames.COMMAND_NAME, GenericCommandNames.UNIQUE_CHECKER);
-		fields.put(GenericFieldNames.INPUT, parameters);
+		Fields fields = new Fields(
+				FieldNames.COMMAND_NAME, GenericCommandNames.UNIQUE_CHECKER,
+				GenericFieldNames.INPUT, parameters);
 		return fields;
 	}
 
