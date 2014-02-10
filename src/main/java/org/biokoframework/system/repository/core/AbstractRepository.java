@@ -59,9 +59,6 @@ public abstract class AbstractRepository<T extends DomainEntity> implements Repo
 //	public abstract ArrayList<T> getEntitiesByForeignKey(String foreignKeyName, String foreignKeyValue, boolean ignoreCase);
 
 	@Override
-	public abstract String report();
-
-	@Override
 	public abstract ArrayList<T> getAll();
 
 	@Override
@@ -82,7 +79,7 @@ public abstract class AbstractRepository<T extends DomainEntity> implements Repo
 				if (entity != null)
 					result.add(entity);
 			} else {
-				System.out.println(repoEntity.fields().report());
+				System.out.println(repoEntity.fields());
 				String filledFieldKey = getFirstNotVoidFieldKey(repoEntity.fields());
 				if (filledFieldKey==null) {
 					result = getAll();

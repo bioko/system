@@ -154,15 +154,6 @@ public class BinaryEntityRepository extends AbstractRepository<BinaryEntity> {
 		throw new UnsupportedOperationException();
 	}
 
-	@Override
-	public String report() {
-		StringBuffer result = new StringBuffer("");
-		for (BinaryEntity each : getAll()) {
-			result.append(each.report());
-		}
-		return result.toString();
-	}
-
 	private void createFile(BinaryEntity blob) throws IOException {
 		File directory = new File(_baseDirectory, timestampPath());
 		FileUtils.forceMkdir(directory);

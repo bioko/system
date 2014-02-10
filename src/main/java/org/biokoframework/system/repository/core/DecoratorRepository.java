@@ -76,12 +76,6 @@ public class DecoratorRepository<DE extends DomainEntity, R extends Repository<D
 		return fBaseRepository.getEntitiesByForeignKey(foreignKeyName, foreignKeyValue);
 	}
 
-	@Deprecated
-	@Override
-	public String report() {
-		return fBaseRepository.report();
-	}
-
 	@Override
 	public ArrayList<DE> getAll() {
 		return fBaseRepository.getAll();
