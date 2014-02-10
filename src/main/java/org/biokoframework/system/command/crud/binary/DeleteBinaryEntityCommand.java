@@ -47,16 +47,15 @@ import org.biokoframework.utils.fields.Fields;
 public class DeleteBinaryEntityCommand extends AbstractCommand {
 
 	private final Context _context;
-	private final BinaryEntityRepository _blobRepo;
 	
 	public DeleteBinaryEntityCommand(Context context, BinaryEntityRepository blobRepo) {
 		_context = context;
-		_blobRepo = blobRepo;
 	}
 
 	@Override
 	public Fields execute(Fields input) throws CommandException {
 		Fields result = new Fields();
+		BinaryEntityRepository blobRepo = getRepository(BinaryEntity.class);
 
 		Logger logger = _context.get(Context.LOGGER);
 		
@@ -74,7 +73,7 @@ public class DeleteBinaryEntityCommand extends AbstractCommand {
 			throw CommandExceptionsFactory.createExpectedFieldNotFound(DomainEntity.ID);
 		}
 				
-		BinaryEntity blob = _blobRepo.delete(blobId);
+		BinaryEntity blob = blobRepo.delete(blobId);
 		if (blob == null) {
 			throw CommandExceptionsFactory.createEntityNotFound(BinaryEntity.class.getSimpleName(), blobId);
 		}

@@ -35,7 +35,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.biokoframework.system.repository.core.AbstractRepository;
@@ -50,26 +49,26 @@ import org.biokoframework.utils.repository.RepositoryException;
 
 public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<DE> {
 	
-	protected final SqlConnector _dbConnector;
-	protected final Class<DE> _entityClass;
-	protected final String _tableName; 
+	protected final SqlConnector fDbConnector;
+	protected final Class<DE> fEntityClass;
+	protected final String fTableName; 
 
-	private LinkedHashMap<String, Field> _fieldNames;
-	private SqlTypesTranslator _translator;
+	private LinkedHashMap<String, Field> fFieldNames;
+	private SqlTypesTranslator fTranslator;
 	
 
 	public SqlRepository(Class<DE> entityClass, String tableName, SqlConnector connector) throws RepositoryException {
-		_entityClass = entityClass;
-		_tableName = tableName;
+		fEntityClass = entityClass;
+		fTableName = tableName;
 		try {
-			_fieldNames = ComponingFieldsFactory.createWithAnnotation(_entityClass);
+			fFieldNames = ComponingFieldsFactory.createWithAnnotation(fEntityClass);
 		} catch (Exception exception) {
 			// Should never happen
-			_fieldNames = null;
+			fFieldNames = null;
 			exception.printStackTrace();
 		}
-		_dbConnector = connector;
-		_translator = connector.getTypesTranslator();
+		fDbConnector = connector;
+		fTranslator = connector.getTypesTranslator();
 		ensureTable();
 	}
 	
@@ -94,21 +93,20 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 	private DE insert(DE entity) throws RepositoryException {
 		String id = null;
 		try {
-			Connection connection = _dbConnector.getConnection();
-			PreparedStatement insertStatement = SqlStatementsHelper.preparedCreateStatement(_entityClass, _tableName, connection);
+			Connection connection = fDbConnector.getConnection();
+			PreparedStatement insertStatement = SqlStatementsHelper.preparedCreateStatement(fEntityClass, fTableName, connection);
 			
 			int i = 1;
-			for (Entry<String, Field> anEntry : _fieldNames.entrySet()) {
+			for (Entry<String, Field> anEntry : fFieldNames.entrySet()) {
 				String aFieldName = anEntry.getKey();
-				// TODO ObjectUtils.toString() should be replaced by Objects.toString() in Java 7
-				_translator.insertIntoStatement(aFieldName, ObjectUtils.toString(entity.get(aFieldName), null), anEntry.getValue(), insertStatement, i);
+				fTranslator.insertIntoStatement(aFieldName, entity.get(aFieldName), anEntry.getValue(), insertStatement, i);
 				i++;
 			}
 			insertStatement.execute();
 						
 			
 			//id = SqlStatementsHelper.retrieveId(insertStatement.getGeneratedKeys());
-			id = _dbConnector.getLastInsertId(connection).toString();
+			id = fDbConnector.getLastInsertId(connection).toString();
 			
 			connection.close();
 		} catch (SQLException exception) {
@@ -126,15 +124,15 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 	private DE update(DE entity) {
 		boolean updated = false;
 		try {
-			Connection connection = _dbConnector.getConnection();
-			PreparedStatement updateStatement = SqlStatementsHelper.preparedUpdateStatement(_entityClass, _tableName, connection);
+			Connection connection = fDbConnector.getConnection();
+			PreparedStatement updateStatement = SqlStatementsHelper.preparedUpdateStatement(fEntityClass, fTableName, connection);
 			int i = 1;
-			for (Entry<String, Field> anEntry : _fieldNames.entrySet()) {
+			for (Entry<String, Field> anEntry : fFieldNames.entrySet()) {
 				String aFieldName = anEntry.getKey();
-				_translator.insertIntoStatement(aFieldName, entity.get(aFieldName), anEntry.getValue(), updateStatement, i);
+				fTranslator.insertIntoStatement(aFieldName, entity.get(aFieldName), anEntry.getValue(), updateStatement, i);
 				i++;
 			}
-			updateStatement.setString(_fieldNames.size() + 1, entity.getId());
+			updateStatement.setString(fFieldNames.size() + 1, entity.getId());
 			updateStatement.execute();
 			
 			updated = updateStatement.getUpdateCount() > 0;
@@ -156,12 +154,12 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 		ArrayList<DE> entities = new ArrayList<DE>();
 		Connection connection = null;
 		try {
-			connection = _dbConnector.getConnection();
-			PreparedStatement retrieveStatement = SqlStatementsHelper.preparedRetrieveByIdStatement(_entityClass, _tableName, connection);
+			connection = fDbConnector.getConnection();
+			PreparedStatement retrieveStatement = SqlStatementsHelper.preparedRetrieveByIdStatement(fEntityClass, fTableName, connection);
 			retrieveStatement.setObject(1, anEntityKey);
 			retrieveStatement.execute();
 			
-			entities = SqlStatementsHelper.retrieveEntities(retrieveStatement.getResultSet(), _entityClass, _translator);
+			entities = SqlStatementsHelper.retrieveEntities(retrieveStatement.getResultSet(), fEntityClass, fTranslator);
 			connection.close();
 		} catch (SQLException exception) {
 			exception.printStackTrace();
@@ -190,8 +188,8 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 		DE toBeDeleted = retrieve(anEntityKey);
 		boolean deleted = false;
 		try {
-			Connection connection = _dbConnector.getConnection();
-			PreparedStatement deleteStatement = SqlStatementsHelper.preparedDeleteByIdStatement(_entityClass, _tableName, connection);
+			Connection connection = fDbConnector.getConnection();
+			PreparedStatement deleteStatement = SqlStatementsHelper.preparedDeleteByIdStatement(fEntityClass, fTableName, connection);
 			deleteStatement.setString(1, anEntityKey);
 			deleteStatement.execute();
 			
@@ -212,11 +210,11 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 	public ArrayList<DE> getAll() {
 		ArrayList<DE> entities = new ArrayList<DE>();
 		try {
-			Connection connection = _dbConnector.getConnection();
-			PreparedStatement retrieveStatement = SqlStatementsHelper.preparedRetrieveAllStatement(_entityClass, _tableName, connection);
+			Connection connection = fDbConnector.getConnection();
+			PreparedStatement retrieveStatement = SqlStatementsHelper.preparedRetrieveAllStatement(fEntityClass, fTableName, connection);
 			retrieveStatement.execute();
 			
-			entities = SqlStatementsHelper.retrieveEntities(retrieveStatement.getResultSet(), _entityClass, _translator);
+			entities = SqlStatementsHelper.retrieveEntities(retrieveStatement.getResultSet(), fEntityClass, fTranslator);
 			connection.close();
 		} catch (SQLException exception) {
 			exception.printStackTrace();
@@ -230,13 +228,13 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 		Connection connection = null;
 		PreparedStatement retrieveStatement = null;
 		try {
-			connection = _dbConnector.getConnection();
-			retrieveStatement = SqlStatementsHelper.prepareRetrieveByForeignKey(_entityClass, _tableName, connection, foreignKeyName);
+			connection = fDbConnector.getConnection();
+			retrieveStatement = SqlStatementsHelper.prepareRetrieveByForeignKey(fEntityClass, fTableName, connection, foreignKeyName);
 
 			retrieveStatement.setObject(1, foreignKeyValue);
 			retrieveStatement.execute();
 			
-			entities = SqlStatementsHelper.retrieveEntities(retrieveStatement.getResultSet(), _entityClass, _translator);
+			entities = SqlStatementsHelper.retrieveEntities(retrieveStatement.getResultSet(), fEntityClass, fTranslator);
 		} catch (SQLException exception) {
 			exception.printStackTrace();
 		} finally {
@@ -259,12 +257,12 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 	public DE retrieveByForeignKey(String foreignKeyName, String foreignKeyValue) {
 		ArrayList<DE> entities = new ArrayList<DE>();
 		try {
-			Connection connection = _dbConnector.getConnection();
-			PreparedStatement retrieveStatement = SqlStatementsHelper.prepareRetrieveOneByForeignKey(_entityClass, _tableName, connection, foreignKeyName);
+			Connection connection = fDbConnector.getConnection();
+			PreparedStatement retrieveStatement = SqlStatementsHelper.prepareRetrieveOneByForeignKey(fEntityClass, fTableName, connection, foreignKeyName);
 			retrieveStatement.setString(1, foreignKeyValue);
 			retrieveStatement.execute();
 			
-			entities = SqlStatementsHelper.retrieveEntities(retrieveStatement.getResultSet(), _entityClass, _translator);
+			entities = SqlStatementsHelper.retrieveEntities(retrieveStatement.getResultSet(), fEntityClass, fTranslator);
 			retrieveStatement.close();
 			connection.close();
 		} catch (SQLException exception) {
@@ -280,7 +278,7 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 	
 	@Override
 	public SqlQuery<DE> createQuery() {
-		return new SqlQuery<DE>(_dbConnector);
+		return new SqlQuery<DE>(fDbConnector);
 	}
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -294,21 +292,21 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	public String getTableName() {
-		return _tableName;
+		return fTableName;
 	}
 	
 	public SqlTypesTranslator getTranslator() {
-		return _translator;
+		return fTranslator;
 	}
 	
 	public LinkedHashMap<String,Field> getFieldNames() {
-		return _fieldNames;
+		return fFieldNames;
 	}
 	
 	private void ensureTable() throws RepositoryException {
 		try {
-			if (!_dbConnector.tableExist(_tableName)) {
-				createTableFor(_entityClass, _dbConnector);
+			if (!fDbConnector.tableExist(fTableName)) {
+				createTableFor(fEntityClass, fDbConnector);
 			} 
 			
 			
@@ -327,11 +325,11 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 		ArrayList<String> fieldEntries = new ArrayList<String>();
 		try {
 			for (Entry<String, Field> entry : ComponingFieldsFactory.createWithAnnotation(entityClass).entrySet()) {
-				fieldEntries.add(entry.getKey() + " " + _translator.getSqlType(entry.getKey(), entry.getValue()));
+				fieldEntries.add(entry.getKey() + " " + fTranslator.getSqlType(entry.getKey(), entry.getValue()));
 			}
-			fieldEntries.add(DomainEntity.ID + " " + _translator.getSqlType(DomainEntity.ID, null));
-			fieldEntries.addAll(_translator.getAllConstraints());
-			_translator.clearConstraintsList();
+			fieldEntries.add(DomainEntity.ID + " " + fTranslator.getSqlType(DomainEntity.ID, null));
+			fieldEntries.addAll(fTranslator.getAllConstraints());
+			fTranslator.clearConstraintsList();
 		} catch (Exception exception) {
 			// THIS SHOULD NEVER HAPPEN
 			System.err.println("[EASY MAN] - cannot retrieve annotation stuff in create SQL table");
@@ -340,8 +338,8 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 		
 		
 		StringBuilder sql = new StringBuilder().
-				append("CREATE TABLE ").append(_tableName).
-				append(" (").append(StringUtils.join(fieldEntries, ", ")).append(") ").append(_dbConnector.getCreateTableTail());
+				append("CREATE TABLE ").append(fTableName).
+				append(" (").append(StringUtils.join(fieldEntries, ", ")).append(") ").append(fDbConnector.getCreateTableTail());
 		
 //		System.out.println(sql);
 		Statement statement = connection.createStatement();

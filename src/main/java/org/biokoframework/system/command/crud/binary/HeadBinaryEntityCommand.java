@@ -47,16 +47,15 @@ import org.biokoframework.utils.fields.Fields;
 public class HeadBinaryEntityCommand extends AbstractCommand {
 
 	private final Context _context;
-	private final BinaryEntityRepository _blobRepo;
 
 	public HeadBinaryEntityCommand(Context context, BinaryEntityRepository blobRepo) {
 		_context = context;
-		_blobRepo = blobRepo;
 	}
 
 	@Override
 	public Fields execute(Fields input) throws CommandException {
 		Fields result = new Fields();
+		BinaryEntityRepository blobRepo = getRepository(BinaryEntity.class);
 
 		Logger logger = _context.get(Context.LOGGER);
 		
@@ -74,7 +73,7 @@ public class HeadBinaryEntityCommand extends AbstractCommand {
 			throw CommandExceptionsFactory.createExpectedFieldNotFound(DomainEntity.ID);
 		}
 				
-		BinaryEntity blob = _blobRepo.retrieveWithoutFile(blobId);
+		BinaryEntity blob = blobRepo.retrieveWithoutFile(blobId);
 		if (blob == null) {
 			throw CommandExceptionsFactory.createEntityNotFound(BinaryEntity.class.getSimpleName(), blobId);
 		}

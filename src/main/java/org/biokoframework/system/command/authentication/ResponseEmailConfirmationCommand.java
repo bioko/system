@@ -42,11 +42,14 @@ import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.repository.Repository;
 import org.biokoframework.utils.validator.Validator;
 
+import com.google.inject.Inject;
+
 
 public class ResponseEmailConfirmationCommand extends AbstractCommand {
 
 	private ICurrentTimeService fCurrentTimeService;
 	
+	@Inject
 	public ResponseEmailConfirmationCommand(ICurrentTimeService currentTimeService) {
 		fCurrentTimeService = currentTimeService;
 	}

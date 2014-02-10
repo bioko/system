@@ -34,7 +34,6 @@ import java.util.List;
 
 import org.biokoframework.system.repository.sql.translator.annotation.Translator;
 import org.biokoframework.utils.domain.annotation.field.Field;
-import org.biokoframework.utils.fields.FieldValues;
 
 public class BooleanTranslator implements Translator {
 
@@ -53,13 +52,7 @@ public class BooleanTranslator implements Translator {
 	}
 
 	@Override
-	public String convertFromDBValue(String fieldName, ResultSet resultset, Field fieldAnnotation) throws SQLException {
-		boolean boolVal = resultset.getBoolean(fieldName);
-		
-		if (!boolVal) {
-			return FieldValues.FALSE;
-		} else {
-			return FieldValues.TRUE;
-		}
+	public Object convertFromDBValue(String fieldName, ResultSet resultset, Field fieldAnnotation) throws SQLException {
+		return resultset.getBoolean(fieldName);
 	}
 }

@@ -153,27 +153,32 @@ public class AnnotatedCommandHandlerFactory {
 			
 
 			if (blobCrudCommandAnnotation.create()) {
-				ICommand commandInstance = new PostBinaryEntityCommand(context, blobRepo, blobName);
+				AbstractCommand commandInstance = new PostBinaryEntityCommand(context, blobRepo, blobName);
+				commandInstance.setRepositoryService(injector.getInstance(RepositoryService.class));
 				commandInstance.setCommandName(blobName);
 				commandHandler.putRest(composeCrudCommandName(HttpMethod.POST.name(), blobName), commandInstance);
 			}
 			if (blobCrudCommandAnnotation.read()) {
-				ICommand commandInstance = new GetBinaryEntityCommand(context, blobRepo);
+				AbstractCommand commandInstance = new GetBinaryEntityCommand(context, blobRepo);
+				commandInstance.setRepositoryService(injector.getInstance(RepositoryService.class));
 				commandInstance.setCommandName(blobName);
 				commandHandler.putRest(composeCrudCommandName(HttpMethod.GET.name(), blobName), commandInstance);
 			}
 			if (blobCrudCommandAnnotation.update()) {
-				ICommand commandInstance = new PutBinaryEntityCommand(context, blobRepo, blobName);
+				AbstractCommand commandInstance = new PutBinaryEntityCommand(context, blobRepo, blobName);
+				commandInstance.setRepositoryService(injector.getInstance(RepositoryService.class));
 				commandInstance.setCommandName(blobName);
 				commandHandler.putRest(composeCrudCommandName(HttpMethod.PUT.name(), blobName), commandInstance);
 			}
 			if (blobCrudCommandAnnotation.delete()) {
-				ICommand commandInstance = new DeleteBinaryEntityCommand(context, blobRepo);
+				AbstractCommand commandInstance = new DeleteBinaryEntityCommand(context, blobRepo);
+				commandInstance.setRepositoryService(injector.getInstance(RepositoryService.class));
 				commandInstance.setCommandName(blobName);
 				commandHandler.putRest(composeCrudCommandName(HttpMethod.DELETE.name(), blobName), commandInstance);
 			}
 			if (blobCrudCommandAnnotation.head()) {
-				org.biokoframework.system.command.AbstractCommand commandInstance = new HeadBinaryEntityCommand(context, blobRepo);
+				AbstractCommand commandInstance = new HeadBinaryEntityCommand(context, blobRepo);
+				commandInstance.setRepositoryService(injector.getInstance(RepositoryService.class));
 				commandInstance.setCommandName(blobName);
 				commandHandler.putRest(composeCrudCommandName(HttpMethod.HEAD.name(), blobName), commandInstance);
 			}

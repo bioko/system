@@ -41,7 +41,7 @@ public class InMemoryRepository<T extends DomainEntity> extends SqlRepository<T>
 		super(entityClass, entityClass.getSimpleName(), HsqldbMemConnector.getInstance());		
 		
 		try {
-			_dbConnector.emptyTable(_tableName);
+			fDbConnector.emptyTable(fTableName);
 		} catch (SQLException e) {
 			throw new RepositoryException(e);
 		}

@@ -44,8 +44,6 @@ import org.biokoframework.utils.fields.FieldNames;
 import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.repository.Repository;
 
-import com.google.inject.TypeLiteral;
-
 public class CrudCommand<T extends DomainEntity> extends SetCommand {
 
 	private Class<T> fDomainEntityClass;

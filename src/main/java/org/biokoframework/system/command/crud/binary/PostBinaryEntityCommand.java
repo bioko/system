@@ -45,21 +45,21 @@ import org.biokoframework.utils.fields.Fields;
 
 public class PostBinaryEntityCommand extends AbstractCommand {
 
-	private final Context _context;
-	private final BinaryEntityRepository _blobRepo;
-	private final String _blobFieldName;
+	private final Context fContext;
+	private final String fBlobFieldName;
 
 	public PostBinaryEntityCommand(Context context, BinaryEntityRepository blobRepo, String blobName) {
-		_context = context;
-		_blobRepo = blobRepo;
-		_blobFieldName = EntityClassNameTranslator.toFieldName(blobName);
+		fContext = context;
+		fBlobFieldName = EntityClassNameTranslator.toFieldName(blobName);
 	}
 
 	@Override
 	public Fields execute(Fields input) throws CommandException {
 		Fields result = new Fields();
+		
+		BinaryEntityRepository blobRepo = getRepository(BinaryEntity.class);
 
-		Logger logger = _context.get(Context.LOGGER);
+		Logger logger = fContext.get(Context.LOGGER);
 		
 		try {
 			logger.info("INPUT: " + input.toJSONString());
@@ -70,13 +70,13 @@ public class PostBinaryEntityCommand extends AbstractCommand {
 		
 		ArrayList<BinaryEntity> response = new ArrayList<BinaryEntity>();
 		
-		BinaryEntity blob = input.get(_blobFieldName);
+		BinaryEntity blob = input.get(fBlobFieldName);
 
 		if (!blob.isValid()) {
 			throw CommandExceptionsFactory.createNotCompleteEntity(blob.getClass().getSimpleName());
 		}
 			
-		blob = SafeRepositoryHelper.save(_blobRepo, blob, _context);
+		blob = SafeRepositoryHelper.save(blobRepo, blob, fContext);
 		if (blob == null) {
 			throw CommandExceptionsFactory.createBadCommandInvocationException();
 		}

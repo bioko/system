@@ -51,11 +51,13 @@ public abstract class ServiceModule extends AbstractModule {
 		switch(fConfig) {
 		case DEV:
 			configureForDev();
+			break;
 		case DEMO:
 			configureForDemo();
+			break;
 		case PROD:
 			configureForProd();
-			
+			break;
 		default:
 			break;
 		}

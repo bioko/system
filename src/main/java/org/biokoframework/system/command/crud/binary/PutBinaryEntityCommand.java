@@ -46,21 +46,21 @@ import org.biokoframework.utils.fields.Fields;
 
 public class PutBinaryEntityCommand extends AbstractCommand {
 
-	private final Context _context;
-	private final BinaryEntityRepository _blobRepo;
-	private final String _blobFieldName;
+	private final Context fContext;
+	private final String fBlobFieldName;
 
 	public PutBinaryEntityCommand(Context context, BinaryEntityRepository blobRepo, String blobName) {
-		_context = context;
-		_blobRepo = blobRepo;
-		_blobFieldName = EntityClassNameTranslator.toFieldName(blobName);
+		fContext = context;
+		fBlobFieldName = EntityClassNameTranslator.toFieldName(blobName);
 	}
 
 	@Override
 	public Fields execute(Fields input) throws CommandException {
 		Fields result = new Fields();
+		
+		BinaryEntityRepository blobRepo = getRepository(BinaryEntity.class);
 
-		Logger logger = _context.get(Context.LOGGER);
+		Logger logger = fContext.get(Context.LOGGER);
 		
 		try {
 			logger.info("INPUT: " + input.toJSONString());
@@ -73,12 +73,12 @@ public class PutBinaryEntityCommand extends AbstractCommand {
 		if (blobId == null || blobId.isEmpty()) {
 			throw CommandExceptionsFactory.createExpectedFieldNotFound(DomainEntity.ID);
 		}
-		BinaryEntity existingBlob = _blobRepo.retrieveWithoutFile(blobId);
+		BinaryEntity existingBlob = blobRepo.retrieveWithoutFile(blobId);
 		if (existingBlob == null) {
 			throw CommandExceptionsFactory.createEntityNotFound(BinaryEntity.class.getSimpleName(), blobId);
 		}
 		
-		BinaryEntity newBlob = input.get(_blobFieldName);
+		BinaryEntity newBlob = input.get(fBlobFieldName);
 		newBlob.setId(blobId);
 		
 		ArrayList<BinaryEntity> response = new ArrayList<BinaryEntity>();
@@ -86,7 +86,7 @@ public class PutBinaryEntityCommand extends AbstractCommand {
 		if (!newBlob.isValid()) {
 			throw CommandExceptionsFactory.createNotCompleteEntity(newBlob.getClass().getSimpleName());
 		}
-		newBlob = SafeRepositoryHelper.save(_blobRepo, newBlob, _context);
+		newBlob = SafeRepositoryHelper.save(blobRepo, newBlob, fContext);
 		if (newBlob == null) {
 			throw CommandExceptionsFactory.createBadCommandInvocationException();
 		}
