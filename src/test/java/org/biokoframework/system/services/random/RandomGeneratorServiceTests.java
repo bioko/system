@@ -25,21 +25,21 @@
  * 
  */
 
-package org.biokoframework.system.service.random;
+package org.biokoframework.system.services.random;
 
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 
-import org.biokoframework.system.ConfigurationEnum;
-import org.biokoframework.system.service.random.impl.TestRandomGeneratorService;
+import org.biokoframework.system.services.random.impl.ProdRandomGeneratorService;
+import org.biokoframework.system.services.random.impl.TestRandomGeneratorService;
 import org.junit.Test;
 
 public class RandomGeneratorServiceTests {
 	
 	@Test
 	public void usingForTestEnvironmentTest() {
-		RandomGeneratorService testService = new RandomGeneratorService(ConfigurationEnum.TEST);
+		IRandomService testService = new TestRandomGeneratorService();
 		
 		ArrayList<String> fakeRandomsQueue1 = new ArrayList<String>();
 		fakeRandomsQueue1.add("QUEUE1_FIRST_FAKE_RANDOM");		
@@ -61,7 +61,7 @@ public class RandomGeneratorServiceTests {
 	
 	@Test
 	public void usingForProdEnvironmentTest() {
-		RandomGeneratorService prodService = new RandomGeneratorService(ConfigurationEnum.PROD);
+		IRandomService prodService = new ProdRandomGeneratorService();
 
 		String trueRandom = prodService.generateString("NotUsedInProducion",10);
 		assertEquals(10, trueRandom.length());

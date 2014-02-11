@@ -37,7 +37,7 @@ import org.biokoframework.system.command.CommandException;
 import org.biokoframework.system.context.Context;
 import org.biokoframework.system.entity.login.Login;
 import org.biokoframework.system.exceptions.CommandExceptionsFactory;
-import org.biokoframework.system.service.random.RandomGeneratorService;
+import org.biokoframework.system.services.random.IRandomService;
 import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.repository.Repository;
 
@@ -105,7 +105,7 @@ public class FacebookStrategy implements AuthenticationStrategy {
 	}
 
 	private String createPassword(Context context) {
-		RandomGeneratorService randomGeneratorService = (RandomGeneratorService) context.get(GenericConstants.RANDOM_PASSWORD_GENERATOR);
+		IRandomService randomGeneratorService = (IRandomService) context.get(GenericConstants.RANDOM_PASSWORD_GENERATOR);
 		
 		String passwordLength = context.getSystemProperty(GenericConstants.PASSWORD_LENGTH);
 		if (passwordLength == null) {

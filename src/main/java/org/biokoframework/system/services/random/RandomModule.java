@@ -25,12 +25,39 @@
  * 
  */
 
-package org.biokoframework.system.service.random;
+package org.biokoframework.system.services.random;
 
-public interface RandomGeneratorServiceImplementation {
+import org.biokoframework.system.ConfigurationEnum;
+import org.biokoframework.system.services.injection.ServiceModule;
+import org.biokoframework.system.services.random.impl.ProdRandomGeneratorService;
+import org.biokoframework.system.services.random.impl.TestRandomGeneratorService;
 
-	String generateString(String label, int length);
+/**
+ * 
+ * @author Mikol Faro <mikol.faro@gmail.com>
+ * @date Feb 11, 2014
+ *
+ */
+public class RandomModule extends ServiceModule {
 
-	Integer generateInteger(String label, int n);
+	public RandomModule(ConfigurationEnum config) {
+		super(config);
+	}
+
+	@Override
+	protected void configureForDev() {
+		bind(IRandomService.class).to(TestRandomGeneratorService.class);
+	}
+
+	@Override
+	protected void configureForDemo() {
+		configureForProd();
+	}
+
+	@Override
+	protected void configureForProd() {
+		bind(IRandomService.class).to(ProdRandomGeneratorService.class);
+
+	}
 
 }

@@ -142,8 +142,4 @@ public class GetCommandInvocationInfoCommand extends AbstractCommand {
 		return new Fields(GenericFieldNames.OUTPUT, response);
 	}
 
-	@Override
-	public String getName() {
-		return GenericCommandNames.COMMAND_INVOCATION_INFO;
-	}
 }

@@ -75,9 +75,4 @@ public class MultipleCommand extends AbstractCommand {
 		_steps.put(aStepKey, aCommand);
 	}
 
-	@Override
-	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

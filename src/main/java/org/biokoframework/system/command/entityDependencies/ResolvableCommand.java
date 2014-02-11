@@ -29,7 +29,6 @@ package org.biokoframework.system.command.entityDependencies;
 
 import java.util.ArrayList;
 
-import org.biokoframework.system.KILL_ME.commons.GenericCommandNames;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldValues;
 import org.biokoframework.system.KILL_ME.commons.logger.Loggers;
@@ -100,12 +99,7 @@ public class ResolvableCommand extends AbstractCommand {
 		fResolver.maxDepth(depthLimit);
 		return this;
 	}
-	
-	@Override
-	public String getName() {
-		return fBaseCommand.getName() + '-' + GenericCommandNames.RESOLVABLE;
-	}
-	
+		
 	@Override
 	public Fields componingInputKeys() {
 		Fields componingInputKeys = fBaseCommand.componingInputKeys();

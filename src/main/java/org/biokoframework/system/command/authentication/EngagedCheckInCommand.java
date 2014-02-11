@@ -34,7 +34,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.biokoframework.system.KILL_ME.commons.GenericCommandNames;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.KILL_ME.commons.logger.Loggers;
 import org.biokoframework.system.command.AbstractCommand;
@@ -122,9 +121,4 @@ public class EngagedCheckInCommand extends AbstractCommand {
 		return new Fields(GenericFieldNames.OUTPUT, parameters);	
 	}
 	
-	@Override
-	public String getName() {
-		return GenericCommandNames.ENGAGED_CHECK_IN;
-	}
-
 }

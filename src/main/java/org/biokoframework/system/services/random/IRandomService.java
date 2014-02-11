@@ -25,25 +25,20 @@
  * 
  */
 
-package org.biokoframework.system.service.random.impl;
+package org.biokoframework.system.services.random;
 
-import java.util.Random;
+import org.biokoframework.system.services.Service;
 
-import org.apache.commons.lang3.RandomStringUtils;
-import org.biokoframework.system.service.random.RandomGeneratorServiceImplementation;
+/**
+ * 
+ * @author Mikol Faro <mikol.faro@gmail.com>
+ * @date Feb 11, 2014
+ *
+ */
+public interface IRandomService extends Service {
 
-public class ProdRandomGeneratorService implements RandomGeneratorServiceImplementation {
-
-	Random rand = new Random();
+	public String generateString(String label, int length);
 	
-	@Override
-	public String generateString(String label, int length) {
-		return RandomStringUtils.randomAlphabetic(length);
-	}
+	public Long generateInteger(String label, int n);
 	
-	@Override
-	public Integer generateInteger(String label, int n) {
-		return rand.nextInt(n); 
-	}
-
 }

@@ -14,8 +14,6 @@ public interface ICommand {
 	@Deprecated
 	public void onContextInitialized();
 	@Deprecated
-	public String getName();
-	@Deprecated
 	public Fields componingInputKeys();
 	@Deprecated
 	public Fields componingOutputKeys();

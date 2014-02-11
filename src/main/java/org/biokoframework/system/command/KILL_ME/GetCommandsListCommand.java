@@ -100,8 +100,4 @@ public class GetCommandsListCommand extends AbstractCommand {
 		return new Fields(GenericFieldNames.OUTPUT, response);
 	}
 
-	@Override
-	public String getName() {
-		return GenericFieldNames.COMMANDS_LIST;
-	}
 }

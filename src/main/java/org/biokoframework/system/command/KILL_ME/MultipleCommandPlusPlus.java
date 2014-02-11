@@ -44,13 +44,11 @@ import org.biokoframework.utils.fields.Fields;
 
 public class MultipleCommandPlusPlus extends AbstractCommand {
 
-	private String _name;
-	private AbstractCommandHandler _commandHandler;
-	private LinkedHashMap<String, String> _steps = new LinkedHashMap<String, String>();
+	private AbstractCommandHandler fCommandHandler;
+	private LinkedHashMap<String, String> fSteps = new LinkedHashMap<String, String>();
 
 	public MultipleCommandPlusPlus(String commandName, AbstractCommandHandler commandHandler) {
-		_name = commandName;
-		_commandHandler = commandHandler;
+		fCommandHandler = commandHandler;
 	}
 	
 	public MultipleCommandPlusPlus() {
@@ -62,20 +60,20 @@ public class MultipleCommandPlusPlus extends AbstractCommand {
 	@Override
 	public final Fields execute(Fields input) throws CommandException {
 		Loggers.xsystem.info("EXECUTING Multiple Command");
-		Loggers.xsystem.info("STEPS: " + _steps.size());
+		Loggers.xsystem.info("STEPS: " + fSteps.size());
 		Loggers.xsystem.info("INPUT: " + input.toString());
 		
-		if (_commandHandler==null)
-			_commandHandler = fContext.getCommandHandler();
+		if (fCommandHandler==null)
+			fCommandHandler = fContext.getCommandHandler();
 		
 		Fields result = new Fields();
 		ArrayList<Object> response = new ArrayList<Object>();
 		
 		Fields stepInput = input.copy();
-		for (Entry<String, String> aStep: _steps.entrySet()) {
+		for (Entry<String, String> aStep: fSteps.entrySet()) {
 			Loggers.xsystem.info("Executing step: " + aStep.getKey());
 						
-			ICommand stepCommand = _commandHandler.getByName(aStep.getValue());
+			ICommand stepCommand = fCommandHandler.getByName(aStep.getValue());
 			if (stepCommand == null) {
 				throw CommandExceptionsFactory.createCommandNotFoundException(aStep.getValue());
 			} else {
@@ -107,13 +105,8 @@ public class MultipleCommandPlusPlus extends AbstractCommand {
 		nextStepInput.putAll(prevStepOutput);
 	}
 	
-	@Override
-	public final String getName() {
-		return _name;
-	}
-
 	public MultipleCommandPlusPlus addStep(String stepName, String commandName) {
-		_steps.put(stepName, commandName);
+		fSteps.put(stepName, commandName);
 		return this;
 	}
 

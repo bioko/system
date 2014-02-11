@@ -55,12 +55,6 @@ public class ResponseEmailConfirmationCommand extends AbstractCommand {
 	}
 
 	@Override
-	public void onContextInitialized() {
-		super.onContextInitialized();
-		
-	}
-
-	@Override
 	public Fields execute(Fields input) throws CommandException {
 		logInput(input);
 

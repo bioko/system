@@ -25,22 +25,22 @@
  * 
  */
 
-package org.biokoframework.system.service.random.impl;
+package org.biokoframework.system.services.random.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.biokoframework.system.service.random.RandomGeneratorServiceImplementation;
+import org.biokoframework.system.services.random.IRandomService;
 
-public class TestRandomGeneratorService implements RandomGeneratorServiceImplementation {
+public class TestRandomGeneratorService implements IRandomService {
 	
 	
 	private static HashMap<String, Integer> _currentIndexes = new HashMap<String, Integer>();
 	private static HashMap<String,List<String>> _fakeRandomQueues = new HashMap<String, List<String>>();
 	
 	private static HashMap<String, Integer> _currentIndexesInt = new HashMap<String, Integer>();
-	private static HashMap<String, List<Integer>> _fakeRandomQueuesInt = new HashMap<String, List<Integer>>();
+	private static HashMap<String, List<Long>> _fakeRandomQueuesInt = new HashMap<String, List<Long>>();
 
 	@Override
 	public String generateString(String label, int length) {
@@ -93,7 +93,7 @@ public class TestRandomGeneratorService implements RandomGeneratorServiceImpleme
 	}
 
 	@Override
-	public Integer generateInteger(String label, int n) {
+	public Long generateInteger(String label, int n) {
 		if (_fakeRandomQueuesInt.get(label)==null) {
 			System.err.println("[EASY MAN] Test random queue with label '"+label+"' is void");
 			return null;
@@ -108,7 +108,7 @@ public class TestRandomGeneratorService implements RandomGeneratorServiceImpleme
 		idx++;
 		
 		_currentIndexesInt.put(label, idx);		
-		Integer value = null; 
+		Long value = null; 
 				
 		try {
 			value =	_fakeRandomQueuesInt.get(label).get(idx);
@@ -119,7 +119,7 @@ public class TestRandomGeneratorService implements RandomGeneratorServiceImpleme
 		return value;
 	}
 
-	public static void addRandomQueueInt(String queueLabel, List<Integer> randomValues) {
+	public static void addRandomQueueInt(String queueLabel, List<Long> randomValues) {
 		_fakeRandomQueuesInt.put(queueLabel, randomValues);
 		Integer queueIdx = new Integer(-1);
 		_currentIndexesInt.put(queueLabel, queueIdx);

@@ -59,8 +59,7 @@ public class QuartzCronListenerWrapper extends JobListenerSupport implements Job
 		JobDataMap jobData = context.getJobDetail().getJobDataMap();
 		
 		AbstractCommand command = (AbstractCommand) jobData.get(CommandRunnerJob.COMMAND);
-		//String commandName = command.getClass().getSimpleName();
-		String commandName = command.getName();
+		String commandName = command.getClass().getSimpleName();
 		
 		Fields commandInput = (Fields) jobData.get(CommandRunnerJob.COMMAND_INPUT);
 		Fields commandOutput = (Fields) jobData.get(CommandRunnerJob.COMMAND_OUTPUT);

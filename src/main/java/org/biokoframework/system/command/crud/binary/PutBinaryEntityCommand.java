@@ -30,9 +30,7 @@ package org.biokoframework.system.command.crud.binary;
 import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
-import org.biokoframework.system.KILL_ME.commons.GenericCommandNames;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
-import org.biokoframework.system.KILL_ME.commons.HttpMethod;
 import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.CommandException;
 import org.biokoframework.system.context.Context;
@@ -98,12 +96,6 @@ public class PutBinaryEntityCommand extends AbstractCommand {
 		logger.info("END CRUD Command:" + this.getClass().getSimpleName());
 		return result;
 	}
-
-	@Override
-	public String getName() {
-		return GenericCommandNames.composeRestCommandName(HttpMethod.PUT, BinaryEntity.class.getSimpleName());
-	}
-	
 	
 	@Override
 	public Fields componingInputKeys() {

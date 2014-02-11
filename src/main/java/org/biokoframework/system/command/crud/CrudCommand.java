@@ -103,9 +103,5 @@ public class CrudCommand<T extends DomainEntity> extends SetCommand {
 		logger.info("END CRUD Command:" + this.getClass().getSimpleName());
 		return result;
 	}
-
-	@Override
-	public String getName() {
-		return "CRUD_" + fDomainEntityClass.getSimpleName();
-	}
+	
 }

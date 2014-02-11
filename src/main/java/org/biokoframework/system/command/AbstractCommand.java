@@ -69,11 +69,6 @@ public abstract class AbstractCommand implements ICommand {
 	public Fields componingOutputKeys() {
 		return new Fields();
 	}
-
-	@Override
-	public String getName() {
-		return fCommandName;
-	}
 	
 	@Override
 	public void setCommandName(String commandName) {
@@ -85,6 +80,7 @@ public abstract class AbstractCommand implements ICommand {
 		fContext = context;
 	}
 	
+	@Deprecated
 	@Override
 	public void onContextInitialized() {
 		

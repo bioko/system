@@ -30,7 +30,6 @@ package org.biokoframework.system.command.entityDependencies;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.biokoframework.system.KILL_ME.commons.GenericCommandNames;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.KILL_ME.commons.logger.Loggers;
 import org.biokoframework.system.command.AbstractCommand;
@@ -80,12 +79,7 @@ public class DissolvedCommand extends AbstractCommand {
 		_dissolver.savingIn(repository, domainEntityClass);
 		return this;
 	}
-	
-	@Override
-	public String getName() {
-		return GenericCommandNames.DISSOLVABLE;
-	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public Fields componingInputKeys() {

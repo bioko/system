@@ -73,9 +73,4 @@ public class SendMailCommand extends AbstractCommand {
 		return new Fields();
 	}
 
-	@Override
-	public String getName() {
-		return SendMailCommand.class.getSimpleName();
-	}
-
 }

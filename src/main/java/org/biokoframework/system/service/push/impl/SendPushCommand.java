@@ -83,11 +83,6 @@ public class SendPushCommand extends AbstractCommand {
 		logOutput();
 		return new Fields();
 	}
-
-	@Override
-	public String getName() {
-		return SendPushCommand.class.getSimpleName();
-	}
 	
 	private void sendPush(String userToken, String message, String production) throws NotificationFailureException {
 		try {

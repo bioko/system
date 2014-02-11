@@ -34,7 +34,6 @@ import java.util.Map;
 import javax.mail.internet.MimeMessage;
 
 import org.apache.commons.lang3.StringUtils;
-import org.biokoframework.system.KILL_ME.commons.GenericConstants;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.CommandException;
@@ -46,8 +45,8 @@ import org.biokoframework.system.repository.core.SafeRepositoryHelper;
 import org.biokoframework.system.service.mail.ContentBuilder;
 import org.biokoframework.system.service.mail.EmailFiller;
 import org.biokoframework.system.service.mail.EmailServiceImplementation;
-import org.biokoframework.system.service.random.RandomGeneratorService;
 import org.biokoframework.system.services.currenttime.ICurrentTimeService;
+import org.biokoframework.system.services.random.IRandomService;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.repository.Repository;
@@ -64,17 +63,13 @@ public class RequestPasswordResetCommand extends AbstractCommand {
 
 	private static final String RESET_PASSWORD_LANDING_PAGE_URL = "resetPasswordLandingPage";
 	
-	private ICurrentTimeService fCurrentTimeService;
-	private RandomGeneratorService _randomTokenService;
+	private final ICurrentTimeService fCurrentTimeService;
+	private final IRandomService fRandomTokenService;
 
 	@Inject
-	public RequestPasswordResetCommand(ICurrentTimeService currentTimeService) {
+	public RequestPasswordResetCommand(ICurrentTimeService currentTimeService, IRandomService randomTokenService) {
 		fCurrentTimeService = currentTimeService;
-	}
-
-	@Override
-	public void onContextInitialized() {
-		_randomTokenService = (RandomGeneratorService) fContext.get(GenericConstants.CONTEXT_RANDOM_GENERATOR_SERVICE);
+		fRandomTokenService = randomTokenService;
 	}
 	
 	@Override
@@ -96,7 +91,7 @@ public class RequestPasswordResetCommand extends AbstractCommand {
 		PasswordReset passwordReset = new PasswordReset(new Fields());
 		passwordReset.set(PasswordReset.LOGIN_ID, login.getId());
 		passwordReset.set(PasswordReset.TOKEN_EXPIRATION, now.plusDays(1).toString(ISODateTimeFormat.dateTimeNoMillis()));
-		String randomToken = _randomTokenService.generateString(PASSWORD_RESET_TOKEN, 20);
+		String randomToken = fRandomTokenService.generateString(PASSWORD_RESET_TOKEN, 20);
 		passwordReset.set(PasswordReset.TOKEN, randomToken);
 		SafeRepositoryHelper.save(_passwordResetRepo, passwordReset, fContext);
 

@@ -25,42 +25,25 @@
  * 
  */
 
-package org.biokoframework.system.service.random;
+package org.biokoframework.system.services.random.impl;
 
-import org.biokoframework.system.ConfigurationEnum;
-import org.biokoframework.system.service.random.impl.ProdRandomGeneratorService;
-import org.biokoframework.system.service.random.impl.TestRandomGeneratorService;
+import java.util.Random;
 
-public class RandomGeneratorService {
+import org.apache.commons.lang3.RandomStringUtils;
+import org.biokoframework.system.services.random.IRandomService;
+
+public class ProdRandomGeneratorService implements IRandomService {
+
+	Random rand = new Random();
 	
-	private RandomGeneratorServiceImplementation _impl;
-
-
-	public RandomGeneratorService(ConfigurationEnum configuration) {
-		
-		
-		switch (configuration) {
-		case PROD:
-			_impl = new ProdRandomGeneratorService();
-			break;
-		case DEMO:
-			_impl = new ProdRandomGeneratorService();
-			break;
-		default:
-			_impl = new TestRandomGeneratorService();
-			break;
-		}
-		
-	}
-	
-	
+	@Override
 	public String generateString(String label, int length) {
-		return _impl.generateString(label, length);
+		return RandomStringUtils.randomAlphabetic(length);
 	}
-
-
-	public Integer generateInteger(String label, int n) {
-		return _impl.generateInteger(label, n);
+	
+	@Override
+	public Long generateInteger(String label, int n) {
+		return (long) rand.nextInt(n); 
 	}
 
 }
