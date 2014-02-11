@@ -25,26 +25,22 @@
  * 
  */
 
-package org.biokoframework.system.service.crypto;
+package org.biokoframework.system.services.crypto;
 
 import org.biokoframework.utils.domain.DomainEntity;
-import org.biokoframework.utils.domain.annotation.field.Field;
-import org.biokoframework.utils.domain.annotation.hint.Hint;
-import org.biokoframework.utils.fields.Fields;
 
-@SuppressWarnings("serial")
-public class DummyDecryptableEntity extends DomainEntity {
+/**
+ * 
+ * @author Mikol Faro <mikol.faro@gmail.com>
+ * @date Feb 11, 2014
+ *
+ */
+public interface IEncryptionService {
 
-	@Field
-	public static final String A_PLAIN_FIELD = "aPlainField";
+	public <DE extends DomainEntity> DE encryptEntity(DE plainEntity);
 	
-	@Field(hints = {
-			@Hint(name = EntityEncryptor.HINT, value = EntityEncryptor.TWO_WAY_HINT)
-	})
-	public static final String A_TWO_WAY_ENCRYPTED_FIELD = "aTwoWayEncryptedField";
+	public <DE extends DomainEntity> boolean matchEncrypted(DE plainEntity, DE encryptedEntity, String encryptionKey);
 	
-	public DummyDecryptableEntity(Fields input) {
-		super(input);
-	}
+	public <DE extends DomainEntity> DE decryptEntity(DE encryptedEntity);
 	
 }

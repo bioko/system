@@ -25,36 +25,25 @@
  * 
  */
 
-package org.biokoframework.system.entity.login;
+package org.biokoframework.system.services.crypto.impl;
 
-import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.domain.annotation.field.Field;
 import org.biokoframework.utils.domain.annotation.hint.Hint;
 import org.biokoframework.utils.fields.Fields;
 
-
 @SuppressWarnings("serial")
-public class Login extends DomainEntity {
+public class DummyDecryptableEntity extends DomainEntity {
 
-	public static final String ENTITY_KEY = GenericFieldNames.LOGIN_ID;
+	@Field
+	public static final String A_PLAIN_FIELD = "aPlainField";
 	
 	@Field(hints = {
-			@Hint(name = "cmsType", value = "email")
-		})
-	public static final String USER_EMAIL = GenericFieldNames.USER_EMAIL;
-
-	@Field(hints = {
-		@Hint(name = "encrypt", value = "oneWay")
+			@Hint(name = ProdEntityEncryptionService.HINT, value = ProdEntityEncryptionService.TWO_WAY_HINT)
 	})
-	public static final String PASSWORD   = GenericFieldNames.PASSWORD;
-
-	@Field(mandatory=false)
-	public static final String ROLES = "roles";
-	@Field(mandatory = false)
-	public static final String FACEBOOK_ID = "facebookId";
+	public static final String A_TWO_WAY_ENCRYPTED_FIELD = "aTwoWayEncryptedField";
 	
-	public Login(Fields input) {
+	public DummyDecryptableEntity(Fields input) {
 		super(input);
 	}
 	

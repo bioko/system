@@ -25,7 +25,7 @@
  * 
  */
 
-package org.biokoframework.system.service.crypto;
+package org.biokoframework.system.services.crypto.impl;
 
 import java.io.UnsupportedEncodingException;
 import java.util.HashSet;
@@ -34,12 +34,13 @@ import java.util.Set;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
+import org.biokoframework.system.services.crypto.IEncryptionService;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.domain.annotation.hint.HintFactory;
 import org.biokoframework.utils.fields.Fields;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
-public class EntityEncryptor {
+public class ProdEntityEncryptionService implements IEncryptionService {
 
 	// BCrypt + SALT is used to encrypt password
 	
@@ -53,6 +54,7 @@ public class EntityEncryptor {
 	
 	public static final String SALT_FIELD_HINT = "saltField";
 	
+	@Override
 	@SuppressWarnings("unchecked")
 	public <DE extends DomainEntity> DE encryptEntity(DE plainEntity) {
 		DE encryptedEntity = null;
@@ -76,7 +78,8 @@ public class EntityEncryptor {
 		return encryptedEntity;
 	}
 	
-	public <DE extends DomainEntity> boolean matchEncrypted(DE plainEntity, DE encryptedEntity, String password) {
+	@Override
+	public <DE extends DomainEntity> boolean matchEncrypted(DE plainEntity, DE encryptedEntity, String encryptionKey) {
 		try {
 			Map<String, Map<String, String>> hints = HintFactory.createMap(plainEntity.getClass());
 			Set<String> allFieldNames = new HashSet<String>(plainEntity.fields().keys());
@@ -102,7 +105,8 @@ public class EntityEncryptor {
 			return false;
 		}
 	}
-		
+	
+	@Override
 	@SuppressWarnings("unchecked")
 	public <DE extends DomainEntity> DE decryptEntity(DE encryptedEntity) {
 		DE decryptedEntity = null;

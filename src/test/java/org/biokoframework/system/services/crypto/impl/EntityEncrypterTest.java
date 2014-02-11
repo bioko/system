@@ -25,7 +25,7 @@
  * 
  */
 
-package org.biokoframework.system.service.crypto;
+package org.biokoframework.system.services.crypto.impl;
 
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
@@ -45,7 +45,7 @@ public class EntityEncrypterTest {
 
 	@Test
 	public void simpleEncryptionSaltyTest() {
-		EntityEncryptor encrypter = new EntityEncryptor();
+		ProdEntityEncryptionService encrypter = new ProdEntityEncryptionService();
 		
 		Login login = new LoginBuilder().loadDefaultExample().build(false);
 		Login encryptedLogin = encrypter.encryptEntity(login);
@@ -67,7 +67,7 @@ public class EntityEncrypterTest {
 	
 	@Test
 	public void simpleMatchTest() {
-		EntityEncryptor encrypter = new EntityEncryptor();
+		ProdEntityEncryptionService encrypter = new ProdEntityEncryptionService();
 		
 		Login login = new LoginBuilder().loadDefaultExample().build("3");
 		Login encryptedLogin = encrypter.encryptEntity(login);
@@ -78,7 +78,7 @@ public class EntityEncrypterTest {
 	@Test
 	public void encryptionDecryptionTest() {
 		String password = "GinoPoni";
-		EntityEncryptor encrypter = new EntityEncryptor();
+		ProdEntityEncryptionService encrypter = new ProdEntityEncryptionService();
 		
 		DummyDecryptableEntity plainEntity = new DummyDecryptableEntity(new Fields());
 		plainEntity.set(DummyDecryptableEntity.A_PLAIN_FIELD, "plain");
