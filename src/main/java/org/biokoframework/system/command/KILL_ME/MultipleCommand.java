@@ -37,7 +37,7 @@ import org.biokoframework.system.command.CommandException;
 import org.biokoframework.utils.fields.FieldNames;
 import org.biokoframework.utils.fields.Fields;
 
-
+@Deprecated
 public class MultipleCommand extends AbstractCommand {
 	
 	private LinkedHashMap<String, AbstractCommand> _steps = new LinkedHashMap<String, AbstractCommand>();

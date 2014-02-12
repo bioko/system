@@ -27,10 +27,7 @@
 
 package org.biokoframework.system.KILL_ME.commons;
 
-import java.io.Serializable;
-
-@SuppressWarnings("serial")
-public class GenericFieldNames implements Serializable {
+public interface GenericFieldNames {
 
 	public static final String INPUT = "input";
 	public static final String OUTPUT = "output";
