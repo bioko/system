@@ -34,8 +34,9 @@ import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.validator.Validator;
 import org.joda.time.DateTime;
 
-@SuppressWarnings("serial")
 public class EmailConfirmation extends DomainEntity {
+
+	private static final long serialVersionUID = -7755292766094861144L;
 
 	@Field(type = Login.class)
 	public static final String LOGIN_ID = Login.ENTITY_KEY;

@@ -34,8 +34,9 @@ import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.validator.Validator;
 import org.joda.time.DateTime;
 
-@SuppressWarnings("serial")
 public class PasswordReset extends DomainEntity {
+
+	private static final long serialVersionUID = -8416042263264339009L;
 
 	@Field(type = Login.class)
 	public static final String LOGIN_ID = Login.ENTITY_KEY;

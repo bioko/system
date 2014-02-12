@@ -31,9 +31,10 @@ import org.biokoframework.system.KILL_ME.exception.SystemException;
 import org.biokoframework.utils.domain.ErrorEntity;
 
 
-@SuppressWarnings("serial")
 public class SystemNotFoundException extends SystemException {
 	
+	private static final long serialVersionUID = 1L;
+
 	public SystemNotFoundException(ErrorEntity error) {
 		super(error);
 	}

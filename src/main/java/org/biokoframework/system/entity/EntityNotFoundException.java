@@ -30,12 +30,12 @@ package org.biokoframework.system.entity;
 import org.biokoframework.system.command.CommandException;
 import org.biokoframework.utils.domain.ErrorEntity;
 
-@SuppressWarnings("serial")
 public class EntityNotFoundException extends CommandException {
+
+	private static final long serialVersionUID = -7383478501731128343L;
 
 	public EntityNotFoundException(ErrorEntity error) {
 		super(error);
-		// TODO Auto-generated constructor stub
 	}
 
 }

@@ -30,9 +30,10 @@ package org.biokoframework.system.exceptions;
 import org.biokoframework.system.command.CommandException;
 import org.biokoframework.utils.domain.ErrorEntity;
 
-@SuppressWarnings("serial")
 @Deprecated
 public class BadCommandInvocationException extends CommandException {
+
+	private static final long serialVersionUID = -1095150166843997873L;
 
 	public BadCommandInvocationException(ErrorEntity error) {
 		super(error);

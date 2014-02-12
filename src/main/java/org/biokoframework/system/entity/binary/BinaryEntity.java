@@ -38,8 +38,9 @@ import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.domain.annotation.field.Field;
 import org.biokoframework.utils.fields.Fields;
 
-@SuppressWarnings("serial")
 public class BinaryEntity extends DomainEntity {
+
+	private static final long serialVersionUID = -243420186840106591L;
 
 	private static final String MEDIA_TYPE_REGEXP = "^[a-zA-Z0-9!#$%^&\\*_\\+-{}\\|'.`~]+/[a-zA-Z0-9!#$%^&\\*_\\+-{}\\|'.`~]+$";
 	

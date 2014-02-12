@@ -34,7 +34,6 @@ import org.biokoframework.utils.domain.annotation.hint.HintNames;
 import org.biokoframework.utils.fields.Fields;
 
 
-@SuppressWarnings("serial")
 public class Template extends DomainEntity{
 	
 	public static final String ENTITY_KEY = "templateId";

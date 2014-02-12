@@ -30,8 +30,9 @@ package org.biokoframework.system.exceptions;
 import org.biokoframework.system.command.CommandException;
 import org.biokoframework.utils.domain.ErrorEntity;
 
-@SuppressWarnings("serial")
 public class EasterEggException extends CommandException {
+
+	private static final long serialVersionUID = -4283167316309149093L;
 
 	public EasterEggException(ErrorEntity error) {
 		super(error);

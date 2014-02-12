@@ -34,7 +34,6 @@ import org.biokoframework.utils.domain.annotation.hint.Hint;
 import org.biokoframework.utils.fields.Fields;
 
 
-@SuppressWarnings("serial")
 public class Login extends DomainEntity {
 
 	public static final String ENTITY_KEY = GenericFieldNames.LOGIN_ID;

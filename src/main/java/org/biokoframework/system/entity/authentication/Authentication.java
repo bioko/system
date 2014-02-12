@@ -33,8 +33,9 @@ import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.domain.annotation.field.Field;
 import org.biokoframework.utils.fields.Fields;
 
-@SuppressWarnings("serial")
 public class Authentication extends DomainEntity {
+
+	private static final long serialVersionUID = 884203019812835755L;
 
 	public static final String ENTITY_KEY = GenericFieldNames.AUTHENTICATION_ID;
 	

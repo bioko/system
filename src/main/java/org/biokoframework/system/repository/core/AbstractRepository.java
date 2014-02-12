@@ -61,6 +61,7 @@ public abstract class AbstractRepository<T extends DomainEntity> implements Repo
 	@Override
 	public abstract ArrayList<T> getAll();
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<T> call(DomainEntity aDomainEntity, String aMethod) throws ValidationException, RepositoryException {
 		T repoEntity = (T) aDomainEntity;

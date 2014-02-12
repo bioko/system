@@ -34,8 +34,9 @@ import org.biokoframework.utils.fields.FieldNames;
 import org.biokoframework.utils.fields.Fields;
 
 
-@SuppressWarnings("serial")
 public class CommandEntity extends DomainEntity {
+
+	private static final long serialVersionUID = 6046135308483598940L;
 
 	@Field
 	public static final String NAME   = FieldNames.NAME;
