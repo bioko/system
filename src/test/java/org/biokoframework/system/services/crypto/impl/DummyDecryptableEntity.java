@@ -32,8 +32,9 @@ import org.biokoframework.utils.domain.annotation.field.Field;
 import org.biokoframework.utils.domain.annotation.hint.Hint;
 import org.biokoframework.utils.fields.Fields;
 
-@SuppressWarnings("serial")
 public class DummyDecryptableEntity extends DomainEntity {
+
+	private static final long serialVersionUID = -3257553878243100123L;
 
 	@Field
 	public static final String A_PLAIN_FIELD = "aPlainField";
