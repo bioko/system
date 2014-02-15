@@ -31,9 +31,10 @@ import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.domain.annotation.field.Field;
 import org.biokoframework.utils.fields.Fields;
 
-@SuppressWarnings("serial")
 public class ASDummyEntity1 extends DomainEntity {
 
+	private static final long serialVersionUID = 4850949595683060884L;
+	
 	@Field
 	public static final String VALUE = "value";
 	@Field

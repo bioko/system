@@ -25,38 +25,20 @@
  * 
  */
 
-package org.biokoframework.system.entity.login;
+package org.biokoframework.system.services.cron;
 
-import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
-import org.biokoframework.utils.domain.DomainEntity;
-import org.biokoframework.utils.domain.annotation.field.Field;
-import org.biokoframework.utils.domain.annotation.hint.Hint;
-import org.biokoframework.utils.fields.Fields;
+import org.biokoframework.system.command.ICommand;
 
+/**
+ * 
+ * @author Mikol Faro <mikol.faro@gmail.com>
+ * @date Feb 12, 2014
+ *
+ */
+public interface ICronListener {
 
-public class Login extends DomainEntity {
-
-	private static final long serialVersionUID = 1L;
-
-	public static final String ENTITY_KEY = GenericFieldNames.LOGIN_ID;
+	public <C extends ICommand> void commandFinished(Class<C> command);
 	
-	@Field(hints = {
-			@Hint(name = "cmsType", value = "email")
-		})
-	public static final String USER_EMAIL = GenericFieldNames.USER_EMAIL;
-
-	@Field(hints = {
-		@Hint(name = "encrypt", value = "oneWay")
-	})
-	public static final String PASSWORD   = GenericFieldNames.PASSWORD;
-
-	@Field(mandatory=false)
-	public static final String ROLES = "roles";
-	@Field(mandatory = false)
-	public static final String FACEBOOK_ID = "facebookId";
-	
-	public Login(Fields input) {
-		super(input);
-	}
+	public <C extends ICommand> void commandFailed(Class<C> command, Throwable cause);
 	
 }

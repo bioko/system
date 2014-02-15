@@ -31,8 +31,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.mail.internet.MimeMessage;
-
 import org.apache.commons.lang3.StringUtils;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.command.AbstractCommand;
@@ -42,10 +40,10 @@ import org.biokoframework.system.entity.login.Login;
 import org.biokoframework.system.entity.template.Template;
 import org.biokoframework.system.exceptions.CommandExceptionsFactory;
 import org.biokoframework.system.repository.core.SafeRepositoryHelper;
-import org.biokoframework.system.service.mail.ContentBuilder;
-import org.biokoframework.system.service.mail.EmailFiller;
-import org.biokoframework.system.service.mail.EmailServiceImplementation;
 import org.biokoframework.system.services.currenttime.ICurrentTimeService;
+import org.biokoframework.system.services.email.EmailException;
+import org.biokoframework.system.services.email.IEmailService;
+import org.biokoframework.system.services.email.KILL_ME.ContentBuilder;
 import org.biokoframework.system.services.random.IRandomService;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.fields.Fields;
@@ -57,6 +55,8 @@ import com.google.inject.Inject;
 
 public class RequestPasswordResetCommand extends AbstractCommand {
 
+	private static final String NO_REPLY = "no-reply@engaged.it";
+
 	public static final String PASSWORD_RESET_TOKEN = "passwordResetToken";
 
 	public static final String PASSWORD_RESET_MAIL_TEMPLATE = "passwordResetMailTemplate";
@@ -65,11 +65,14 @@ public class RequestPasswordResetCommand extends AbstractCommand {
 	
 	private final ICurrentTimeService fCurrentTimeService;
 	private final IRandomService fRandomTokenService;
+	private final IEmailService fEmailService;
 
 	@Inject
-	public RequestPasswordResetCommand(ICurrentTimeService currentTimeService, IRandomService randomTokenService) {
+	public RequestPasswordResetCommand(ICurrentTimeService currentTimeService, 
+			IRandomService randomTokenService, IEmailService emailService) {
 		fCurrentTimeService = currentTimeService;
 		fRandomTokenService = randomTokenService;
+		fEmailService = emailService;
 	}
 	
 	@Override
@@ -99,24 +102,20 @@ public class RequestPasswordResetCommand extends AbstractCommand {
 		Template mailTemplate = _templateRepo.retrieveByForeignKey(Template.TRACK, PASSWORD_RESET_MAIL_TEMPLATE);
 		if (mailTemplate != null) {
 			
+			
 			Map<String, Object> contentMap = new HashMap<String, Object>();
 			contentMap.put("url", StringUtils.defaultString(fContext.getSystemProperty(RESET_PASSWORD_LANDING_PAGE_URL)));
 			contentMap.put("token", randomToken);
 			contentMap.put("userEmail", login.get(Login.USER_EMAIL));
 			ContentBuilder contentBuilder = new ContentBuilder(mailTemplate, contentMap);
 			
-			EmailFiller filler = new EmailFiller();
-			filler.addTo(login.get(Login.USER_EMAIL).toString());
-			filler.setFrom("no-reply@engaged.it");
-			filler.setContent(contentBuilder.buildBody());
-			filler.setSubject(contentBuilder.buildTitle());
-			
-			EmailServiceImplementation dispatcher = EmailServiceImplementation.mailServer();
-			MimeMessage message = dispatcher.newMessage();
-			
-			filler.fill(message);
-			
-			dispatcher.send(message);
+			String targetEmail = login.get(Login.USER_EMAIL);
+			try {
+				fEmailService.sendASAP(targetEmail, NO_REPLY, contentBuilder.buildBody(), contentBuilder.buildTitle());
+			} catch (EmailException exception) {
+				throw CommandExceptionsFactory.createContainerException(exception);
+			}
+
 		} else {
 			throw CommandExceptionsFactory.createEntityNotFound(Template.class.getSimpleName(), Template.TRACK, PASSWORD_RESET_MAIL_TEMPLATE);
 		}

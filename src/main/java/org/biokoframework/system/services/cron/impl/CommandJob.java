@@ -25,38 +25,41 @@
  * 
  */
 
-package org.biokoframework.system.entity.login;
+package org.biokoframework.system.services.cron.impl;
 
-import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
-import org.biokoframework.utils.domain.DomainEntity;
-import org.biokoframework.utils.domain.annotation.field.Field;
-import org.biokoframework.utils.domain.annotation.hint.Hint;
+import org.biokoframework.system.command.CommandException;
+import org.biokoframework.system.command.ICommand;
 import org.biokoframework.utils.fields.Fields;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 
+import com.google.inject.Injector;
 
-public class Login extends DomainEntity {
+/**
+ * 
+ * @author Mikol Faro <mikol.faro@gmail.com>
+ * @date Feb 12, 2014
+ *
+ */
+public class CommandJob implements Job {
 
-	private static final long serialVersionUID = 1L;
-
-	public static final String ENTITY_KEY = GenericFieldNames.LOGIN_ID;
-	
-	@Field(hints = {
-			@Hint(name = "cmsType", value = "email")
-		})
-	public static final String USER_EMAIL = GenericFieldNames.USER_EMAIL;
-
-	@Field(hints = {
-		@Hint(name = "encrypt", value = "oneWay")
-	})
-	public static final String PASSWORD   = GenericFieldNames.PASSWORD;
-
-	@Field(mandatory=false)
-	public static final String ROLES = "roles";
-	@Field(mandatory = false)
-	public static final String FACEBOOK_ID = "facebookId";
-	
-	public Login(Fields input) {
-		super(input);
+	@SuppressWarnings("unchecked")
+	@Override
+	public void execute(JobExecutionContext context) throws JobExecutionException {
+		Injector injector = (Injector) context.get(QuartzCronService.INJECTOR);
+		Class<? extends ICommand> commandClass = (Class<? extends ICommand>) context.get(QuartzCronService.COMMAND);
+		
+		ICommand command = injector.getInstance(commandClass);
+		
+		try {
+			command.execute(new Fields());
+		} catch (CommandException exception) {
+			throw new JobExecutionException(exception, !hasAlreadyFailed(context));
+		}
 	}
-	
+
+	private boolean hasAlreadyFailed(JobExecutionContext context) {
+		return context.getRefireCount() > 0;
+	}
 }

@@ -36,6 +36,8 @@ import org.biokoframework.utils.fields.Fields;
 
 public class Template extends DomainEntity{
 	
+	private static final long serialVersionUID = 1L;
+
 	public static final String ENTITY_KEY = "templateId";
 
 	@Field

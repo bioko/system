@@ -32,8 +32,9 @@ import java.util.List;
 import org.biokoframework.system.KILL_ME.exception.SystemException;
 import org.biokoframework.utils.domain.ErrorEntity;
 
-@SuppressWarnings("serial")
 public class CommandException extends SystemException {
+
+	private static final long serialVersionUID = 8521314562020210902L;
 
 	public CommandException(ErrorEntity error) {
 		super(error);

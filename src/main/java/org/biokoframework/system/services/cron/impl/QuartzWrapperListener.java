@@ -25,28 +25,52 @@
  * 
  */
 
-package org.biokoframework.system.repository.memory.manytypes;
+package org.biokoframework.system.services.cron.impl;
 
-import org.biokoframework.utils.domain.DomainEntity;
-import org.biokoframework.utils.domain.annotation.field.Field;
-import org.biokoframework.utils.fields.Fields;
+import java.util.List;
+
+import org.biokoframework.system.command.ICommand;
+import org.biokoframework.system.services.cron.ICronListener;
+import org.quartz.JobDataMap;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
+import org.quartz.listeners.JobListenerSupport;
 
 /**
+ * 
  * @author Mikol Faro <mikol.faro@gmail.com>
- * @date Feb 5, 2014
+ * @date Feb 13, 2014
+ *
  */
-public class ManyTypesEntity extends DomainEntity {
+public class QuartzWrapperListener extends JobListenerSupport {
 
-	private static final long serialVersionUID = 1L;
+	private final List<ICronListener> fActualListeners;
 
-	@Field(type = Long.class)
-	public static final String INT_FIELD = "intField";
-	
-	@Field(type = Long.class)
-	public static final String LONG_FIELD = "longField";
-	
-	public ManyTypesEntity(Fields fields) {
-		super(fields);
+	public QuartzWrapperListener(List<ICronListener> listeners) {
+		fActualListeners = listeners;
 	}
-	
+
+	@Override
+	public String getName() {
+		return getClass().getSimpleName();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void jobWasExecuted(JobExecutionContext context, JobExecutionException jobException) {
+		JobDataMap jobData = context.getJobDetail().getJobDataMap();
+		
+		Class<? extends ICommand> command = (Class<? extends ICommand>) jobData.get(QuartzCronService.COMMAND);
+		
+		if (jobException == null) {
+			for (ICronListener aListener : fActualListeners) {
+				aListener.commandFinished(command);
+			}
+		} else {
+			for (ICronListener aListener : fActualListeners) {
+				aListener.commandFailed(command, jobException.getCause());
+			}
+		}
+	}
+
 }

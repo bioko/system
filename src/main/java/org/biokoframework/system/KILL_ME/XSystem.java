@@ -27,137 +27,45 @@
 
 package org.biokoframework.system.KILL_ME;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.log4j.Logger;
-import org.biokoframework.system.KILL_ME.exception.CommandNotFoundException;
-import org.biokoframework.system.command.AbstractCommandHandler;
-import org.biokoframework.system.command.AbstractFilter;
-import org.biokoframework.system.command.CommandException;
-import org.biokoframework.system.command.ICommand;
-import org.biokoframework.system.context.Context;
-import org.biokoframework.system.event.SystemListener;
-import org.biokoframework.system.service.validation.AbstractValidator;
-import org.biokoframework.utils.domain.ErrorEntity;
 import org.biokoframework.utils.exception.BiokoException;
-import org.biokoframework.utils.exception.ValidationException;
 import org.biokoframework.utils.fields.FieldNames;
 import org.biokoframework.utils.fields.Fields;
-import org.biokoframework.utils.validator.Validator;
-import org.biokoframework.utils.validator.ValidatorRule;
-import org.json.simple.JSONValue;
 
 
 public class XSystem {
 
-	private AbstractCommandHandler _commandHandler;
-	private final Logger _logger;
-	private Context _context;
-	private Map<String, Map<String, ValidatorRule>> _inputValidatorRules;
-	private Map<String, List<AbstractValidator>> _customCommandValidators;
-	private Map<String, List<AbstractFilter>> _commandsFilters;
+	private final Logger fLogger;
 
-//	public XSystem(AbstractCommandHandler commandHandler, Logger logger) {
-//		_commandHandler = commandHandler;
-//		_logger = logger;
-//	}
-	
-	
-
-	@SuppressWarnings("unchecked")
-	public XSystem(Context context) {
-		_commandHandler = context.getCommandHandler();
-		_logger = context.getLogger();
-		_context = context;
-		
-		_inputValidatorRules = (Map<String, Map<String, ValidatorRule>>)  _context.get(Context.INPUT_VALIDATOR_RULES);
-		_customCommandValidators = (Map<String, List<AbstractValidator>>) _context.get(Context.CUSTOM_COMMAND_VALIDATORS);
-		_commandsFilters = (Map<String, List<AbstractFilter>> ) _context.get(Context.COMMANDS_FILTERS);
-		if (_commandsFilters == null) {
-			_commandsFilters = new HashMap<String, List<AbstractFilter>>();
-		}
+	public XSystem() {
+		fLogger = Logger.getLogger(getClass());
 	}
-
+	
 	public Fields execute(Fields input) throws BiokoException {
 		Fields output = new Fields();
 		String commandName = input.get(FieldNames.COMMAND_NAME);
-		try {
-			_logger.info("----- Executing Command: " + commandName + " -----");
-			_logger.info("Command input: " + input.toString());
-			ICommand command = _commandHandler.getByName(commandName);
-			if (command == null) {
-				Fields fields = new Fields(
-						ErrorEntity.ERROR_MESSAGE, "Command " + commandName + " not found.",
-						ErrorEntity.ERROR_CODE, "101");
-				throw new CommandNotFoundException(new ErrorEntity(fields));
-			}
+//		try {
+		fLogger.info("----- Executing Command: " + commandName + " -----");
+		fLogger.info("Command input: " + input.toString());
 			
-			List<ErrorEntity> validationErrors = null;
-			if (_inputValidatorRules!= null && _inputValidatorRules.containsKey(commandName)) {
-				_logger.info("Validating inputs: ");
-				Map<String, ValidatorRule> commandValidatorRules = _inputValidatorRules.get(commandName);
-				Validator commandValidator = new Validator(commandValidatorRules);
-				boolean valid = commandValidator.validate(input);
-				_logger.info("  -> result: "+valid);
-				if (!valid) {
-					_logger.info("  -> validation errors: "+JSONValue.toJSONString(commandValidator.getErrors()));
-					validationErrors = new ArrayList<ErrorEntity>(commandValidator.getErrors());
-//					throw new ValidationException(commandValidator.getErrors());
-				}
-			}
-			
-			if (_customCommandValidators!=null && _customCommandValidators.containsKey(commandName)) {
-				_logger.info("Running custom validators");
-				if (validationErrors==null)
-					validationErrors = new ArrayList<ErrorEntity>();
-				
-				List<AbstractValidator> customValidatorsForCommand = _customCommandValidators.get(commandName);
-				for(AbstractValidator validator: customValidatorsForCommand) {
-					validator.validate(input, validationErrors);
-				}
-			}
-			
-			if (validationErrors != null && !validationErrors.isEmpty())
-				throw new ValidationException(validationErrors);
-			
-			
-			List<AbstractFilter> thisCommandFilters = _commandsFilters.get(commandName);
-			// execute input filters
-			if (thisCommandFilters!=null && !thisCommandFilters.isEmpty()) {
-				for(AbstractFilter filter: thisCommandFilters)
-					filter.filterInput(input);
-			}
-			
-			output = command.execute(input);
-			
-			// execute output filters
-			if (thisCommandFilters!=null && !thisCommandFilters.isEmpty()) {
-				for(AbstractFilter filter: thisCommandFilters)
-					filter.filterOutput(output);
-			}
-			
-			
-		} catch (BiokoException systemException) {
-			_logger.error("System exception", systemException);
-			throw systemException;
-		} catch (Exception exception) {
-			_logger.error("Generic exception", exception);
-			throw new CommandException(exception);
-		}
-		_logger.info("Command output: " + output.toString());
-		_logger.info("----- Command execution finished -----");
+//		} catch (BiokoException systemException) {
+//			fLogger.error("System exception", systemException);
+//			throw systemException;
+//		} catch (Exception exception) {
+//			fLogger.error("Generic exception", exception);
+//			throw new CommandException(exception);
+//		}
+		fLogger.info("Command output: " + output.toString());
+		fLogger.info("----- Command execution finished -----");
 		return output;
 	}
 
 	public void shutdown() {
-		_logger.info("System: " + _context.getSystemName() + " is going down");
-		_logger.info("Bye! Bye!");
-		List<SystemListener> listeners = _context.getSystemListeners();
-		for (SystemListener aListener : listeners) {
-			aListener.systemShutdown();
-		}
+//		fLogger.info("System: " + fContext.getSystemName() + " is going down");
+//		fLogger.info("Bye! Bye!");
+//		List<SystemListener> listeners = fContext.getSystemListeners();
+//		for (SystemListener aListener : listeners) {
+//			aListener.systemShutdown();
+//		}
 	}
 }

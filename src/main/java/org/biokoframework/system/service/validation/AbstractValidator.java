@@ -27,22 +27,18 @@
 
 package org.biokoframework.system.service.validation;
 
-import java.util.List;
-
 import org.biokoframework.system.context.Context;
-import org.biokoframework.utils.domain.ErrorEntity;
-import org.biokoframework.utils.fields.Fields;
 
-public abstract class AbstractValidator {
+public abstract class AbstractValidator implements IValidator {
 	
 	protected Context _context;
-		
-	public abstract void validate(Fields input, List<ErrorEntity> errors);
 	
+	@Deprecated
 	public void setContext(Context context) {
 		_context = context;
 	}
 	
+	@Deprecated
 	public void onContextInitialized() {}
 	
 

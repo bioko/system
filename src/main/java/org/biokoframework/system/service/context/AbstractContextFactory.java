@@ -38,12 +38,9 @@ import org.biokoframework.system.KILL_ME.commons.GenericConstants;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldValues;
 import org.biokoframework.system.context.Context;
 import org.biokoframework.system.context.ContextImpl;
-import org.biokoframework.system.service.queue.Queue;
-import org.biokoframework.system.service.queue.QueuedItem;
 import org.biokoframework.system.services.random.impl.TestRandomGeneratorService;
 import org.biokoframework.utils.exception.BiokoException;
 import org.biokoframework.utils.fields.Fields;
-import org.biokoframework.utils.repository.Repository;
 
 public abstract class AbstractContextFactory implements ContextFactory {
 
@@ -125,10 +122,5 @@ public abstract class AbstractContextFactory implements ContextFactory {
 	protected void addPasswordGenerator(Context context, ConfigurationEnum configurationEnum) {
 		context.put(GenericConstants.RANDOM_PASSWORD_GENERATOR, new TestRandomGeneratorService());
 	}
-	
-	protected void addQueue(Context context, String queueName, String queueRepositoryName) {
-		Repository<QueuedItem> baseRepository = context.getRepository(queueRepositoryName);
-		context.put(queueName, new Queue(baseRepository));
-	}
-	
+		
 }

@@ -32,15 +32,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.biokoframework.system.ConfigurationEnum;
-import org.biokoframework.system.KILL_ME.XSystemIdentityCard;
-import org.biokoframework.system.command.AbstractCommandHandler;
-import org.biokoframework.system.command.ProxyCommandHandler;
-import org.biokoframework.system.context.Context;
-import org.biokoframework.system.context.ProxyContext;
 import org.biokoframework.system.entity.login.Login;
-import org.biokoframework.system.factory.AnnotatedCommandHandlerFactory;
-import org.biokoframework.system.service.description.dummy.DummyContextFactory;
 import org.biokoframework.system.service.description.dummy.DummyEntityWithLocation;
 import org.biokoframework.system.service.description.dummy.DummyReferencingEntity;
 import org.biokoframework.system.service.description.dummy.DummySystemCommands;
@@ -48,8 +40,6 @@ import org.biokoframework.system.services.RepositoryModule;
 import org.biokoframework.utils.repository.RepositoryException;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import com.google.inject.Guice;
 
 public class JsonDescriptionsTest {
 
@@ -150,69 +140,5 @@ public class JsonDescriptionsTest {
 						+ "}"
 					+ "}"));
 	}
-	
-	@Test
-	public void dummySystemTest() throws Exception {
-		JsonSystemDescriptor descriptor = new JsonSystemDescriptor();
 		
-		XSystemIdentityCard dummyIdentityCard = new XSystemIdentityCard("dummySystem", "1.0", ConfigurationEnum.PROD);
-		
-		Context context = new DummyContextFactory().create(dummyIdentityCard);
-		context.put(Context.COMMANDS_CLASS, DummySystemCommands.class);
-		AbstractCommandHandler commandHandler = AnnotatedCommandHandlerFactory.create(DummySystemCommands.class, new ProxyContext(context), dummyIdentityCard, Guice.createInjector(new DummyRepositoryModule()));
-		context.setCommandHandler(new ProxyCommandHandler(commandHandler));
-		
-		assertThat(descriptor.describeSystem(context).toJSONString(),
-				matchesJSONString(
-					"{"
-						+ "\"entities\":{"
-							+ "\"Login\":{"
-								+ "\"id\":{"
-									+ "\"type\":\"Integer\""
-								+ "},"
-								+ "\"userEmail\":{"
-									+ "\"type\":\"String\","
-									+ "\"hints\":{\"cmsType\":\"email\"}"
-								+ "},"
-								+ "\"password\":{"
-									+ "\"type\":\"String\","
-									+ "\"hints\":{\"encrypt\":\"oneWay\"}"
-								+ "},"
-								+ "\"facebookId\":{"
-									+ "\"type\":\"String\","
-									+ "\"mandatory\":false"
-								+ "},"
-								+ "\"roles\":{"
-									+ "\"type\":\"String\","
-									+ "\"mandatory\":false"
-								+ "}"
-							+ "},"
-							+ "\"DummyEntityWithLocation\":{"
-								+ "\"id\":{"
-									+ "\"type\":\"Integer\""
-								+ "},"
-								+ "\"aField\":{"
-									+ "\"type\":\"String\""
-								+ "},"
-								+ "\"longitude\":{"
-									+ "\"type\":\"Double\","
-									+ "\"hints\":{\"cmsType\":\"hidden\"}"
-								+ "},"
-								+ "\"latitude\":{"
-									+ "\"type\":\"Double\","
-									+ "\"hints\":{\"cmsType\":\"hidden\"}"
-								+ "},"
-								+ "\"location\":{"
-									+ "\"virtual\":true,"
-									+ "\"hints\":{"
-										+ "\"cmsType\":\"location\","
-										+ "\"latitudeField\":\"latitude\","
-										+ "\"longitudeField\":\"longitude\""
-									+ "}"
-								+ "}"
-							+ "}"
-						+ "}"
-					+ "}"));
-	}
-	
 }

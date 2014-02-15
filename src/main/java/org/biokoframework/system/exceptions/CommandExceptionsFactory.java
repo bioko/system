@@ -33,7 +33,7 @@ import java.util.List;
 import org.biokoframework.system.KILL_ME.exception.CommandNotFoundException;
 import org.biokoframework.system.command.CommandException;
 import org.biokoframework.system.entity.EntityNotFoundException;
-import org.biokoframework.system.service.authentication.AuthenticationFailureException;
+import org.biokoframework.system.services.authentication.AuthenticationFailureException;
 import org.biokoframework.utils.domain.ErrorEntity;
 import org.biokoframework.utils.fields.FieldNames;
 import org.biokoframework.utils.fields.Fields;
@@ -144,7 +144,7 @@ public class CommandExceptionsFactory {
 		return new EntityNotFoundException(new ErrorEntity(fields));
 	}
 	
-	public static CommandException createInvalidLoginException() {
+	public static AuthenticationFailureException createInvalidLoginException() {
 		String[] message = _errorMap.get(FieldNames.INVALID_LOGIN_CODE);
 		Fields fields = new Fields();
 		fields.put(ErrorEntity.ERROR_CODE, FieldNames.INVALID_LOGIN_CODE);
@@ -154,7 +154,7 @@ public class CommandExceptionsFactory {
 		return new AuthenticationFailureException(new ErrorEntity(fields));
 	}
 	
-	public static CommandException createTokenNotFoundException() {
+	public static AuthenticationFailureException createTokenNotFoundException() {
 		String[] message = _errorMap.get(FieldNames.AUTHENTICATION_REQUIRED_CODE);
 		Fields fields = new Fields();
 		fields.put(ErrorEntity.ERROR_CODE, FieldNames.AUTHENTICATION_REQUIRED_CODE);
@@ -164,7 +164,7 @@ public class CommandExceptionsFactory {
 		return new AuthenticationFailureException(new ErrorEntity(fields));
 	}
 
-	public static CommandException createUnauthorisedAccessException() {
+	public static AuthenticationFailureException createUnauthorisedAccessException() {
 		String[] message = _errorMap.get(FieldNames.AUTHENTICATION_REQUIRED_CODE);
 		Fields fields = new Fields();
 		fields.put(ErrorEntity.ERROR_CODE, FieldNames.AUTHENTICATION_REQUIRED_CODE);
@@ -175,7 +175,7 @@ public class CommandExceptionsFactory {
 	}
 	
 	
-	public static CommandException createInsufficientPrivilegesException() {
+	public static AuthenticationFailureException createInsufficientPrivilegesException() {
 		String[] message = _errorMap.get(FieldNames.INSUFFICIENT_PRIVILEGES_CODE);
 		Fields fields = new Fields();
 		fields.put(ErrorEntity.ERROR_CODE, FieldNames.INSUFFICIENT_PRIVILEGES_CODE);
@@ -187,7 +187,7 @@ public class CommandExceptionsFactory {
 	
 	
 	
-	public static CommandException createTokenExpiredException() {
+	public static AuthenticationFailureException createTokenExpiredException() {
 		String[] message = _errorMap.get(FieldNames.TOKEN_EXPIRED_CODE);
 		Fields fields = new Fields();
 		fields.put(ErrorEntity.ERROR_CODE, FieldNames.TOKEN_EXPIRED_CODE);
@@ -231,7 +231,7 @@ public class CommandExceptionsFactory {
 		return new BadCommandInvocationException(new ErrorEntity(fields));
 	}
 
-	public static CommandException createFacebookAuthenticationFailure(String facebookErrorType) {
+	public static AuthenticationFailureException createFacebookAuthenticationFailure(String facebookErrorType) {
 		String[] message = _errorMap.get(FieldNames.FACEBOOK_AUTH_FAILURE_CODE);
 		Fields fields = new Fields();
 		fields.put(ErrorEntity.ERROR_CODE, FieldNames.FACEBOOK_AUTH_FAILURE_CODE);

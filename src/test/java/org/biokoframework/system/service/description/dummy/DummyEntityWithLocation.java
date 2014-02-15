@@ -33,8 +33,9 @@ import org.biokoframework.utils.domain.annotation.field.VirtualField;
 import org.biokoframework.utils.domain.annotation.hint.Hint;
 import org.biokoframework.utils.fields.Fields;
 
-@SuppressWarnings("serial")
 public class DummyEntityWithLocation extends DomainEntity {
+
+	private static final long serialVersionUID = -2593643618856255124L;
 
 	@Field
 	public static final String A_FIELD = "aField";

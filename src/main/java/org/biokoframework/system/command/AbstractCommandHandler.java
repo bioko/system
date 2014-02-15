@@ -29,6 +29,7 @@ package org.biokoframework.system.command;
 
 import java.util.Set;
 
+@Deprecated
 public abstract class AbstractCommandHandler {
 	
 	public abstract void put(String aCommandName, ICommand aCommand);

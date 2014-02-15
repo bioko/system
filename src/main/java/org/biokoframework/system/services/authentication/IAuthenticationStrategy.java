@@ -25,38 +25,22 @@
  * 
  */
 
-package org.biokoframework.system.entity.login;
+package org.biokoframework.system.services.authentication;
 
-import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
-import org.biokoframework.utils.domain.DomainEntity;
-import org.biokoframework.utils.domain.annotation.field.Field;
-import org.biokoframework.utils.domain.annotation.hint.Hint;
 import org.biokoframework.utils.fields.Fields;
 
+/**
+ * 
+ * @author Mikol Faro <mikol.faro@gmail.com>
+ * @date Feb 13, 2014
+ *
+ */
+public interface IAuthenticationStrategy {
 
-public class Login extends DomainEntity {
+	public Fields authenticate(Fields input) throws AuthenticationFailureException;
 
-	private static final long serialVersionUID = 1L;
-
-	public static final String ENTITY_KEY = GenericFieldNames.LOGIN_ID;
+	public boolean canAuthenticate(Fields fields);
 	
-	@Field(hints = {
-			@Hint(name = "cmsType", value = "email")
-		})
-	public static final String USER_EMAIL = GenericFieldNames.USER_EMAIL;
-
-	@Field(hints = {
-		@Hint(name = "encrypt", value = "oneWay")
-	})
-	public static final String PASSWORD   = GenericFieldNames.PASSWORD;
-
-	@Field(mandatory=false)
-	public static final String ROLES = "roles";
-	@Field(mandatory = false)
-	public static final String FACEBOOK_ID = "facebookId";
-	
-	public Login(Fields input) {
-		super(input);
-	}
-	
+	public Fields getChallenge();
+	public boolean hasChallenge();
 }

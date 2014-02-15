@@ -28,8 +28,6 @@
 package org.biokoframework.system.command.authentication;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -45,8 +43,6 @@ import org.biokoframework.system.entity.description.ParameterEntity;
 import org.biokoframework.system.entity.description.ParameterEntityBuilder;
 import org.biokoframework.system.entity.login.Login;
 import org.biokoframework.system.repository.core.SafeRepositoryHelper;
-import org.biokoframework.system.service.authentication.strategies.AuthenticationStrategy;
-import org.biokoframework.system.service.authentication.strategies.AuthenticationStrategyFactory;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.repository.Repository;
@@ -64,25 +60,25 @@ public class EngagedCheckInCommand extends AbstractCommand {
 		Fields result = new Fields();
 		List<Map<String, Object>> response = new ArrayList<Map<String,Object>>();
 		
-		AuthenticationStrategy authStrategy = AuthenticationStrategyFactory.retrieveCheckInStrategy(input);
-		
-		Login login = (Login) authStrategy.authenticate(fContext, input, false).get(Login.class.getSimpleName());
-		
-		Authentication authentication = insertNewAuthenticationFor(fContext, login, authenticationRepository);
-	
-		Map<String, Object> map = new HashMap<String, Object>();
-		
-		String token = authentication.get(GenericFieldNames.AUTH_TOKEN);
-		Long tokenExpire = authentication.get(GenericFieldNames.AUTH_TOKEN_EXPIRE);
-		
-		map.put(GenericFieldNames.AUTH_TOKEN, token);
-		map.put(GenericFieldNames.AUTH_TOKEN_EXPIRE, tokenExpire);
-		if (login.get(Login.ROLES) != null) {
-			map.put(Login.ROLES, login.get(Login.ROLES).toString());
-		}
-		response = Arrays.asList(map);
-		result.put(GenericFieldNames.TOKEN_HEADER, token);
-		result.put(GenericFieldNames.TOKEN_EXPIRE_HEADER, tokenExpire);
+//		AuthenticationStrategy authStrategy = AuthenticationStrategyFactory.retrieveCheckInStrategy(input);
+//		
+//		Login login = (Login) authStrategy.authenticate(fContext, input, false).get(Login.class.getSimpleName());
+//		
+//		Authentication authentication = insertNewAuthenticationFor(fContext, login, authenticationRepository);
+//	
+//		Map<String, Object> map = new HashMap<String, Object>();
+//		
+//		String token = authentication.get(GenericFieldNames.AUTH_TOKEN);
+//		Long tokenExpire = authentication.get(GenericFieldNames.AUTH_TOKEN_EXPIRE);
+//		
+//		map.put(GenericFieldNames.AUTH_TOKEN, token);
+//		map.put(GenericFieldNames.AUTH_TOKEN_EXPIRE, tokenExpire);
+//		if (login.get(Login.ROLES) != null) {
+//			map.put(Login.ROLES, login.get(Login.ROLES).toString());
+//		}
+//		response = Arrays.asList(map);
+//		result.put(GenericFieldNames.TOKEN_HEADER, token);
+//		result.put(GenericFieldNames.TOKEN_EXPIRE_HEADER, tokenExpire);
  		
 		result.put(GenericFieldNames.RESPONSE, response);
 		Loggers.xsystem.info("OUTPUT after execution: " + result.toString());

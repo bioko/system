@@ -28,9 +28,14 @@
 package org.biokoframework.system.services;
 
 import org.biokoframework.system.repository.service.RepositoryService;
+import org.biokoframework.utils.domain.DomainEntity;
+import org.biokoframework.utils.domain.reflection.DummyParameterizedType;
+import org.biokoframework.utils.repository.Repository;
 import org.biokoframework.utils.repository.RepositoryException;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Key;
+import com.google.inject.binder.AnnotatedBindingBuilder;
 
 /**
  * 
@@ -41,9 +46,9 @@ import com.google.inject.AbstractModule;
 public abstract class RepositoryModule extends AbstractModule {
 
 	@Override
-	protected void configure() {
-		bind(RepositoryService.class).
-		to(DefaultRepositoryService.class);
+	protected final void configure() {
+		bind(RepositoryService.class)
+			.to(DefaultRepositoryService.class);
 		
 		try {
 			configureRepositories();
@@ -53,5 +58,11 @@ public abstract class RepositoryModule extends AbstractModule {
 	}
 	
 	protected abstract void configureRepositories() throws RepositoryException;
+	
+	@SuppressWarnings("unchecked")
+	protected <DE extends DomainEntity> AnnotatedBindingBuilder<Repository<DE>> bindEntity(Class<DE> entityClass) {
+		return (AnnotatedBindingBuilder<Repository<DE>>) 
+				bind(Key.get(new DummyParameterizedType(Repository.class, entityClass)));
+	}
 
 }

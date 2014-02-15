@@ -25,38 +25,21 @@
  * 
  */
 
-package org.biokoframework.system.entity.login;
+package org.biokoframework.system.service.validation;
 
-import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
-import org.biokoframework.utils.domain.DomainEntity;
-import org.biokoframework.utils.domain.annotation.field.Field;
-import org.biokoframework.utils.domain.annotation.hint.Hint;
+import java.util.List;
+
+import org.biokoframework.utils.domain.ErrorEntity;
 import org.biokoframework.utils.fields.Fields;
 
-
-public class Login extends DomainEntity {
-
-	private static final long serialVersionUID = 1L;
-
-	public static final String ENTITY_KEY = GenericFieldNames.LOGIN_ID;
+/**
+ * 
+ * @author Mikol Faro <mikol.faro@gmail.com>
+ * @date Feb 15, 2014
+ *
+ */
+public interface IValidator {
 	
-	@Field(hints = {
-			@Hint(name = "cmsType", value = "email")
-		})
-	public static final String USER_EMAIL = GenericFieldNames.USER_EMAIL;
+	public void validate(Fields input, List<ErrorEntity> errors);
 
-	@Field(hints = {
-		@Hint(name = "encrypt", value = "oneWay")
-	})
-	public static final String PASSWORD   = GenericFieldNames.PASSWORD;
-
-	@Field(mandatory=false)
-	public static final String ROLES = "roles";
-	@Field(mandatory = false)
-	public static final String FACEBOOK_ID = "facebookId";
-	
-	public Login(Fields input) {
-		super(input);
-	}
-	
 }

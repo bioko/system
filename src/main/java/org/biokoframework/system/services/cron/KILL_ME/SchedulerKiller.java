@@ -25,38 +25,30 @@
  * 
  */
 
-package org.biokoframework.system.entity.login;
+package org.biokoframework.system.services.cron.KILL_ME;
 
-import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
-import org.biokoframework.utils.domain.DomainEntity;
-import org.biokoframework.utils.domain.annotation.field.Field;
-import org.biokoframework.utils.domain.annotation.hint.Hint;
-import org.biokoframework.utils.fields.Fields;
+import org.apache.log4j.Logger;
+import org.biokoframework.system.KILL_ME.exception.SystemException;
+import org.biokoframework.system.event.SystemListener;
+import org.biokoframework.system.services.cron.ICronService;
 
+final class SchedulerKiller implements SystemListener {
 
-public class Login extends DomainEntity {
-
-	private static final long serialVersionUID = 1L;
-
-	public static final String ENTITY_KEY = GenericFieldNames.LOGIN_ID;
+	private final ICronService fService;
+	private final Logger fLogger;
 	
-	@Field(hints = {
-			@Hint(name = "cmsType", value = "email")
-		})
-	public static final String USER_EMAIL = GenericFieldNames.USER_EMAIL;
-
-	@Field(hints = {
-		@Hint(name = "encrypt", value = "oneWay")
-	})
-	public static final String PASSWORD   = GenericFieldNames.PASSWORD;
-
-	@Field(mandatory=false)
-	public static final String ROLES = "roles";
-	@Field(mandatory = false)
-	public static final String FACEBOOK_ID = "facebookId";
+	public SchedulerKiller(ICronService service, Logger logger) {
+		fService = service;
+		fLogger = logger;
+	}
 	
-	public Login(Fields input) {
-		super(input);
+	@Override
+	public void systemShutdown() {
+		try {
+			fService.stop();
+		} catch (SystemException exception) {
+			fLogger.error("Unable to stop scheduler", exception);
+		}
 	}
 	
 }
