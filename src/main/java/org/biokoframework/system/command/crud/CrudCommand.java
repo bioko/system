@@ -44,21 +44,20 @@ import org.biokoframework.utils.fields.FieldNames;
 import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.repository.Repository;
 
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
+
 public class CrudCommand<T extends DomainEntity> extends SetCommand {
 
 	private Class<T> fDomainEntityClass;
-//	private Repository<T> _domainEntityRepository;
 	private Context fContext;
 
+	@Inject
+	public CrudCommand(@Assisted Class<T> domainEntityClass, Repository<T> domainEntityRepository) {
 
-	public CrudCommand(Context context, Class<T> domainEntityClass, Repository<T> domainEntityRepository) {
+		super(CrudComponingKeysBuilder.inputKeys(domainEntityClass), CrudComponingKeysBuilder.outputKeys(domainEntityClass));
 
-		super(CrudComponingKeysBuilder.inputKeys(domainEntityClass),
-				CrudComponingKeysBuilder.outputKeys(domainEntityClass));
-
-		fContext = context;
 		fDomainEntityClass = domainEntityClass;
-//		_domainEntityRepository = domainEntityRepository;
 	}
 
 	@Override
