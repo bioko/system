@@ -24,7 +24,6 @@
  * THE SOFTWARE.
  * 
  */
-
 package org.biokoframework.system.command.crud;
 
 import org.biokoframework.utils.domain.DomainEntity;
@@ -32,11 +31,11 @@ import org.biokoframework.utils.domain.DomainEntity;
 /**
  * 
  * @author Mikol Faro <mikol.faro@gmail.com>
- * @date Feb 16, 2014
+ * @date Feb 18, 2014
  *
  */
 public interface ICrudCommandFactory {
 	
-	public <DE extends DomainEntity> CrudCommand<DE> create(Class<DE> entityClass);
+	public CrudCommand create(Class<? extends DomainEntity> entityClass);
 
 }

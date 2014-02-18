@@ -27,6 +27,7 @@
 
 package org.biokoframework.system.command.crud;
 
+// TODO rename enum values
 public enum CrudMethod {
 		POST("SAVE"),
 		GET("RETRIEVE"),
@@ -34,10 +35,10 @@ public enum CrudMethod {
 		DELETE("DELETE"),
 		OPTIONS("DESCRIBE");
 		
-	private final String _crudCommand;
+	private final String fCrudCommand;
 	
 	private CrudMethod(String aCrudCommand) {
-		_crudCommand = aCrudCommand;
+		fCrudCommand = aCrudCommand;
 	}
 
 	public static CrudMethod fromRestCommand(String aCommandName) {
@@ -46,6 +47,6 @@ public enum CrudMethod {
 	}
 	
 	public String value() {
-		return _crudCommand;
+		return fCrudCommand;
 	}
 }

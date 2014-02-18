@@ -47,14 +47,12 @@ import org.biokoframework.utils.repository.Repository;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 
-public class CrudCommand<T extends DomainEntity> extends SetCommand {
+public class CrudCommand extends SetCommand {
 
-	private Class<T> fDomainEntityClass;
-	private Context fContext;
+	private final Class<? extends DomainEntity> fDomainEntityClass;
 
 	@Inject
-	public CrudCommand(@Assisted Class<T> domainEntityClass, Repository<T> domainEntityRepository) {
-
+	public CrudCommand(@Assisted Class<? extends DomainEntity> domainEntityClass) {
 		super(CrudComponingKeysBuilder.inputKeys(domainEntityClass), CrudComponingKeysBuilder.outputKeys(domainEntityClass));
 
 		fDomainEntityClass = domainEntityClass;
@@ -64,7 +62,7 @@ public class CrudCommand<T extends DomainEntity> extends SetCommand {
 	public Fields execute(Fields input) throws CommandException {
 		Fields result = new Fields();
 		CrudMethod crudMethod = CrudMethod.fromRestCommand(input.get(FieldNames.COMMAND_NAME).toString());
-		Repository<T> repository = getRepository(fDomainEntityClass);
+		Repository<? extends DomainEntity> repository = getRepository(fDomainEntityClass);
 
 		Logger logger = fContext.get(Context.LOGGER);
 		
@@ -75,7 +73,7 @@ public class CrudCommand<T extends DomainEntity> extends SetCommand {
 			e1.printStackTrace();
 		}
 		result.put(GenericCommandNames.CRUD_METHOD, crudMethod.value());
-		T actualEntity = null;
+		DomainEntity actualEntity = null;
 		try {
 			actualEntity = fDomainEntityClass.getConstructor(Fields.class).newInstance(input);
 		} catch (Exception e) {
@@ -90,7 +88,7 @@ public class CrudCommand<T extends DomainEntity> extends SetCommand {
 					new ValidationException(actualEntity.getValidationErrors()));
 		} else {
 			// TODO MATTO ma che schifo di codice!!!!
-			List<T> response = SafeRepositoryHelper.call(repository, actualEntity, crudMethod.value(), fContext);
+			List<? extends DomainEntity> response = SafeRepositoryHelper.call(repository, actualEntity, crudMethod.value(), fContext);
 			if (response.size() > 0) {
 				result.put(GenericFieldNames.RESPONSE, response);
 			} else {
