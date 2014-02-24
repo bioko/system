@@ -39,28 +39,6 @@ import org.biokoframework.utils.repository.query.Query;
 
 public abstract class AbstractRepository<T extends DomainEntity> implements Repository<T> {
 
-	@Override
-	public abstract T save(T anEntity) throws ValidationException, RepositoryException;
-
-	@Override
-	public abstract T delete(String anEntityKey);
-
-	@Override
-	public abstract T retrieve(String anEntityKey);
-
-	@Override
-	public abstract T retrieveByForeignKey(String foreignKeyName, String foreignKeyValue);
-	
-//	public abstract T retrieveByForeignKey(String foreignKeyName, String foreignKeyValue, boolean ignoreCase);
-
-	@Override
-	public abstract ArrayList<T> getEntitiesByForeignKey(String foreignKeyName, Object foreignKeyValue);
-	
-//	public abstract ArrayList<T> getEntitiesByForeignKey(String foreignKeyName, String foreignKeyValue, boolean ignoreCase);
-
-	@Override
-	public abstract ArrayList<T> getAll();
-
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<T> call(DomainEntity aDomainEntity, String aMethod) throws ValidationException, RepositoryException {
@@ -98,9 +76,6 @@ public abstract class AbstractRepository<T extends DomainEntity> implements Repo
 		return result;
 	}
 
-	@Override
-	public abstract T retrieve(T anEntityT);
-	
 	// TODO togliere quando Mattia farà il query builder,
 	// per ora restringo solo sul primo campo pieno
 	private String getFirstNotVoidFieldKey(Fields fields) {

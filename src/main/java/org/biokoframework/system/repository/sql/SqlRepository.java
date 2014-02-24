@@ -77,16 +77,18 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 		this(entityClass, entityClass.getSimpleName(), connectionHelper);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
-	public DE save(DE entity) throws RepositoryException, ValidationException {
+	public DE save(DomainEntity entity) throws RepositoryException, ValidationException {
+		DE castedEntity = (DE) entity;
 		if (!entity.isValid()) {
 			throw new ValidationException(entity.getValidationErrors());
 		}
 		
 		if (entity.getId() != null && !entity.getId().isEmpty()) {
-			return update(entity);
+			return update(castedEntity);
 		} else {
-			return insert(entity);
+			return insert(castedEntity);
 		}
 	}
 
@@ -178,9 +180,11 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public DE retrieve(DE anEntityT) {
-		return retrieve(anEntityT.getId());
+	public DE retrieve(DomainEntity anEntity) {
+		DE castedEntity = (DE) anEntity;
+		return retrieve(castedEntity.getId());
 	}
 
 	@Override

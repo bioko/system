@@ -39,6 +39,7 @@ import org.apache.commons.io.IOUtils;
 import org.biokoframework.system.KILL_ME.commons.logger.Loggers;
 import org.biokoframework.system.entity.binary.BinaryEntity;
 import org.biokoframework.system.repository.core.AbstractRepository;
+import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.exception.ValidationException;
 import org.biokoframework.utils.repository.Repository;
 import org.biokoframework.utils.repository.RepositoryException;
@@ -64,7 +65,8 @@ public class BinaryEntityRepository extends AbstractRepository<BinaryEntity> {
 	}
 
 	@Override
-	public BinaryEntity save(BinaryEntity aBlob) throws ValidationException, RepositoryException {
+	public BinaryEntity save(DomainEntity anEntity) throws ValidationException, RepositoryException {
+		BinaryEntity aBlob = (BinaryEntity) anEntity;
 		try {
 			if (aBlob.getId() != null) {
 				BinaryEntity existingBlob = _supportRepository.retrieve(aBlob.getId());
@@ -129,7 +131,8 @@ public class BinaryEntityRepository extends AbstractRepository<BinaryEntity> {
 	}
 
 	@Override
-	public BinaryEntity retrieve(BinaryEntity aBlob) {
+	public BinaryEntity retrieve(DomainEntity anEntity) {
+		BinaryEntity aBlob = (BinaryEntity) anEntity;
 		return retrieve(aBlob.getId());
 	}
 

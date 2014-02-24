@@ -48,7 +48,7 @@ public class InMemoryRepository<T extends DomainEntity> extends SqlRepository<T>
 		
 	}
 
-	public String getContentAsPrettyString() {
+	String getContentAsPrettyString() {
 		StringBuilder builder = new StringBuilder();
 		
 		List<T> all = getAll();

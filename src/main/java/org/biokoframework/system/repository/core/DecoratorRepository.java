@@ -51,9 +51,11 @@ public class DecoratorRepository<DE extends DomainEntity, R extends Repository<D
 		fBaseRepository = baseRepository;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
-	public DE save(DE anEntity) throws ValidationException, RepositoryException {
-		return fBaseRepository.save(anEntity);
+	public DE save(DomainEntity anEntity) throws ValidationException, RepositoryException {
+		DE entity = (DE) anEntity;
+		return fBaseRepository.save(entity);
 	}
 
 	@Override
@@ -81,9 +83,11 @@ public class DecoratorRepository<DE extends DomainEntity, R extends Repository<D
 		return fBaseRepository.getAll();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public DE retrieve(DE anEntityT) {
-		return fBaseRepository.retrieve(anEntityT);
+	public DE retrieve(DomainEntity anEntity) {
+		DE entity = (DE) anEntity;
+		return fBaseRepository.retrieve(entity);
 	}
 
 	@Override
