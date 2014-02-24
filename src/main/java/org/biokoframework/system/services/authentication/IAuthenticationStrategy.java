@@ -37,10 +37,10 @@ import org.biokoframework.utils.fields.Fields;
  */
 public interface IAuthenticationStrategy {
 
-	public Fields authenticate(Fields input) throws AuthenticationFailureException;
+	Fields authenticate(Fields input) throws AuthenticationFailureException;
 
-	public boolean canAuthenticate(Fields fields);
+	boolean canAuthenticate(Fields fields);
 	
-	public Fields getChallenge();
-	public boolean hasChallenge();
+	Fields getChallenge();
+	boolean hasChallenge();
 }

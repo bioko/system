@@ -37,10 +37,10 @@ import org.biokoframework.utils.domain.DomainEntity;
  */
 public interface IEncryptionService {
 
-	public <DE extends DomainEntity> DE encryptEntity(DE plainEntity);
+	<DE extends DomainEntity> DE encryptEntity(DE plainEntity);
 	
-	public <DE extends DomainEntity> boolean matchEncrypted(DE plainEntity, DE encryptedEntity, String encryptionKey);
+	<DE extends DomainEntity> boolean matchEncrypted(DE plainEntity, DE encryptedEntity, String encryptionKey);
 	
-	public <DE extends DomainEntity> DE decryptEntity(DE encryptedEntity);
+	<DE extends DomainEntity> DE decryptEntity(DE encryptedEntity);
 	
 }

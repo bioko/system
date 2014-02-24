@@ -39,10 +39,10 @@ import org.biokoframework.utils.repository.RepositoryException;
  */
 public interface IQueueService {
 
-	public void push(String content) throws ValidationException, RepositoryException;
-	public String pop();
+	void push(String content) throws ValidationException, RepositoryException;
+	String pop();
 
-	public void pushFields(Fields fields);
-	public Fields popFields();
+	void pushFields(Fields fields);
+	Fields popFields();
 
 }

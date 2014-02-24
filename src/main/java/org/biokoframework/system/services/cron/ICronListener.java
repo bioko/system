@@ -37,8 +37,8 @@ import org.biokoframework.system.command.ICommand;
  */
 public interface ICronListener {
 
-	public <C extends ICommand> void commandFinished(Class<C> command);
+	<C extends ICommand> void commandFinished(Class<C> command);
 	
-	public <C extends ICommand> void commandFailed(Class<C> command, Throwable cause);
+	<C extends ICommand> void commandFailed(Class<C> command, Throwable cause);
 	
 }

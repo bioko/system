@@ -37,6 +37,6 @@ import org.biokoframework.utils.fields.Fields;
  */
 public interface IAuthenticationService {
 
-	public Fields authenticate(Fields fields);
+	Fields authenticate(Fields fields);
 	
 }

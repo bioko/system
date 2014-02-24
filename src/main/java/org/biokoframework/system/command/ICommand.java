@@ -8,14 +8,14 @@ public interface ICommand {
 	public Fields execute(Fields input) throws CommandException;
 	
 	@Deprecated
-	public void setContext(Context context);
+	void setContext(Context context);
 	@Deprecated
-	public void setCommandName(String commandName);
+	void setCommandName(String commandName);
 	@Deprecated
-	public void onContextInitialized();
+	void onContextInitialized();
 	@Deprecated
-	public Fields componingInputKeys();
+	Fields componingInputKeys();
 	@Deprecated
-	public Fields componingOutputKeys();
+	Fields componingOutputKeys();
 	
 }

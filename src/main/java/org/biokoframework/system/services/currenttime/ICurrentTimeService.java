@@ -31,6 +31,6 @@ import org.joda.time.DateTime;
 
 public interface ICurrentTimeService {
 	
-	public DateTime getCurrentTimeAsDateTime();		
+	DateTime getCurrentTimeAsDateTime();		
 
 }

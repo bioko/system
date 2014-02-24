@@ -39,10 +39,10 @@ public interface IPushNotificationService {
 	String USER_TOKEN = "userToken";
 	String PRODUCTION = "production";
 
-	public void addPushReceiver(String userToken, String deviceToken, boolean pushStatus) throws NotificationFailureException;
+	void addPushReceiver(String userToken, String deviceToken, boolean pushStatus) throws NotificationFailureException;
 	
-	public void sendPush(String userToken, String message) throws NotificationFailureException;
+	void sendPush(String userToken, String message) throws NotificationFailureException;
 	
-	public void sendBroadcastPush(String message) throws NotificationFailureException;
+	void sendBroadcastPush(String message) throws NotificationFailureException;
 	
 }

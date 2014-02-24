@@ -40,6 +40,6 @@ import org.biokoframework.utils.fields.Fields;
  */
 public interface IValidator {
 	
-	public void validate(Fields input, List<ErrorEntity> errors);
+	void validate(Fields input, List<ErrorEntity> errors);
 
 }

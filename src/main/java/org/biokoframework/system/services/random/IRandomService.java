@@ -37,8 +37,8 @@ import org.biokoframework.system.services.Service;
  */
 public interface IRandomService extends Service {
 
-	public String generateString(String label, int length);
+	String generateString(String label, int length);
 	
-	public Long generateInteger(String label, int n);
+	Long generateInteger(String label, int n);
 	
 }

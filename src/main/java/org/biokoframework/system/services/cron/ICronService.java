@@ -40,9 +40,9 @@ import org.biokoframework.system.command.ICommand;
  */
 public interface ICronService {
 
-	public <C extends ICommand> void schedule(Class<C> command, String cronExpression, String notificationEmail) throws CronException;
+	<C extends ICommand> void schedule(Class<C> command, String cronExpression, String notificationEmail) throws CronException;
 	
-	public <C extends ICommand> void schedule(Class<C> command, String cronExpression, String notificationEmail, List<ICronListener> listeners) throws CronException;
+	<C extends ICommand> void schedule(Class<C> command, String cronExpression, String notificationEmail, List<ICronListener> listeners) throws CronException;
 
 	void stop() throws SystemException;
 	
