@@ -25,81 +25,63 @@
  * 
  */
 
+
 package org.biokoframework.system.command.crud;
 
-import java.util.List;
+import java.util.ArrayList;
 
-import org.apache.log4j.Logger;
-import org.biokoframework.system.KILL_ME.commons.GenericCommandNames;
+import org.apache.commons.lang3.StringUtils;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
+import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.CommandException;
-import org.biokoframework.system.command.KILL_ME.SetCommand;
-import org.biokoframework.system.context.Context;
 import org.biokoframework.system.exceptions.CommandExceptionsFactory;
-import org.biokoframework.system.repository.core.SafeRepositoryHelper;
-import org.biokoframework.system.service.description.JsonSystemDescriptor;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.exception.ValidationException;
-import org.biokoframework.utils.fields.FieldNames;
 import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.repository.Repository;
+import org.biokoframework.utils.repository.RepositoryException;
 
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 
-@Deprecated
-public class CrudCommand extends SetCommand {
+public class UpdateEntityCommand extends AbstractCommand {
 
 	private final Class<? extends DomainEntity> fDomainEntityClass;
 
 	@Inject
-	public CrudCommand(@Assisted Class<? extends DomainEntity> domainEntityClass) {
-		super(CrudComponingKeysBuilder.inputKeys(domainEntityClass), CrudComponingKeysBuilder.outputKeys(domainEntityClass));
-
+	public UpdateEntityCommand(@Assisted Class<? extends DomainEntity> domainEntityClass) {
 		fDomainEntityClass = domainEntityClass;
 	}
-
+	
 	@Override
 	public Fields execute(Fields input) throws CommandException {
-		Fields result = new Fields();
-		CrudMethod crudMethod = CrudMethod.fromRestCommand(input.get(FieldNames.COMMAND_NAME).toString());
+		logInput(input);
 		Repository<? extends DomainEntity> repository = getRepository(fDomainEntityClass);
-
-		Logger logger = fContext.get(Context.LOGGER);
 		
-		try {
-			logger.info("INPUT: " + input.toJSONString());
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		result.put(GenericCommandNames.CRUD_METHOD, crudMethod.value());
 		DomainEntity actualEntity = null;
 		try {
 			actualEntity = fDomainEntityClass.getConstructor(Fields.class).newInstance(input);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
-
-		if (crudMethod.equals(CrudMethod.OPTIONS)) {
-			result.put(GenericFieldNames.RESPONSE, new JsonSystemDescriptor().describeEntity(fDomainEntityClass));
-		} else if (!actualEntity.isValid() && (crudMethod.equals(CrudMethod.POST) || crudMethod.equals(CrudMethod.PUT))) {
-			throw CommandExceptionsFactory.createContainerException( 
-					new ValidationException(actualEntity.getValidationErrors()));
-		} else {
-			// TODO MATTO ma che schifo di codice!!!!
-			List<? extends DomainEntity> response = SafeRepositoryHelper.call(repository, actualEntity, crudMethod.value(), fContext);
-			if (response.size() > 0) {
-				result.put(GenericFieldNames.RESPONSE, response);
-			} else {
-				throw CommandExceptionsFactory.createEntityNotFound(fDomainEntityClass.getSimpleName(), actualEntity.getId());
-			}
-			result.putAll(input);
+		} catch (Exception exception) {
+			throw new CommandException(exception);
 		}
-		logger.info("OUTPUT after execution: " + result.toString());
-		logger.info("END CRUD Command:" + this.getClass().getSimpleName());
-		return result;
+		
+		if (StringUtils.isEmpty(actualEntity.getId())) {
+			throw CommandExceptionsFactory.createExpectedFieldNotFound(DomainEntity.ID);
+		}
+		
+		ArrayList<DomainEntity> response = new ArrayList<>();
+		try {
+			response.add(repository.save(actualEntity));
+		} catch (RepositoryException exception) {
+			throw CommandExceptionsFactory.createContainerException(exception);
+		} catch (ValidationException exception) {
+			throw CommandExceptionsFactory.createContainerException(exception);
+		}
+		
+		Fields output = new Fields(
+				GenericFieldNames.RESPONSE, response);
+		logOutput(output);
+		return output;
 	}
-	
+
 }

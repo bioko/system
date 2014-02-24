@@ -26,7 +26,10 @@
  */
 package org.biokoframework.system.command.crud;
 
+import org.biokoframework.system.command.ICommand;
 import org.biokoframework.utils.domain.DomainEntity;
+
+import com.google.inject.Provider;
 
 /**
  * 
@@ -34,8 +37,8 @@ import org.biokoframework.utils.domain.DomainEntity;
  * @date Feb 18, 2014
  *
  */
-public interface ICrudCommandFactory {
+public interface IGenericCommandProvider<C extends ICommand> extends Provider<C> {
 	
-	public CrudCommand create(Class<? extends DomainEntity> entityClass);
-
+	CreateEntityCommand create(Class<? extends DomainEntity> entityClass);
+	
 }

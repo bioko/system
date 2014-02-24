@@ -43,7 +43,7 @@ import org.biokoframework.utils.domain.annotation.field.ComponingFieldsFactory;
 import org.biokoframework.utils.fields.FieldNames;
 import org.biokoframework.utils.fields.Fields;
 
-
+@Deprecated
 public class CrudComponingKeysBuilder {
 
 	public static <T extends DomainEntity> LinkedHashMap<String, Fields> inputKeys(Class<T> domainEntityClass) {

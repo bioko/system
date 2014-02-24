@@ -54,11 +54,7 @@
 
 package org.biokoframework.system;
 
-import org.biokoframework.system.command.crud.CrudCommand;
-import org.biokoframework.system.command.crud.ICrudCommandFactory;
-
 import com.google.inject.AbstractModule;
-import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.binder.ConstantBindingBuilder;
 import com.google.inject.name.Names;
 
@@ -75,10 +71,6 @@ public abstract class SystemMainModule extends AbstractModule {
 		
 		configureProperties();
 		
-		install(new FactoryModuleBuilder()
-				.implement(CrudCommand.class, CrudCommand.class)
-				.build(ICrudCommandFactory.class));
-
 		configureMain();
 		
 		configureOtherModules();

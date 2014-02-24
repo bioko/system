@@ -25,40 +25,50 @@
  * 
  */
 
-package org.biokoframework.system.command.KILL_ME;
 
-import java.util.LinkedHashMap;
+package org.biokoframework.system.command.crud;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.command.AbstractCommand;
+import org.biokoframework.system.command.CommandException;
+import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.fields.Fields;
+import org.biokoframework.utils.repository.Repository;
 
-@Deprecated
-public abstract class SetCommand extends AbstractCommand {
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
 
-	private LinkedHashMap<String, Fields> _inputKeysMap;
-	private LinkedHashMap<String, Fields> _outputKeysMap;
+public class RetrieveEntityCommand extends AbstractCommand {
 
-	public SetCommand(LinkedHashMap<String, Fields> inputKeysMap,
-			LinkedHashMap<String, Fields> outputKeysMap) {
-//		if (!_inputKeysMap.keySet().equals(_outputKeysMap.keySet())) {
-//			throw new UnsupportedOperationException("The two sets must have the same keys");
-//		}
-		_inputKeysMap = inputKeysMap;
-		_outputKeysMap = outputKeysMap;
+	private final Class<? extends DomainEntity> fDomainEntityClass;
+
+	@Inject
+	public RetrieveEntityCommand(@Assisted Class<? extends DomainEntity> domainEntityClass) {
+		fDomainEntityClass = domainEntityClass;
 	}
 	
-	public Fields componingInputKeys(String aCommandName) {
-		if (_inputKeysMap.containsKey(aCommandName)) {
-			return _inputKeysMap.get(aCommandName); 
+	@Override
+	public Fields execute(Fields input) throws CommandException {
+		logInput(input);
+		Repository<? extends DomainEntity> repository = getRepository(fDomainEntityClass);
+
+		List<DomainEntity> entities = new ArrayList<>();
+		
+		String id = input.get(DomainEntity.ID);
+		if (StringUtils.isEmpty(id)) {
+			entities.addAll(repository.getAll());
+		} else {
+			entities.add(repository.retrieve(id));
 		}
-		return new Fields();
+		
+		Fields output = new Fields(
+				GenericFieldNames.RESPONSE, entities);
+		logOutput(output);
+		return output;
 	}
 
-	public Fields componingOutputKeys(String aCommandName) {
-		if (_outputKeysMap.containsKey(aCommandName)) {
-			return _outputKeysMap.get(aCommandName);
-		}
-		return new Fields();
-	}
-	
 }
