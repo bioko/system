@@ -29,27 +29,29 @@ package org.biokoframework.system.repository.core;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.biokoframework.system.command.CommandException;
-import org.biokoframework.system.context.Context;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.repository.Repository;
 
 public class SafeRepositoryHelper {
 	
-	public static <T extends DomainEntity> List<T> call(Repository<T> repository, DomainEntity aDomainEntity, String aMethod, Context context) throws CommandException {
+	private static final Logger LOGGER = Logger.getLogger(SafeRepositoryHelper.class);
+
+	public static <T extends DomainEntity> List<T> call(Repository<T> repository, DomainEntity aDomainEntity, String aMethod) throws CommandException {
 		try {
 			return repository.call(aDomainEntity, aMethod);
 		} catch (Exception exception) {
-//			context.getLogger().error("Not very safe call", exception);
+			LOGGER.error("Not very safe call", exception);
 			throw new CommandException(exception);
 		}
 	}
 
-	public static <T extends DomainEntity> T save(Repository<T> repository, T anEntity, Context context) throws CommandException {
+	public static <T extends DomainEntity> T save(Repository<T> repository, T anEntity) throws CommandException {
 		try {
 			return repository.save(anEntity);
 		} catch (Exception exception) {
-//			context.getLogger().error("Not very safe call", exception);
+			LOGGER.error("Not very safe call", exception);
 			throw new CommandException(exception);
 		}
 	}

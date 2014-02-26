@@ -49,6 +49,8 @@ import org.biokoframework.utils.repository.RepositoryException;
 
 public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<DE> {
 	
+	private static final Logger LOGGER = Logger.getLogger(SqlRepository.class);
+	
 	protected final SqlConnector fDbConnector;
 	protected final Class<DE> fEntityClass;
 	protected final String fTableName; 
@@ -112,7 +114,7 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 			
 			connection.close();
 		} catch (SQLException exception) {
-			Logger.getLogger("engagedServer").error("Error in insert", exception);
+			LOGGER.error("Error in insert", exception);
 		}
 		
 		if (!StringUtils.isEmpty(id) && !id.equals("0")) {
@@ -142,7 +144,7 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 			updateStatement.close();
 			connection.close();
 		} catch (SQLException exception) {
-			Logger.getLogger("engagedServer").error("Error in retrieve", exception);
+			LOGGER.error("Error in retrieve", exception);
 		}
 		if (updated) {
 			return entity;
@@ -270,7 +272,7 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 			retrieveStatement.close();
 			connection.close();
 		} catch (SQLException exception) {
-			Logger.getLogger("engagedServer").error("Retrieve:", exception);
+			LOGGER.error("Retrieve:", exception);
 			exception.printStackTrace();
 		}
 		if (entities.isEmpty()) {
@@ -307,7 +309,7 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 			
 			
 		} catch (Exception exception) {
-			Logger.getLogger("engagedServer").error("DB table check", exception);
+			LOGGER.error("DB table check", exception);
 			throw new RepositoryException(exception);
 		}
 	}

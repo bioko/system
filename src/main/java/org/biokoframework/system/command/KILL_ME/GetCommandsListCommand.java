@@ -42,7 +42,7 @@ import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.fields.FieldNames;
 import org.biokoframework.utils.fields.Fields;
 
-
+@Deprecated
 public class GetCommandsListCommand extends AbstractCommand {
 	
 	private AbstractCommandHandler _commandHandler;

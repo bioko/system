@@ -31,6 +31,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.apache.commons.lang3.StringUtils;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.command.AbstractCommand;
@@ -51,8 +54,6 @@ import org.biokoframework.utils.repository.Repository;
 import org.joda.time.DateTime;
 import org.joda.time.format.ISODateTimeFormat;
 
-import com.google.inject.Inject;
-
 public class RequestPasswordResetCommand extends AbstractCommand {
 
 	private static final String NO_REPLY = "no-reply@engaged.it";
@@ -67,12 +68,15 @@ public class RequestPasswordResetCommand extends AbstractCommand {
 	private final IRandomService fRandomTokenService;
 	private final IEmailService fEmailService;
 
+	private final String fLandingPageUrl;
+
 	@Inject
-	public RequestPasswordResetCommand(ICurrentTimeService currentTimeService, 
-			IRandomService randomTokenService, IEmailService emailService) {
+	public RequestPasswordResetCommand(ICurrentTimeService currentTimeService, IRandomService randomTokenService, 
+			IEmailService emailService, @Named("resetPasswordLandingPage") String landingPageUrl) {
 		fCurrentTimeService = currentTimeService;
 		fRandomTokenService = randomTokenService;
 		fEmailService = emailService;
+		fLandingPageUrl = landingPageUrl;
 	}
 	
 	@Override
@@ -96,7 +100,7 @@ public class RequestPasswordResetCommand extends AbstractCommand {
 		passwordReset.set(PasswordReset.TOKEN_EXPIRATION, now.plusDays(1).toString(ISODateTimeFormat.dateTimeNoMillis()));
 		String randomToken = fRandomTokenService.generateString(PASSWORD_RESET_TOKEN, 20);
 		passwordReset.set(PasswordReset.TOKEN, randomToken);
-		SafeRepositoryHelper.save(_passwordResetRepo, passwordReset, fContext);
+		SafeRepositoryHelper.save(_passwordResetRepo, passwordReset);
 
 
 		Template mailTemplate = _templateRepo.retrieveByForeignKey(Template.TRACK, PASSWORD_RESET_MAIL_TEMPLATE);
@@ -104,7 +108,7 @@ public class RequestPasswordResetCommand extends AbstractCommand {
 			
 			
 			Map<String, Object> contentMap = new HashMap<String, Object>();
-			contentMap.put("url", StringUtils.defaultString(fContext.getSystemProperty(RESET_PASSWORD_LANDING_PAGE_URL)));
+			contentMap.put("url", StringUtils.defaultString(fLandingPageUrl));
 			contentMap.put("token", randomToken);
 			contentMap.put("userEmail", login.get(Login.USER_EMAIL));
 			ContentBuilder contentBuilder = new ContentBuilder(mailTemplate, contentMap);

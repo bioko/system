@@ -35,8 +35,8 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
-import org.biokoframework.system.services.push.NotificationFailureException;
 import org.biokoframework.system.services.push.IPushNotificationService;
+import org.biokoframework.system.services.push.NotificationFailureException;
 import org.biokoframework.system.services.queue.IQueueService;
 import org.biokoframework.utils.fields.Fields;
 

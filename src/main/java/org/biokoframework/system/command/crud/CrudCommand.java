@@ -29,12 +29,10 @@ package org.biokoframework.system.command.crud;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.biokoframework.system.KILL_ME.commons.GenericCommandNames;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.command.CommandException;
 import org.biokoframework.system.command.KILL_ME.SetCommand;
-import org.biokoframework.system.context.Context;
 import org.biokoframework.system.exceptions.CommandExceptionsFactory;
 import org.biokoframework.system.repository.core.SafeRepositoryHelper;
 import org.biokoframework.system.service.description.JsonSystemDescriptor;
@@ -61,18 +59,11 @@ public class CrudCommand extends SetCommand {
 
 	@Override
 	public Fields execute(Fields input) throws CommandException {
+		logInput(input);
 		Fields result = new Fields();
 		CrudMethod crudMethod = CrudMethod.fromRestCommand(input.get(FieldNames.COMMAND_NAME).toString());
 		Repository<? extends DomainEntity> repository = getRepository(fDomainEntityClass);
-
-		Logger logger = fContext.get(Context.LOGGER);
 		
-		try {
-			logger.info("INPUT: " + input.toJSONString());
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 		result.put(GenericCommandNames.CRUD_METHOD, crudMethod.value());
 		DomainEntity actualEntity = null;
 		try {
@@ -89,7 +80,7 @@ public class CrudCommand extends SetCommand {
 					new ValidationException(actualEntity.getValidationErrors()));
 		} else {
 			// TODO MATTO ma che schifo di codice!!!!
-			List<? extends DomainEntity> response = SafeRepositoryHelper.call(repository, actualEntity, crudMethod.value(), fContext);
+			List<? extends DomainEntity> response = SafeRepositoryHelper.call(repository, actualEntity, crudMethod.value());
 			if (response.size() > 0) {
 				result.put(GenericFieldNames.RESPONSE, response);
 			} else {
@@ -97,8 +88,8 @@ public class CrudCommand extends SetCommand {
 			}
 			result.putAll(input);
 		}
-		logger.info("OUTPUT after execution: " + result.toString());
-		logger.info("END CRUD Command:" + this.getClass().getSimpleName());
+
+		logOutput(result);
 		return result;
 	}
 	

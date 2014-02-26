@@ -29,11 +29,9 @@ package org.biokoframework.system.command.crud.binary;
 
 import java.util.ArrayList;
 
-import org.apache.log4j.Logger;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.CommandException;
-import org.biokoframework.system.context.Context;
 import org.biokoframework.system.entity.EntityClassNameTranslator;
 import org.biokoframework.system.entity.binary.BinaryEntity;
 import org.biokoframework.system.exceptions.CommandExceptionsFactory;
@@ -43,28 +41,18 @@ import org.biokoframework.utils.fields.Fields;
 
 public class PostBinaryEntityCommand extends AbstractCommand {
 
-	private final Context fContext;
 	private final String fBlobFieldName;
 
-	public PostBinaryEntityCommand(Context context, BinaryEntityRepository blobRepo, String blobName) {
-		fContext = context;
+	public PostBinaryEntityCommand(String blobName) {
 		fBlobFieldName = EntityClassNameTranslator.toFieldName(blobName);
 	}
 
 	@Override
 	public Fields execute(Fields input) throws CommandException {
+		logInput(input);
 		Fields result = new Fields();
 		
 		BinaryEntityRepository blobRepo = getRepository(BinaryEntity.class);
-
-		Logger logger = fContext.get(Context.LOGGER);
-		
-		try {
-			logger.info("INPUT: " + input.toJSONString());
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 		
 		ArrayList<BinaryEntity> response = new ArrayList<BinaryEntity>();
 		
@@ -74,15 +62,14 @@ public class PostBinaryEntityCommand extends AbstractCommand {
 			throw CommandExceptionsFactory.createNotCompleteEntity(blob.getClass().getSimpleName());
 		}
 			
-		blob = SafeRepositoryHelper.save(blobRepo, blob, fContext);
+		blob = SafeRepositoryHelper.save(blobRepo, blob);
 		if (blob == null) {
 			throw CommandExceptionsFactory.createBadCommandInvocationException();
 		}
 		response.add(blob);
 		
 		result.put(GenericFieldNames.RESPONSE, response);
-		logger.info("OUTPUT after execution: " + result.toString());
-		logger.info("END CRUD Command:" + this.getClass().getSimpleName());
+		logOutput(result);
 		return result;
 	}
 	

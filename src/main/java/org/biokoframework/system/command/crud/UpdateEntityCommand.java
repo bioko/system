@@ -30,6 +30,9 @@ package org.biokoframework.system.command.crud;
 
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.apache.commons.lang3.StringUtils;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.command.AbstractCommand;
@@ -41,15 +44,13 @@ import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.repository.Repository;
 import org.biokoframework.utils.repository.RepositoryException;
 
-import com.google.inject.Inject;
-import com.google.inject.assistedinject.Assisted;
-
 public class UpdateEntityCommand extends AbstractCommand {
 
 	private final Class<? extends DomainEntity> fDomainEntityClass;
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Inject
-	public UpdateEntityCommand(@Assisted Class<? extends DomainEntity> domainEntityClass) {
+	public UpdateEntityCommand(@Named("entity") Class domainEntityClass) {
 		fDomainEntityClass = domainEntityClass;
 	}
 	

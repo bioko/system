@@ -35,11 +35,12 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
+import org.apache.log4j.Logger;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.CommandException;
-import org.biokoframework.system.services.push.NotificationFailureException;
 import org.biokoframework.system.services.push.IPushNotificationService;
+import org.biokoframework.system.services.push.NotificationFailureException;
 import org.biokoframework.system.services.queue.IQueueService;
 import org.biokoframework.utils.fields.Fields;
 
@@ -48,6 +49,8 @@ import com.google.inject.name.Named;
 
 public class SendPushCommand extends AbstractCommand {
 
+	private static final Logger LOGGER = Logger.getLogger(SendPushCommand.class);
+	
 	private final IQueueService fPushQueueService;
 	private final String fPusherdrilloUrl;
 	private final String fAppToken;
@@ -81,7 +84,7 @@ public class SendPushCommand extends AbstractCommand {
 					sendPush(userToken, content, production);
 				}
 			} catch (NotificationFailureException exception) {
-				fContext.getLogger().error("Pushing", exception);
+				LOGGER.error("Pushing", exception);
 			}
 			
 		}

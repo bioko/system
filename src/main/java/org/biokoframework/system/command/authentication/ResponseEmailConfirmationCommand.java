@@ -71,7 +71,7 @@ public class ResponseEmailConfirmationCommand extends AbstractCommand {
 			
 			confirmation.set(EmailConfirmation.CONFIRMATION_TIMESTAMP, timestamp);
 			confirmation.set(EmailConfirmation.CONFIRMED, FieldValues.TRUE);
-			SafeRepositoryHelper.save(emailConfirmationRepo, confirmation, fContext);
+			SafeRepositoryHelper.save(emailConfirmationRepo, confirmation);
 		}
 				
 		logOutput();

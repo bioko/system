@@ -46,14 +46,14 @@ import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.fields.FieldNames;
 import org.biokoframework.utils.fields.Fields;
 
-
+@Deprecated
 public class GetCommandInvocationInfoCommand extends AbstractCommand {
 	
-	private AbstractCommandHandler _commandHandler;
+	private AbstractCommandHandler fCommandHandler;
 
 	@Override
 	public void onContextInitialized() {
-		_commandHandler = fContext.getCommandHandler();
+		fCommandHandler = fContext.getCommandHandler();
 	}
 
 	// TODO MATTO I
@@ -71,7 +71,7 @@ public class GetCommandInvocationInfoCommand extends AbstractCommand {
 		if (commandName == null) {
 			throw CommandExceptionsFactory.createExpectedFieldNotFound(GenericFieldNames.COMMAND);
 		}
-		ICommand command = _commandHandler.getByName(commandName);
+		ICommand command = fCommandHandler.getByName(commandName);
 		if (command == null) {
 			Loggers.xsystem.error("Command " + commandName + " not found");
 			throw CommandExceptionsFactory.createCommandNotFoundException(commandName);

@@ -36,6 +36,7 @@ import org.biokoframework.system.repository.core.AbstractRepository;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.repository.Repository;
 
+@Deprecated
 public abstract class Context {
 
 	public static final String SYSTEM_NAME = "systemName";
@@ -53,6 +54,7 @@ public abstract class Context {
 	
 	public abstract void put(String name, Object value);
 	
+	@Deprecated
 	public abstract Logger getLogger() ;
 	
 	public abstract String getSystemName();

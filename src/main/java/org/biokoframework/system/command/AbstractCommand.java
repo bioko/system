@@ -27,6 +27,8 @@
 
 package org.biokoframework.system.command;
 
+import javax.inject.Inject;
+
 import org.apache.log4j.Logger;
 import org.biokoframework.system.context.Context;
 import org.biokoframework.system.repository.service.RepositoryService;
@@ -36,10 +38,10 @@ import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.json.JSonBuilder;
 import org.biokoframework.utils.repository.Repository;
 
-import com.google.inject.Inject;
-
 
 public abstract class AbstractCommand implements ICommand {
+	
+	private static final Logger LOGGER = Logger.getLogger(AbstractCommand.class);
 	
 	protected Context fContext;
 	protected String fCommandName;
@@ -50,7 +52,7 @@ public abstract class AbstractCommand implements ICommand {
 	public final void setRepositoryService(RepositoryService service) {
 		fRepositoryService = service;
 	}
-	
+
 	public void fillInvocationInfo(Fields output) {
 		try {
 			output.put(FieldNames.COMMAND_INVOCATION_INPUT_INFO, new JSonBuilder().buildFrom(componingInputKeys()));
@@ -83,24 +85,23 @@ public abstract class AbstractCommand implements ICommand {
 	@Deprecated
 	@Override
 	public void onContextInitialized() {
-		
 	}
 	
 	protected void logInput(Fields input) { 
-		Logger logger = fContext.getLogger();
-		logger.info("EXECUTING Command:" + this.getClass().getSimpleName());
-		logger.info("INPUT: " + input.toString());
+		LOGGER.info("EXECUTING Command:" + this.getClass().getSimpleName());
+		LOGGER.info("INPUT: " + input.toString());
 	}
 	
-	protected void logOutput(Fields output) { 
-		Logger logger = fContext.getLogger();
+	protected void logOutput(Fields output) {
+		if (LOGGER.isInfoEnabled()) {
+			if (output == null) {		
+				LOGGER.info("OUTPUT after execution: (nothing)");
+			} else {
+				LOGGER.info("OUTPUT after execution: " + output.toString());
+			}
 		
-		if (output == null)		
-			logger.info("OUTPUT after execution: (nothing)");
-		else
-			logger.info("OUTPUT after execution: " + output.toString());
-		
-		logger.info("END Command:" + this.getClass().getSimpleName());
+			LOGGER.info("END Command:" + this.getClass().getSimpleName());
+		}
 	}
 	
 	protected void logOutput() {

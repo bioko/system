@@ -2,6 +2,9 @@ package org.biokoframework.system.command.crud;
 
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.apache.commons.lang3.StringUtils;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.command.AbstractCommand;
@@ -11,15 +14,13 @@ import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.repository.Repository;
 
-import com.google.inject.Inject;
-import com.google.inject.assistedinject.Assisted;
-
 public class DeleteEntityCommand extends AbstractCommand {
 
 	private final Class<? extends DomainEntity> fDomainEntityClass;
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Inject
-	public DeleteEntityCommand(@Assisted Class<? extends DomainEntity> domainEntityClass) {
+	public DeleteEntityCommand(@Named("entity") Class domainEntityClass) {
 		fDomainEntityClass = domainEntityClass;
 	}
 	

@@ -46,9 +46,9 @@ public class CreateEntityCommand extends AbstractCommand {
 
 	private final Class<? extends DomainEntity> fDomainEntityClass;
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Inject
-	public CreateEntityCommand(@Named("entity") Class<?> domainEntityClass) {
+	public CreateEntityCommand(@Named("entity") Class domainEntityClass) {
 		fDomainEntityClass = (Class<? extends DomainEntity>) domainEntityClass;
 	}
 	

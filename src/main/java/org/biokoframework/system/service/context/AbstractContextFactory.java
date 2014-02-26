@@ -42,6 +42,7 @@ import org.biokoframework.system.services.random.impl.TestRandomGeneratorService
 import org.biokoframework.utils.exception.BiokoException;
 import org.biokoframework.utils.fields.Fields;
 
+@Deprecated
 public abstract class AbstractContextFactory implements ContextFactory {
 
 	public Context create(XSystemIdentityCard identityCard) throws BiokoException {

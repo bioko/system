@@ -45,43 +45,45 @@ import org.biokoframework.utils.domain.annotation.field.Field;
 
 public class SqlTypesTranslator {
 
-	private Map<Class<?>, ? extends Translator> _typeMap;
-	private Translator _idTranslator;
-	private List<String> _additionalConstraints = new LinkedList<String>();
+	private static final Logger LOGGER = Logger.getLogger(SqlTypesTranslator.class);
+	
+	private Map<Class<?>, ? extends Translator> fTypeMap;
+	private Translator fIdTranslator;
+	private List<String> fAdditionalConstraints = new LinkedList<String>();
 	
 	public SqlTypesTranslator(Class<?> translatorDefinitions) throws InstantiationException, IllegalAccessException {
-		_typeMap = createTranslatorsMap(translatorDefinitions);
-		_idTranslator = getIDTranslator(translatorDefinitions);
+		fTypeMap = createTranslatorsMap(translatorDefinitions);
+		fIdTranslator = getIDTranslator(translatorDefinitions);
 	}
 	
 	public String getSqlType(String fieldName, Field fieldAnnotation) {
 		if (fieldName.equals(DomainEntity.ID) || DomainEntity.class.isAssignableFrom(fieldAnnotation.type())) {
-			return _idTranslator.selectDBType(fieldName, fieldAnnotation, _additionalConstraints);
+			return fIdTranslator.selectDBType(fieldName, fieldAnnotation, fAdditionalConstraints);
 		} else {
-			Translator translator = _typeMap.get(fieldAnnotation.type());
+			Translator translator = fTypeMap.get(fieldAnnotation.type());
 			
 			if (translator == null) {
-				translator = _typeMap.get(String.class);
-				Logger.getLogger("engagedServer").warn("Cannot find translator for " + fieldAnnotation.type() + " default to String translator");
+				translator = fTypeMap.get(String.class);
+				LOGGER.warn("Cannot find translator for " + fieldAnnotation.type() + " default to String translator");
 			}
-			return translator.selectDBType(fieldName, fieldAnnotation, _additionalConstraints);
+			return translator.selectDBType(fieldName, fieldAnnotation, fAdditionalConstraints);
 		}
 	}
 
 	public void insertIntoStatement(String fieldName, Object fieldValue, Field fieldAnnotation, PreparedStatement statement, int queryIndex) throws SQLException {
 		if (fieldName.equals(DomainEntity.ID) || DomainEntity.class.isAssignableFrom(fieldAnnotation.type())) {
-			_idTranslator.insertIntoStatement(fieldName, fieldValue, fieldAnnotation, statement, queryIndex);
+			fIdTranslator.insertIntoStatement(fieldName, fieldValue, fieldAnnotation, statement, queryIndex);
 		} else {
-			_typeMap.get(fieldAnnotation.type()).insertIntoStatement(fieldName, fieldValue, fieldAnnotation, statement, queryIndex);
+			fTypeMap.get(fieldAnnotation.type()).insertIntoStatement(fieldName, fieldValue, fieldAnnotation, statement, queryIndex);
 		}
 	}
 	
 	public Object convertFromDBValue(String fieldName, ResultSet resultset, Field fieldAnnotation) throws SQLException {
 		
 		if (fieldName.equals(DomainEntity.ID) || DomainEntity.class.isAssignableFrom(fieldAnnotation.type())) {
-			return _idTranslator.convertFromDBValue(fieldName, resultset, fieldAnnotation);
+			return fIdTranslator.convertFromDBValue(fieldName, resultset, fieldAnnotation);
 		} else {
-			return _typeMap.get(fieldAnnotation.type()).convertFromDBValue(fieldName, resultset, fieldAnnotation);
+			return fTypeMap.get(fieldAnnotation.type()).convertFromDBValue(fieldName, resultset, fieldAnnotation);
 		}
 	}
 	
@@ -105,10 +107,10 @@ public class SqlTypesTranslator {
 	}
 
 	public void clearConstraintsList() {
-		_additionalConstraints.clear();
+		fAdditionalConstraints.clear();
 	}
 	
 	public List<String> getAllConstraints() {
-		return Collections.unmodifiableList(_additionalConstraints);
+		return Collections.unmodifiableList(fAdditionalConstraints);
 	}
 }

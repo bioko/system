@@ -29,11 +29,9 @@ package org.biokoframework.system.command.crud.binary;
 
 import java.util.ArrayList;
 
-import org.apache.log4j.Logger;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.CommandException;
-import org.biokoframework.system.context.Context;
 import org.biokoframework.system.entity.EntityClassNameTranslator;
 import org.biokoframework.system.entity.binary.BinaryEntity;
 import org.biokoframework.system.exceptions.CommandExceptionsFactory;
@@ -44,29 +42,19 @@ import org.biokoframework.utils.fields.Fields;
 
 public class PutBinaryEntityCommand extends AbstractCommand {
 
-	private final Context fContext;
 	private final String fBlobFieldName;
 
-	public PutBinaryEntityCommand(Context context, BinaryEntityRepository blobRepo, String blobName) {
-		fContext = context;
+	public PutBinaryEntityCommand(String blobName) {
 		fBlobFieldName = EntityClassNameTranslator.toFieldName(blobName);
 	}
 
 	@Override
 	public Fields execute(Fields input) throws CommandException {
+		logInput(input);
 		Fields result = new Fields();
 		
 		BinaryEntityRepository blobRepo = getRepository(BinaryEntity.class);
 
-		Logger logger = fContext.get(Context.LOGGER);
-		
-		try {
-			logger.info("INPUT: " + input.toJSONString());
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
 		String blobId = input.get(DomainEntity.ID);
 		if (blobId == null || blobId.isEmpty()) {
 			throw CommandExceptionsFactory.createExpectedFieldNotFound(DomainEntity.ID);
@@ -84,7 +72,7 @@ public class PutBinaryEntityCommand extends AbstractCommand {
 		if (!newBlob.isValid()) {
 			throw CommandExceptionsFactory.createNotCompleteEntity(newBlob.getClass().getSimpleName());
 		}
-		newBlob = SafeRepositoryHelper.save(blobRepo, newBlob, fContext);
+		newBlob = SafeRepositoryHelper.save(blobRepo, newBlob);
 		if (newBlob == null) {
 			throw CommandExceptionsFactory.createBadCommandInvocationException();
 		}
@@ -92,8 +80,7 @@ public class PutBinaryEntityCommand extends AbstractCommand {
 		
 		
 		result.put(GenericFieldNames.RESPONSE, response);
-		logger.info("OUTPUT after execution: " + result.toString());
-		logger.info("END CRUD Command:" + this.getClass().getSimpleName());
+		logOutput(result);
 		return result;
 	}
 	

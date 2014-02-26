@@ -48,6 +48,8 @@ import org.biokoframework.utils.domain.annotation.field.Field;
 import org.biokoframework.utils.fields.Fields;
 
 public class SqlStatementsHelper {
+	
+	private static final Logger LOGGER = Logger.getLogger(SqlStatementsHelper.class);
 
 	public static <DE extends DomainEntity> PreparedStatement prepareRetrieveByForeignKey(Class<DE> entityClass, String tableName, Connection connection, String foreignKey) throws SQLException {
 		StringBuilder sql = new StringBuilder().
@@ -78,7 +80,7 @@ public class SqlStatementsHelper {
 			fields = ComponingFieldsFactory.createWithAnnotation(entityClass).entrySet();
 		} catch (Exception exception) {
 			// THIS SHOULD NEVER HAPPEN
-			Logger.getLogger("engagedServer").error("retrieving fields:", exception);
+			LOGGER.error("retrieving fields:", exception);
 			exception.printStackTrace();
 		}
 		
@@ -94,7 +96,7 @@ public class SqlStatementsHelper {
 			try {
 				entities.add(entityClass.getConstructor(Fields.class).newInstance(entityFields));
 			} catch (Exception exception) {
-				Logger.getLogger("engagedServer").error("creating entity:", exception);
+				LOGGER.error("creating entity:", exception);
 				// THIS SHOULD NEVER HAPPEN
 				exception.printStackTrace();
 			}

@@ -31,9 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
-import org.biokoframework.system.KILL_ME.commons.logger.Loggers;
 import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.CommandException;
 import org.biokoframework.system.context.Context;
@@ -52,10 +50,8 @@ public class EngagedCheckInCommand extends AbstractCommand {
 
 	@Override
 	public Fields execute(Fields input) throws CommandException {
-		Logger logger = fContext.get(Context.LOGGER);
+		logInput(input);
 		Repository<Authentication> authenticationRepository = getRepository(Authentication.class);
-		logger.info("EXECUTING Command:" + this.getClass().getSimpleName());
-		logger.info("INPUT: " + input.toString());
 		
 		Fields result = new Fields();
 		List<Map<String, Object>> response = new ArrayList<Map<String,Object>>();
@@ -81,14 +77,13 @@ public class EngagedCheckInCommand extends AbstractCommand {
 //		result.put(GenericFieldNames.TOKEN_EXPIRE_HEADER, tokenExpire);
  		
 		result.put(GenericFieldNames.RESPONSE, response);
-		Loggers.xsystem.info("OUTPUT after execution: " + result.toString());
-		Loggers.xsystem.info("END Command:" + this.getClass().getSimpleName());
+		logOutput(result);
 		return result;
 	}
 
 	private Authentication insertNewAuthenticationFor(Context context, Login login, Repository<Authentication> authenticationRepository) throws CommandException {
 		Authentication newAuth = AuthenticationManager.createAuthenticationFor(context, login);
-		newAuth = SafeRepositoryHelper.save(authenticationRepository, newAuth, fContext);
+		newAuth = SafeRepositoryHelper.save(authenticationRepository, newAuth);
 		return newAuth;
 	}
 

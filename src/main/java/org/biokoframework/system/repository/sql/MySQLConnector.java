@@ -64,6 +64,8 @@ import org.joda.time.LocalDate;
 
 public class MySQLConnector extends SqlConnector {
 
+	private static final Logger LOGGER = Logger.getLogger(MySQLConnector.class);
+	
 	private String _url;
 	private Connection _connectionInstance;
 	
@@ -96,7 +98,7 @@ public class MySQLConnector extends SqlConnector {
 			} else if (exception.getMessage().contains("Access denied")) {
 				grantUser();
 			}
-			Logger.getLogger("engagedServer").error("Connection creation", exception);
+			LOGGER.error("Connection creation", exception);
 			exception.printStackTrace();
 			throw exception;
 		}

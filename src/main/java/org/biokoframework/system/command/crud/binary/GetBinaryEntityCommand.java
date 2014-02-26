@@ -29,12 +29,10 @@ package org.biokoframework.system.command.crud.binary;
 
 import java.util.ArrayList;
 
-import org.apache.log4j.Logger;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldValues;
 import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.CommandException;
-import org.biokoframework.system.context.Context;
 import org.biokoframework.system.entity.EntityClassNameTranslator;
 import org.biokoframework.system.entity.binary.BinaryEntity;
 import org.biokoframework.system.entity.description.ParameterEntity;
@@ -46,26 +44,12 @@ import org.biokoframework.utils.fields.Fields;
 
 public class GetBinaryEntityCommand extends AbstractCommand {
 
-	private final Context fContext;
-	
-	public GetBinaryEntityCommand(Context context, BinaryEntityRepository blobRepo) {
-		fContext = context;
-	}
-
 	@Override
 	public Fields execute(Fields input) throws CommandException {
-		Fields result = new Fields();
+		logInput(input);
+		
 		BinaryEntityRepository blobRepo = getRepository(BinaryEntity.class);
 
-		Logger logger = fContext.get(Context.LOGGER);
-		
-		try {
-			logger.info("INPUT: " + input.toJSONString());
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
 		ArrayList<BinaryEntity> response = new ArrayList<BinaryEntity>();
 		
 		String blobId = input.get(DomainEntity.ID);
@@ -79,12 +63,12 @@ public class GetBinaryEntityCommand extends AbstractCommand {
 		}
 		response.add(blob);
 		
-		result.put(GenericFieldNames.RESPONSE_CONTENT_TYPE, blob.get(BinaryEntity.MEDIA_TYPE));
+		Fields output = new Fields(
+				GenericFieldNames.RESPONSE_CONTENT_TYPE, blob.get(BinaryEntity.MEDIA_TYPE),
+				GenericFieldNames.RESPONSE, response);
 		
-		result.put(GenericFieldNames.RESPONSE, response);
-		logger.info("OUTPUT after execution: " + result.toString());
-		logger.info("END CRUD Command:" + this.getClass().getSimpleName());
-		return result;
+		logOutput(output);
+		return output;
 	}
 	
 	@Override

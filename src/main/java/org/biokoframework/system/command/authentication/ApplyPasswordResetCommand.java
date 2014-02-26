@@ -73,7 +73,7 @@ public class ApplyPasswordResetCommand extends AbstractCommand {
 			if (now.isBefore(tokenExpireTime)) {
 				Login login = loginRepo.retrieve(passwordReset.get(PasswordReset.LOGIN_ID).toString());
 				login.set(Login.PASSWORD, input.get(Login.PASSWORD).toString());
-				SafeRepositoryHelper.save(loginRepo, login, fContext);
+				SafeRepositoryHelper.save(loginRepo, login);
 			}
 		} else {
 			throw CommandExceptionsFactory.createEntityNotFound(PasswordReset.class.getSimpleName(), PasswordReset.TOKEN, token);

@@ -42,6 +42,7 @@ import org.biokoframework.system.exceptions.CommandExceptionsFactory;
 import org.biokoframework.utils.fields.FieldNames;
 import org.biokoframework.utils.fields.Fields;
 
+@Deprecated
 public class MultipleCommandPlusPlus extends AbstractCommand {
 
 	private AbstractCommandHandler fCommandHandler;
