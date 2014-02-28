@@ -58,21 +58,24 @@ public class UpdateEntityCommand extends AbstractCommand {
 	public Fields execute(Fields input) throws CommandException {
 		logInput(input);
 		Repository<? extends DomainEntity> repository = getRepository(fDomainEntityClass);
-		
-		DomainEntity actualEntity = null;
-		try {
-			actualEntity = fDomainEntityClass.getConstructor(Fields.class).newInstance(input);
-		} catch (Exception exception) {
-			throw new CommandException(exception);
+
+		String id = input.get(DomainEntity.ID);
+		if (StringUtils.isEmpty(id)) {
+			throw CommandExceptionsFactory.createExpectedFieldNotFound(DomainEntity.ID);
 		}
 		
-		if (StringUtils.isEmpty(actualEntity.getId())) {
-			throw CommandExceptionsFactory.createExpectedFieldNotFound(DomainEntity.ID);
+		DomainEntity entity = repository.retrieve(id);
+		if (entity == null) {
+			throw CommandExceptionsFactory.createEntityNotFound(fDomainEntityClass.getSimpleName(), id);
+		}
+		
+		for (String aKey : input.keys()) {
+			entity.set(aKey, input.get(aKey));
 		}
 		
 		ArrayList<DomainEntity> response = new ArrayList<>();
 		try {
-			response.add(repository.save(actualEntity));
+			response.add(repository.save(entity));
 		} catch (RepositoryException exception) {
 			throw CommandExceptionsFactory.createContainerException(exception);
 		} catch (ValidationException exception) {

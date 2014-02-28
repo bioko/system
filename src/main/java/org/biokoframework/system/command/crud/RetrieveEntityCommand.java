@@ -38,6 +38,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.CommandException;
+import org.biokoframework.system.exceptions.CommandExceptionsFactory;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.repository.Repository;
@@ -63,7 +64,11 @@ public class RetrieveEntityCommand extends AbstractCommand {
 		if (StringUtils.isEmpty(id)) {
 			entities.addAll(repository.getAll());
 		} else {
-			entities.add(repository.retrieve(id));
+			DomainEntity entity = repository.retrieve(id);
+			if (entity == null) {
+				throw CommandExceptionsFactory.createEntityNotFound(fDomainEntityClass.getSimpleName(), id);
+			}
+			entities.add(entity);
 		}
 		
 		Fields output = new Fields(GenericFieldNames.RESPONSE, entities);

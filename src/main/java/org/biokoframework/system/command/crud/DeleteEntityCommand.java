@@ -36,7 +36,12 @@ public class DeleteEntityCommand extends AbstractCommand {
 		}
 		
 		ArrayList<DomainEntity> response = new ArrayList<>();
-		response.add(repository.delete(id));
+		
+		DomainEntity entity = repository.delete(id);
+		if (entity == null) {
+			throw CommandExceptionsFactory.createEntityNotFound(fDomainEntityClass.getSimpleName(), id);
+		}
+		response.add(entity);
 		
 		Fields output = new Fields(
 				GenericFieldNames.RESPONSE, response);
