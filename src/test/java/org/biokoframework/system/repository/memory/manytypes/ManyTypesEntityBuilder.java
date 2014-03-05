@@ -27,7 +27,11 @@
 
 package org.biokoframework.system.repository.memory.manytypes;
 
+import javax.inject.Inject;
+
 import org.biokoframework.utils.domain.EntityBuilder;
+
+import com.google.inject.Injector;
 
 /**
  * 
@@ -40,8 +44,9 @@ public class ManyTypesEntityBuilder extends EntityBuilder<ManyTypesEntity> {
 	public static final String EXAMPLE_1 = "example1";
 	public static final String EXAMPLE_2 = "example2";
 
-	public ManyTypesEntityBuilder() {
-		super(ManyTypesEntity.class);
+	@Inject
+	public ManyTypesEntityBuilder(Injector injector) {
+		super(ManyTypesEntity.class, injector);
 		
 		putExample(EXAMPLE_1, "{'id':'1','intField':12, 'longField':30}");
 		putExample(EXAMPLE_2, "{'id':'2','intField':24, 'longField':60}");

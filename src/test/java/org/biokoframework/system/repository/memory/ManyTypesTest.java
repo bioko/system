@@ -36,7 +36,12 @@ import org.biokoframework.system.repository.memory.manytypes.ManyTypesEntity;
 import org.biokoframework.system.repository.memory.manytypes.ManyTypesEntityBuilder;
 import org.biokoframework.utils.domain.EntityBuilder;
 import org.biokoframework.utils.repository.Repository;
+import org.biokoframework.utils.validation.ValidationModule;
+import org.junit.Before;
 import org.junit.Test;
+
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 
 /**
  * 
@@ -46,11 +51,18 @@ import org.junit.Test;
  */
 public class ManyTypesTest {
 	
+	private Injector fInjector;
+
+	@Before
+	public void prepareInjector() {
+		fInjector = Guice.createInjector(new ValidationModule());
+	}
+	
 	@Test
 	public void integerTypes() throws Exception {
 		Repository<ManyTypesEntity> repository = new InMemoryRepository<ManyTypesEntity>(ManyTypesEntity.class);
 
-		EntityBuilder<ManyTypesEntity> entityBuilder = new ManyTypesEntityBuilder().loadDefaultExample();
+		EntityBuilder<ManyTypesEntity> entityBuilder = fInjector.getInstance(ManyTypesEntityBuilder.class).loadDefaultExample();
 		
 		ManyTypesEntity entity1 = entityBuilder.build(false);
 		entity1 = repository.save(entity1);

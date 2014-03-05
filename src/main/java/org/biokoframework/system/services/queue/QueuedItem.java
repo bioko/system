@@ -31,7 +31,6 @@ import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.domain.annotation.field.Field;
 import org.biokoframework.utils.domain.annotation.hint.Hint;
 import org.biokoframework.utils.domain.annotation.hint.HintNames;
-import org.biokoframework.utils.fields.Fields;
 
 public class QueuedItem extends DomainEntity {
 
@@ -46,9 +45,5 @@ public class QueuedItem extends DomainEntity {
 	
 	@Field(type=Long.class)
 	public static final String IDX = "idx";
-	
-	public QueuedItem(Fields input) {
-		super(input);
-	}
 
 }

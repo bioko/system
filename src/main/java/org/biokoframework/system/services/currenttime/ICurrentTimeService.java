@@ -31,6 +31,9 @@ import org.joda.time.DateTime;
 
 public interface ICurrentTimeService {
 	
+	static final String ISO_DATETIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
+	static final String ISO_DATE_FORMAT = "yyyy-MM-dd";
+	
 	DateTime getCurrentTimeAsDateTime();		
 
 }

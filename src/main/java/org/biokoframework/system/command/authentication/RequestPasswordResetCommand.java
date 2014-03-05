@@ -95,7 +95,7 @@ public class RequestPasswordResetCommand extends AbstractCommand {
 		
 		DateTime now = fCurrentTimeService.getCurrentTimeAsDateTime();
 		
-		PasswordReset passwordReset = new PasswordReset(new Fields());
+		PasswordReset passwordReset = new PasswordReset();
 		passwordReset.set(PasswordReset.LOGIN_ID, login.getId());
 		passwordReset.set(PasswordReset.TOKEN_EXPIRATION, now.plusDays(1).toString(ISODateTimeFormat.dateTimeNoMillis()));
 		String randomToken = fRandomTokenService.generateString(PASSWORD_RESET_TOKEN, 20);

@@ -5,3 +5,4 @@
 *.md.html
 .idea
 system.iml
+.attach_pid*

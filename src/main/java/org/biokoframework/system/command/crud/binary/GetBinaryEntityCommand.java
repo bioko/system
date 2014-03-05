@@ -75,7 +75,7 @@ public class GetBinaryEntityCommand extends AbstractCommand {
 	public Fields componingInputKeys() {
 		ArrayList<ParameterEntity> parameters = new ArrayList<ParameterEntity>(); 
 		
-		ParameterEntity parameter = new ParameterEntity(new Fields());
+		ParameterEntity parameter = new ParameterEntity();
 		parameter.set(ParameterEntity.NAME, DomainEntity.ID);
 		parameter.set(ParameterEntity.HTTP_PARAMETER_TYPE, GenericFieldValues.URL_PATH);
 		parameters.add(parameter);

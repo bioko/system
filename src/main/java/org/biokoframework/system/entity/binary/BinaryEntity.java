@@ -36,7 +36,7 @@ import org.apache.commons.io.IOUtils;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.domain.annotation.field.Field;
-import org.biokoframework.utils.fields.Fields;
+import org.biokoframework.utils.domain.annotation.hint.Hint;
 
 public class BinaryEntity extends DomainEntity {
 
@@ -52,17 +52,15 @@ public class BinaryEntity extends DomainEntity {
 	@Field(type = Long.class)
 	public static final String SIZE_BYTES = "sizeBytes";	
 	
-	@Field(pattern = MEDIA_TYPE_REGEXP)
+	@Field(hints = {
+			@Hint(name = "validationRegexp", value = MEDIA_TYPE_REGEXP)
+	})
 	public static final String MEDIA_TYPE = "mediaType";
 	
 	@Field(mandatory = false)
 	public static final String PATH = "path";
 
 	private byte[] _bytes;
-
-	public BinaryEntity(Fields input) {
-		super(input);
-	}
 	
 	public InputStream getStream() {
 		return new ByteArrayInputStream(_bytes);

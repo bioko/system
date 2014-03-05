@@ -36,7 +36,7 @@ public class ComposedParameterEntityBuilder extends ParameterEntityBuilder {
 	}
 
 	public void setContent(List<ParameterEntity> content) {
-		_currentFields.put(ParameterEntity.CONTENT, content);
+		fCurrentFields.put(ParameterEntity.CONTENT, content);
 	}
 
 }

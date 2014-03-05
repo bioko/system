@@ -31,7 +31,6 @@ import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.entity.login.Login;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.domain.annotation.field.Field;
-import org.biokoframework.utils.fields.Fields;
 
 public class Authentication extends DomainEntity {
 
@@ -47,9 +46,5 @@ public class Authentication extends DomainEntity {
 	public static final String TOKEN_EXPIRE = GenericFieldNames.AUTH_TOKEN_EXPIRE;	
 	@Field(mandatory=false)
 	public static final String ROLES = Login.ROLES;
-	
-	public Authentication(Fields input) {
-		super(input);
-	}
 
 }

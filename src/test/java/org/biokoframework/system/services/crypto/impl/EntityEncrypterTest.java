@@ -37,7 +37,6 @@ import static org.junit.Assert.assertThat;
 import org.apache.commons.lang3.StringUtils;
 import org.biokoframework.system.entity.login.Login;
 import org.biokoframework.system.entity.login.LoginBuilder;
-import org.biokoframework.utils.fields.Fields;
 import org.junit.Test;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
@@ -80,7 +79,7 @@ public class EntityEncrypterTest {
 		String password = "GinoPoni";
 		ProdEntityEncryptionService encrypter = new ProdEntityEncryptionService();
 		
-		DummyDecryptableEntity plainEntity = new DummyDecryptableEntity(new Fields());
+		DummyDecryptableEntity plainEntity = new DummyDecryptableEntity();
 		plainEntity.set(DummyDecryptableEntity.A_PLAIN_FIELD, "plain");
 		plainEntity.set(DummyDecryptableEntity.A_TWO_WAY_ENCRYPTED_FIELD, "twoWayValue");
 		

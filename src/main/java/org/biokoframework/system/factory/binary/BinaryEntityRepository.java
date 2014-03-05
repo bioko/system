@@ -82,7 +82,8 @@ public class BinaryEntityRepository extends AbstractRepository<BinaryEntity> {
 			Loggers.engagedServer.error("Save blob file", exception);
 			return null;
 		}
-		BinaryEntity filterBlob = new BinaryEntity(aBlob.fields());
+		BinaryEntity filterBlob = new BinaryEntity();
+		filterBlob.setAll(aBlob.fields());
 		filterBlob.fields().remove(BinaryEntity.PATH);
 		return filterBlob;
 	}
@@ -109,7 +110,8 @@ public class BinaryEntityRepository extends AbstractRepository<BinaryEntity> {
 		BinaryEntity aBlob = _supportRepository.retrieve(aBlobId);
 		BinaryEntity returnBlob = null;
 		if (aBlob != null) {
-			returnBlob = new BinaryEntity(aBlob.fields().copy());
+			returnBlob = new BinaryEntity();
+			returnBlob.setAll(aBlob.fields().copy());
 			try {
 				returnBlob.setStream(new FileInputStream(aBlob.get(BinaryEntity.PATH).toString()));
 			} catch (IOException exception) {
@@ -124,7 +126,8 @@ public class BinaryEntityRepository extends AbstractRepository<BinaryEntity> {
 		BinaryEntity aBlob = _supportRepository.retrieve(aBlobId);
 		BinaryEntity returnBlob = null;
 		if (aBlob != null) {
-			returnBlob = new BinaryEntity(aBlob.fields().copy());
+			returnBlob = new BinaryEntity();
+			returnBlob.setAll(aBlob.fields().copy());
 			returnBlob.fields().remove(BinaryEntity.PATH);
 		}
 		return returnBlob;
@@ -140,7 +143,8 @@ public class BinaryEntityRepository extends AbstractRepository<BinaryEntity> {
 	public ArrayList<BinaryEntity> getAll() {
 		ArrayList<BinaryEntity> blobs = new ArrayList<BinaryEntity>();
 		for (BinaryEntity aBlob : _supportRepository.getAll()) {
-			BinaryEntity cleanBlob = new BinaryEntity(aBlob.fields());
+			BinaryEntity cleanBlob = new BinaryEntity();
+			cleanBlob.setAll(aBlob.fields());
 			cleanBlob.fields().remove(BinaryEntity.PATH);
 			blobs.add(cleanBlob);
 		}

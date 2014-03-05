@@ -30,7 +30,6 @@ package org.biokoframework.system.service.description.dummy;
 import org.biokoframework.system.entity.login.Login;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.domain.annotation.field.Field;
-import org.biokoframework.utils.fields.Fields;
 
 public class DummyReferencingEntity extends DomainEntity {
 
@@ -41,9 +40,5 @@ public class DummyReferencingEntity extends DomainEntity {
 	
 	@Field(type = Login.class)
 	public static final String LOGIN_ID = "loginId";
-	
-	public DummyReferencingEntity(Fields input) {
-		super(input);
-	}
 
 }

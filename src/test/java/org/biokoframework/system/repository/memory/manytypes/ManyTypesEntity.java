@@ -29,7 +29,6 @@ package org.biokoframework.system.repository.memory.manytypes;
 
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.domain.annotation.field.Field;
-import org.biokoframework.utils.fields.Fields;
 
 /**
  * @author Mikol Faro <mikol.faro@gmail.com>
@@ -44,9 +43,5 @@ public class ManyTypesEntity extends DomainEntity {
 	
 	@Field(type = Long.class)
 	public static final String LONG_FIELD = "longField";
-	
-	public ManyTypesEntity(Fields fields) {
-		super(fields);
-	}
 	
 }

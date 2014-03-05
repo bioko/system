@@ -30,8 +30,6 @@ package org.biokoframework.system.entity.authentication;
 import org.biokoframework.system.entity.login.Login;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.domain.annotation.field.Field;
-import org.biokoframework.utils.fields.Fields;
-import org.biokoframework.utils.validator.Validator;
 import org.joda.time.DateTime;
 
 public class PasswordReset extends DomainEntity {
@@ -41,14 +39,10 @@ public class PasswordReset extends DomainEntity {
 	@Field(type = Login.class)
 	public static final String LOGIN_ID = Login.ENTITY_KEY;
 	
-	@Field(type = DateTime.class, dateFormat = Validator.ISO_TIMESTAMP)
+	@Field(type = DateTime.class)
 	public static final String TOKEN_EXPIRATION = "tokenExpiration";
 	
 	@Field
 	public static final String TOKEN = "token";
-	
-	public PasswordReset(Fields input) {
-		super(input);
-	}
 
 }

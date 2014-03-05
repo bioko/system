@@ -37,36 +37,43 @@ import org.biokoframework.system.repository.memory.dummy1.ASDummyEntity1;
 import org.biokoframework.system.repository.memory.dummy1.ASDummyEntity1Builder;
 import org.biokoframework.utils.exception.ValidationException;
 import org.biokoframework.utils.repository.RepositoryException;
+import org.biokoframework.utils.validation.ValidationModule;
 import org.json.simple.JSONValue;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+
 
 public class MemoryRepositoryTest {
 
-	private InMemoryRepository<ASDummyEntity1> _repo;
+	private InMemoryRepository<ASDummyEntity1> fRepo;
+	private Injector fInjector;
 
 	@Before
 	public void fillExampleRepo() throws ValidationException, RepositoryException {
-		_repo = new InMemoryRepository<ASDummyEntity1>(ASDummyEntity1.class);
-		ASDummyEntity1Builder builder = new ASDummyEntity1Builder();
+		fInjector = Guice.createInjector(new ValidationModule());
+		
+		fRepo = new InMemoryRepository<ASDummyEntity1>(ASDummyEntity1.class);
+		ASDummyEntity1Builder builder = fInjector.getInstance(ASDummyEntity1Builder.class);
 
-		_repo.save(builder.loadExample(ASDummyEntity1Builder.EXAMPLE_GINO).build(false));
-		_repo.save(builder.loadExample(ASDummyEntity1Builder.EXAMPLE_PINO).build(false));
-		_repo.save(builder.loadExample(ASDummyEntity1Builder.EXAMPLE_RINO).build(false));
-		_repo.save(builder.loadExample(ASDummyEntity1Builder.EXAMPLE_DINO).build(false));
+		fRepo.save(builder.loadExample(ASDummyEntity1Builder.EXAMPLE_GINO).build(false));
+		fRepo.save(builder.loadExample(ASDummyEntity1Builder.EXAMPLE_PINO).build(false));
+		fRepo.save(builder.loadExample(ASDummyEntity1Builder.EXAMPLE_RINO).build(false));
+		fRepo.save(builder.loadExample(ASDummyEntity1Builder.EXAMPLE_DINO).build(false));
 
 	}
 	
 	@Test
 	public void retriveByForeignKeyTest() throws ValidationException, RepositoryException {
-		ASDummyEntity1Builder builder = new ASDummyEntity1Builder();
+		ASDummyEntity1Builder builder = fInjector.getInstance(ASDummyEntity1Builder.class);
 
 		// case sensitive correct case
-		ASDummyEntity1 ginoEntity = _repo.retrieveByForeignKey(ASDummyEntity1.VALUE, "gino");
+		ASDummyEntity1 ginoEntity = fRepo.retrieveByForeignKey(ASDummyEntity1.VALUE, "gino");
 		assertEquals(builder.loadExample(ASDummyEntity1Builder.EXAMPLE_GINO).build(true).get(ASDummyEntity1.ID), ginoEntity.get(ASDummyEntity1.ID));
 		// case sensitive, with wrong case
-		ASDummyEntity1 ginoEntity2 = _repo.retrieveByForeignKey(ASDummyEntity1.VALUE, "Gino");
+		ASDummyEntity1 ginoEntity2 = fRepo.retrieveByForeignKey(ASDummyEntity1.VALUE, "Gino");
 		assertEquals(null, ginoEntity2);
 //		// case insensitive, with correct case
 //		asdummyentity1 ginoentity3 = repo.retrievebyforeignkey(asdummyentity1.value, "gino", true);
@@ -82,10 +89,10 @@ public class MemoryRepositoryTest {
 	public void getEntitiesByForeignKeyTest()  {
 
 		try {
-			ASDummyEntity1Builder builder = new ASDummyEntity1Builder();
+			ASDummyEntity1Builder builder = fInjector.getInstance(ASDummyEntity1Builder.class);
 
 			// case sensitive correct case
-			List<ASDummyEntity1> gruppo1Entities = _repo.getEntitiesByForeignKey(ASDummyEntity1.GROUP, "gruppo1");
+			List<ASDummyEntity1> gruppo1Entities = fRepo.getEntitiesByForeignKey(ASDummyEntity1.GROUP, "gruppo1");
 			
 			System.out.println(JSONValue.toJSONString(gruppo1Entities));
 			System.out.println("[");
@@ -95,17 +102,17 @@ public class MemoryRepositoryTest {
 			
 			
 			assertThat(gruppo1Entities.toArray(new ASDummyEntity1[0]), arrayContainingInAnyOrder(
-					builder.loadExample(ASDummyEntity1Builder.EXAMPLE_GINO).build(true),
-					builder.loadExample(ASDummyEntity1Builder.EXAMPLE_PINO).build(true)
+						builder.loadExample(ASDummyEntity1Builder.EXAMPLE_GINO).build(true),
+						builder.loadExample(ASDummyEntity1Builder.EXAMPLE_PINO).build(true)
 					));
 
 
 			// case sensitive, with wrong case
-			List<ASDummyEntity1> gruppo1Entities2 = _repo.getEntitiesByForeignKey(ASDummyEntity1.GROUP, "Gruppo1");
+			List<ASDummyEntity1> gruppo1Entities2 = fRepo.getEntitiesByForeignKey(ASDummyEntity1.GROUP, "Gruppo1");
 			assertEquals(0, gruppo1Entities2.size());
 
 			// case insensitive, with correct case
-			List<ASDummyEntity1> gruppo1Entities3 = _repo.getEntitiesByForeignKey(ASDummyEntity1.GROUP, "gruppo1");
+			List<ASDummyEntity1> gruppo1Entities3 = fRepo.getEntitiesByForeignKey(ASDummyEntity1.GROUP, "gruppo1");
 			assertThat(gruppo1Entities3.toArray(new ASDummyEntity1[0]), arrayContainingInAnyOrder(
 					builder.loadExample(ASDummyEntity1Builder.EXAMPLE_GINO).build(true),
 					builder.loadExample(ASDummyEntity1Builder.EXAMPLE_PINO).build(true)

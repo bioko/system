@@ -31,7 +31,6 @@ import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.domain.annotation.field.Field;
 import org.biokoframework.utils.domain.annotation.hint.Hint;
-import org.biokoframework.utils.fields.Fields;
 
 
 public class Login extends DomainEntity {
@@ -54,9 +53,5 @@ public class Login extends DomainEntity {
 	public static final String ROLES = "roles";
 	@Field(mandatory = false)
 	public static final String FACEBOOK_ID = "facebookId";
-	
-	public Login(Fields input) {
-		super(input);
-	}
 	
 }

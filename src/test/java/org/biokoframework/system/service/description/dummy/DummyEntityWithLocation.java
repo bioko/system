@@ -31,7 +31,6 @@ import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.domain.annotation.field.Field;
 import org.biokoframework.utils.domain.annotation.field.VirtualField;
 import org.biokoframework.utils.domain.annotation.hint.Hint;
-import org.biokoframework.utils.fields.Fields;
 
 public class DummyEntityWithLocation extends DomainEntity {
 
@@ -56,9 +55,5 @@ public class DummyEntityWithLocation extends DomainEntity {
 		@Hint(name = "cmsType", value = "location")
 	})
 	public static final String LOCATION = "location";
-	
-	public DummyEntityWithLocation(Fields input) {
-		super(input);
-	}
 	
 }

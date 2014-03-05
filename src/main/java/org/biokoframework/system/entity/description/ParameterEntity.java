@@ -32,7 +32,6 @@ import org.biokoframework.system.KILL_ME.commons.GenericFieldValues;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.domain.annotation.field.Field;
 import org.biokoframework.utils.fields.FieldNames;
-import org.biokoframework.utils.fields.Fields;
 
 
 public class ParameterEntity extends DomainEntity {
@@ -62,10 +61,6 @@ public class ParameterEntity extends DomainEntity {
 	public static final String MINIMUM = GenericFieldNames.MINIMUM;
 	@Field(mandatory = false, type = Integer.class)
 	public static final String MAXIMUM = GenericFieldNames.MAXIMUM;
-	
-	public ParameterEntity(Fields input) {
-		super(input);
-	}
 
 	public static final String ENTITY_KEY = GenericFieldNames.NOT_EXPECTED_ID;
 	

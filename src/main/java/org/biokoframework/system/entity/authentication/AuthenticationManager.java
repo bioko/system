@@ -46,7 +46,9 @@ public class AuthenticationManager {
 		fields.put(GenericFieldNames.AUTH_TOKEN, UUID.randomUUID().toString());
 		long utcTimeSecs = System.currentTimeMillis() / 1000 + validityIntervalSecs;
 		fields.put(GenericFieldNames.AUTH_TOKEN_EXPIRE, utcTimeSecs);
-		return new Authentication(fields);
+		Authentication authentication = new Authentication();
+		authentication.setAll(fields);
+		return authentication;
 	}
 	
 	public static boolean isExpired(Authentication authentication) {

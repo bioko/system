@@ -40,13 +40,13 @@ import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.fields.FieldValues;
 import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.repository.Repository;
-import org.biokoframework.utils.validator.Validator;
 
 import com.google.inject.Inject;
 
 
 public class ResponseEmailConfirmationCommand extends AbstractCommand {
 
+	private static final String ISO_TIMESTAMP = "yyyy-MM-dd'T'HH:mm:ssZ";
 	private ICurrentTimeService fCurrentTimeService;
 	
 	@Inject
@@ -67,7 +67,7 @@ public class ResponseEmailConfirmationCommand extends AbstractCommand {
 		EmailConfirmation confirmation = emailConfirmationRepo.retrieveByForeignKey(EmailConfirmation.TOKEN, token);
 		Login login = loginRepo.retrieve(confirmation.get(EmailConfirmation.LOGIN_ID).toString());
 		if (login != null && login.get(Login.USER_EMAIL).equals(loginUserEmail)) {
-			String timestamp = fCurrentTimeService.getCurrentTimeAsDateTime().toString(Validator.ISO_TIMESTAMP);
+			String timestamp = fCurrentTimeService.getCurrentTimeAsDateTime().toString(ISO_TIMESTAMP);
 			
 			confirmation.set(EmailConfirmation.CONFIRMATION_TIMESTAMP, timestamp);
 			confirmation.set(EmailConfirmation.CONFIRMED, FieldValues.TRUE);

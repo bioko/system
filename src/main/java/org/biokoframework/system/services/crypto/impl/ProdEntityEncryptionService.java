@@ -37,7 +37,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.biokoframework.system.services.crypto.IEncryptionService;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.domain.annotation.hint.HintFactory;
-import org.biokoframework.utils.fields.Fields;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
 public class ProdEntityEncryptionService implements IEncryptionService {
@@ -59,8 +58,8 @@ public class ProdEntityEncryptionService implements IEncryptionService {
 	public <DE extends DomainEntity> DE encryptEntity(DE plainEntity) {
 		DE encryptedEntity = null;
 		try {
-			encryptedEntity = (DE) plainEntity.getClass().getConstructor(Fields.class).newInstance(new Fields());
-			
+			encryptedEntity = (DE) plainEntity.getClass().newInstance();
+
 			Map<String, Map<String, String>> hints = HintFactory.createMap(plainEntity.getClass());
 			for (String aFieldName : plainEntity.fields().keys()) {
 				Map<String, String> fieldHints = hints.get(aFieldName);
@@ -111,7 +110,7 @@ public class ProdEntityEncryptionService implements IEncryptionService {
 	public <DE extends DomainEntity> DE decryptEntity(DE encryptedEntity) {
 		DE decryptedEntity = null;
 		try {
-			decryptedEntity = (DE) encryptedEntity.getClass().getConstructor(Fields.class).newInstance(new Fields());
+			decryptedEntity = (DE) encryptedEntity.getClass().newInstance();
 			
 			Map<String, Map<String, String>> hints = HintFactory.createMap(encryptedEntity.getClass());
 			for (String aFieldName : encryptedEntity.fields().keys()) {

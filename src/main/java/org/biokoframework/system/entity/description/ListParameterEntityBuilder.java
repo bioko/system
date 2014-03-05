@@ -35,7 +35,7 @@ public class ListParameterEntityBuilder extends ParameterEntityBuilder {
 	}
 	
 	public void setContent(ParameterEntity content) {
-		_currentFields.put(ParameterEntity.CONTENT, content);
+		fCurrentFields.put(ParameterEntity.CONTENT, content);
 	}
 
 }

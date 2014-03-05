@@ -30,8 +30,6 @@ package org.biokoframework.system.entity.authentication;
 import org.biokoframework.system.entity.login.Login;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.domain.annotation.field.Field;
-import org.biokoframework.utils.fields.Fields;
-import org.biokoframework.utils.validator.Validator;
 import org.joda.time.DateTime;
 
 public class EmailConfirmation extends DomainEntity {
@@ -47,11 +45,7 @@ public class EmailConfirmation extends DomainEntity {
 	@Field(type = Boolean.class)
 	public static final String CONFIRMED = "confirmed";
 	
-	@Field(type = DateTime.class, mandatory = false, format = Validator.ISO_TIMESTAMP)
+	@Field(type = DateTime.class, mandatory = false)
 	public static final String CONFIRMATION_TIMESTAMP = "confirmationTimestamp";
-	
-	public EmailConfirmation(Fields input) {
-		super(input);
-	}
 
 }

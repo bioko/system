@@ -34,12 +34,12 @@ import java.util.List;
 
 import org.biokoframework.system.repository.sql.translator.annotation.Translator;
 import org.biokoframework.utils.domain.annotation.field.Field;
-import org.biokoframework.utils.validator.Validator;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 
 public class ISODateTimeTranslator implements Translator {
 
+	private static final String ISO_TIMESTAMP = "yyyy-MM-dd'T'HH:mm:ssZ";
 	private static final String MYSQL_TIMESTAMP = "yyyy-MM-dd HH:mm:ss.S";
 	
 	@Override
@@ -68,7 +68,7 @@ public class ISODateTimeTranslator implements Translator {
 			return null;
 		} else {				
 			DateTime timestamp = DateTimeFormat.forPattern(MYSQL_TIMESTAMP).parseDateTime(sqlFieldValue);
-			return timestamp.toString(Validator.ISO_TIMESTAMP);
+			return timestamp.toString(ISO_TIMESTAMP);
 		}
 	}
 

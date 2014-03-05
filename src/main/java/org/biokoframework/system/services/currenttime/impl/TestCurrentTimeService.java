@@ -28,7 +28,6 @@
 package org.biokoframework.system.services.currenttime.impl;
 
 import org.biokoframework.system.services.currenttime.ICurrentTimeService;
-import org.biokoframework.utils.validator.Validator;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 
@@ -48,7 +47,7 @@ public class TestCurrentTimeService implements ICurrentTimeService {
 
 
 	public static void setCalendar(String dateAsString) {
-		setCalendar(dateAsString, Validator.ISO_TIMESTAMP);
+		setCalendar(dateAsString, ISO_DATETIME_FORMAT);
 	}
 
 	

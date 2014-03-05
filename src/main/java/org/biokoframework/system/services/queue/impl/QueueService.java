@@ -78,7 +78,7 @@ public class QueueService implements IQueueService {
 	
 	@Override
 	public void push(String content) throws ValidationException, RepositoryException {
-		QueuedItem item = new QueuedItem(new Fields());
+		QueuedItem item = new QueuedItem();
 		item.set(QueuedItem.CONTENT, content);
 		synchronized (pushLock) {
 			synchronized (tail) {

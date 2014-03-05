@@ -59,10 +59,10 @@ public class CommandEntityBuilder extends EntityBuilder<CommandEntity> {
 	}
 	
 	public void setInput(ArrayList<ParameterEntity> input) {
-		_currentFields.put(CommandEntity.INPUT, input);
+		fCurrentFields.put(CommandEntity.INPUT, input);
 	}
 	
 	public void setOutput(ArrayList<ParameterEntity> output) {
-		_currentFields.put(CommandEntity.OUTPUT, output);
+		fCurrentFields.put(CommandEntity.OUTPUT, output);
 	}
 }

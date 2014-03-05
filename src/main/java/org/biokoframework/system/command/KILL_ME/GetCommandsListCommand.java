@@ -68,7 +68,7 @@ public class GetCommandsListCommand extends AbstractCommand {
 		// descriverebbe qualunque altra cosa
 		ArrayList<DomainEntity> response = new ArrayList<DomainEntity>();
 		for (String aCommandName : _commandHandler.keys()) {
-			CommandEntity commandEntity = new CommandEntity(new Fields());
+			CommandEntity commandEntity = new CommandEntity();
 			commandEntity.set(CommandEntity.NAME, aCommandName);
 			response.add(commandEntity);
 		}

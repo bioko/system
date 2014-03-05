@@ -83,7 +83,8 @@ public class GetCommandInvocationInfoCommand extends AbstractCommand {
 		ArrayList<ParameterEntity> parameters = extractOutputParameters(commandName, command);
 		commandEntityFields.put(GenericFieldNames.OUTPUT, parameters);
 		
-		CommandEntity entity = new CommandEntity(commandEntityFields);
+		CommandEntity entity = new CommandEntity();
+		entity.setAll(commandEntityFields);
 		ArrayList<DomainEntity> response = new ArrayList<DomainEntity>();
 		response.add(entity);
 		result.put(GenericFieldNames.RESPONSE, response);
@@ -116,7 +117,7 @@ public class GetCommandInvocationInfoCommand extends AbstractCommand {
 	public Fields componingInputKeys() {
 		ArrayList<ParameterEntity> request = new ArrayList<ParameterEntity>(); 
 		
-		ParameterEntity parameter = new ParameterEntity(new Fields());
+		ParameterEntity parameter = new ParameterEntity();
 		parameter.set(ParameterEntity.NAME, GenericFieldNames.COMMAND);
 		parameter.set(ParameterEntity.HTTP_PARAMETER_TYPE, GenericFieldValues.QUERY_STRING);
 		request.add(parameter);

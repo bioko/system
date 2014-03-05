@@ -94,7 +94,9 @@ public class SqlStatementsHelper {
 			entityFields.put(DomainEntity.ID, translator.convertFromDBValue(DomainEntity.ID, result, null));
 			
 			try {
-				entities.add(entityClass.getConstructor(Fields.class).newInstance(entityFields));
+				DE entity = entityClass.newInstance();
+				entity.setAll(entityFields);
+				entities.add(entity);
 			} catch (Exception exception) {
 				LOGGER.error("creating entity:", exception);
 				// THIS SHOULD NEVER HAPPEN

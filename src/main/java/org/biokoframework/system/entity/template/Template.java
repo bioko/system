@@ -31,7 +31,6 @@ import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.domain.annotation.field.Field;
 import org.biokoframework.utils.domain.annotation.hint.Hint;
 import org.biokoframework.utils.domain.annotation.hint.HintNames;
-import org.biokoframework.utils.fields.Fields;
 
 
 public class Template extends DomainEntity{
@@ -50,9 +49,5 @@ public class Template extends DomainEntity{
 	public static final String TRACK = "track";
 	@Field(mandatory = false)
 	public static final String CATEGORY = "category";
-	
-	public Template(Fields input) {
-		super(input);
-	}
 
 }

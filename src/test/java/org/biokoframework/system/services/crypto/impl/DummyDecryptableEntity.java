@@ -30,7 +30,6 @@ package org.biokoframework.system.services.crypto.impl;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.domain.annotation.field.Field;
 import org.biokoframework.utils.domain.annotation.hint.Hint;
-import org.biokoframework.utils.fields.Fields;
 
 public class DummyDecryptableEntity extends DomainEntity {
 
@@ -43,9 +42,5 @@ public class DummyDecryptableEntity extends DomainEntity {
 			@Hint(name = ProdEntityEncryptionService.HINT, value = ProdEntityEncryptionService.TWO_WAY_HINT)
 	})
 	public static final String A_TWO_WAY_ENCRYPTED_FIELD = "aTwoWayEncryptedField";
-	
-	public DummyDecryptableEntity(Fields input) {
-		super(input);
-	}
 	
 }

@@ -104,7 +104,7 @@ public class ResolvableCommand extends AbstractCommand {
 	public Fields componingInputKeys() {
 		Fields componingInputKeys = fBaseCommand.componingInputKeys();
 		
-		ParameterEntity parameter = new ParameterEntity(new Fields());
+		ParameterEntity parameter = new ParameterEntity();
 		parameter.set(ParameterEntity.NAME, GenericFieldNames.RESOLVE_ENTITIES);
 		parameter.set(ParameterEntity.HTTP_PARAMETER_TYPE, GenericFieldValues.QUERY_STRING);
 		

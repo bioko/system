@@ -35,7 +35,7 @@ import org.biokoframework.system.service.validation.AbstractValidator;
 import org.biokoframework.utils.domain.ErrorEntity;
 import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.repository.Repository;
-import org.biokoframework.utils.validator.ValidatorErrorBuilder;
+import org.biokoframework.utils.validation.ValidationErrorBuilder;
 
 public class EmailUniqueInLoginRepoValidator extends AbstractValidator {
 
@@ -47,7 +47,7 @@ public class EmailUniqueInLoginRepoValidator extends AbstractValidator {
 		List<Login> result = loginRepo.getEntitiesByForeignKey(Login.USER_EMAIL, valueToTest);
 
 		if (!result.isEmpty())
-			errors.add(ValidatorErrorBuilder.buildUniqueViolationError(Login.USER_EMAIL));
+			errors.add(ValidationErrorBuilder.buildUniqueViolationError(Login.USER_EMAIL));
 
 	}
 

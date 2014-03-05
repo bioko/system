@@ -40,7 +40,6 @@ import org.biokoframework.system.services.currenttime.ICurrentTimeService;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.repository.Repository;
-import org.biokoframework.utils.validator.Validator;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 
@@ -48,7 +47,9 @@ import com.google.inject.Inject;
 
 public class ApplyPasswordResetCommand extends AbstractCommand {
 
+	private static final String ISO_TIMESTAMP = "yyyy-MM-dd'T'HH:mm:ssZ";
 	private final ICurrentTimeService fCurrentTimeService;
+	
 
 	@Inject
 	public ApplyPasswordResetCommand(ICurrentTimeService currentTimeService) {
@@ -68,7 +69,7 @@ public class ApplyPasswordResetCommand extends AbstractCommand {
 		if (passwordReset != null) {
 			passwordResetRepo.delete(passwordReset.getId());
 
-			DateTime tokenExpireTime = DateTime.parse(passwordReset.get(PasswordReset.TOKEN_EXPIRATION).toString(), DateTimeFormat.forPattern(Validator.ISO_TIMESTAMP));
+			DateTime tokenExpireTime = DateTime.parse(passwordReset.get(PasswordReset.TOKEN_EXPIRATION).toString(), DateTimeFormat.forPattern(ISO_TIMESTAMP));
 			DateTime now = fCurrentTimeService.getCurrentTimeAsDateTime();
 			if (now.isBefore(tokenExpireTime)) {
 				Login login = loginRepo.retrieve(passwordReset.get(PasswordReset.LOGIN_ID).toString());

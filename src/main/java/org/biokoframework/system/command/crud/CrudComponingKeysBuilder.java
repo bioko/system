@@ -128,13 +128,13 @@ public class CrudComponingKeysBuilder {
 		}
 		
 		for (String aKey : keys) {
-			ParameterEntity parameter = new ParameterEntity(new Fields());
+			ParameterEntity parameter = new ParameterEntity();
 			parameter.set(ParameterEntity.NAME, aKey);
 			parameter.set(ParameterEntity.HTTP_PARAMETER_TYPE, GenericFieldValues.BODY);
 			parameters.add(parameter);
 		}
 		
-		ParameterEntity idParameter = new ParameterEntity(new Fields());
+		ParameterEntity idParameter = new ParameterEntity();
 		idParameter.set(ParameterEntity.NAME, DomainEntity.ID);
 		idParameter.set(ParameterEntity.HTTP_PARAMETER_TYPE, GenericFieldValues.URL_PATH);
 		parameters.add(idParameter);
@@ -147,7 +147,7 @@ public class CrudComponingKeysBuilder {
 	private static <T extends DomainEntity> Fields getInputKeys(Class<T> domainEntityClass) {
 		ArrayList<ParameterEntity> parameters = new ArrayList<ParameterEntity>(); 
 
-		ParameterEntity parameter = new ParameterEntity(new Fields());
+		ParameterEntity parameter = new ParameterEntity();
 		parameter.set(ParameterEntity.NAME, DomainEntity.ID);
 		parameter.set(ParameterEntity.HTTP_PARAMETER_TYPE, GenericFieldValues.URL_PATH);
 		parameters.add(parameter);
@@ -160,7 +160,7 @@ public class CrudComponingKeysBuilder {
 	private static <T extends DomainEntity> Fields deleteInputKeys(Class<T> domainEntityClass) {
 		ArrayList<ParameterEntity> parameters = new ArrayList<ParameterEntity>(); 
 		
-		ParameterEntity parameter = new ParameterEntity(new Fields());
+		ParameterEntity parameter = new ParameterEntity();
 		parameter.set(ParameterEntity.NAME, DomainEntity.ID);
 		parameter.set(ParameterEntity.HTTP_PARAMETER_TYPE, GenericFieldValues.URL_PATH);
 		parameters.add(parameter);

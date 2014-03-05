@@ -31,7 +31,6 @@ import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.domain.annotation.field.Field;
 import org.biokoframework.utils.fields.FieldNames;
-import org.biokoframework.utils.fields.Fields;
 
 
 public class CommandEntity extends DomainEntity {
@@ -44,10 +43,6 @@ public class CommandEntity extends DomainEntity {
 	public static final String INPUT  = GenericFieldNames.INPUT;
 	@Field(mandatory = false)
 	public static final String OUTPUT = GenericFieldNames.OUTPUT;
-	
-	public CommandEntity(Fields input) {
-		super(input);
-	}
 	
 	public static final String ENTITY_KEY = GenericFieldNames.NOT_EXPECTED_ID;
 	// TODO rinominare in entityIdKey
