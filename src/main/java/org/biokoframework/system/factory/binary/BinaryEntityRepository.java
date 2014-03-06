@@ -34,6 +34,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.biokoframework.system.KILL_ME.commons.logger.Loggers;
@@ -56,12 +59,13 @@ public class BinaryEntityRepository extends AbstractRepository<BinaryEntity> {
 			.append("dd")
 			.append(File.separator).toString();
 
-	private File _baseDirectory;
-	private Repository<BinaryEntity> _supportRepository;
+	private File fBaseDirectory;
+	private Repository<BinaryEntity> fSupportRepository;
 
-	public BinaryEntityRepository(File baseDirectory, Repository<BinaryEntity> supportRepository) {
-		_baseDirectory = baseDirectory;
-		_supportRepository = supportRepository;
+	@Inject
+	public BinaryEntityRepository(@Named("fileBaseDirectory") File baseDirectory, Repository<BinaryEntity> supportRepository) {
+		fBaseDirectory = baseDirectory;
+		fSupportRepository = supportRepository;
 	}
 
 	@Override
@@ -69,16 +73,16 @@ public class BinaryEntityRepository extends AbstractRepository<BinaryEntity> {
 		BinaryEntity aBlob = (BinaryEntity) anEntity;
 		try {
 			if (aBlob.getId() != null) {
-				BinaryEntity existingBlob = _supportRepository.retrieve(aBlob.getId());
+				BinaryEntity existingBlob = fSupportRepository.retrieve(aBlob.getId());
 				aBlob.setId(existingBlob.getId());
 				aBlob.set(BinaryEntity.PATH, existingBlob.get(BinaryEntity.PATH));
 				updateFile(aBlob);
 			} else {
 				createFile(aBlob);
 			}
-			_supportRepository.save(aBlob);
+			fSupportRepository.save(aBlob);
 		} catch (IOException exception) {
-			_supportRepository.delete(aBlob.getId());
+			fSupportRepository.delete(aBlob.getId());
 			Loggers.engagedServer.error("Save blob file", exception);
 			return null;
 		}
@@ -90,7 +94,7 @@ public class BinaryEntityRepository extends AbstractRepository<BinaryEntity> {
 
 	@Override
 	public BinaryEntity delete(String aBlobId) {
-		BinaryEntity aBlob = _supportRepository.delete(aBlobId);
+		BinaryEntity aBlob = fSupportRepository.delete(aBlobId);
 		if (aBlob != null) {
 			try {
 				File file = new File(aBlob.get(BinaryEntity.PATH).toString());
@@ -107,7 +111,7 @@ public class BinaryEntityRepository extends AbstractRepository<BinaryEntity> {
 
 	@Override
 	public BinaryEntity retrieve(String aBlobId) {
-		BinaryEntity aBlob = _supportRepository.retrieve(aBlobId);
+		BinaryEntity aBlob = fSupportRepository.retrieve(aBlobId);
 		BinaryEntity returnBlob = null;
 		if (aBlob != null) {
 			returnBlob = new BinaryEntity();
@@ -123,7 +127,7 @@ public class BinaryEntityRepository extends AbstractRepository<BinaryEntity> {
 	}
 
 	public BinaryEntity retrieveWithoutFile(String aBlobId) {
-		BinaryEntity aBlob = _supportRepository.retrieve(aBlobId);
+		BinaryEntity aBlob = fSupportRepository.retrieve(aBlobId);
 		BinaryEntity returnBlob = null;
 		if (aBlob != null) {
 			returnBlob = new BinaryEntity();
@@ -142,7 +146,7 @@ public class BinaryEntityRepository extends AbstractRepository<BinaryEntity> {
 	@Override
 	public ArrayList<BinaryEntity> getAll() {
 		ArrayList<BinaryEntity> blobs = new ArrayList<BinaryEntity>();
-		for (BinaryEntity aBlob : _supportRepository.getAll()) {
+		for (BinaryEntity aBlob : fSupportRepository.getAll()) {
 			BinaryEntity cleanBlob = new BinaryEntity();
 			cleanBlob.setAll(aBlob.fields());
 			cleanBlob.fields().remove(BinaryEntity.PATH);
@@ -162,7 +166,7 @@ public class BinaryEntityRepository extends AbstractRepository<BinaryEntity> {
 	}
 
 	private void createFile(BinaryEntity blob) throws IOException {
-		File directory = new File(_baseDirectory, timestampPath());
+		File directory = new File(fBaseDirectory, timestampPath());
 		FileUtils.forceMkdir(directory);
 		File file = new File(directory, UUID.randomUUID().toString());
 		blob.set(BinaryEntity.PATH, file.getAbsolutePath());

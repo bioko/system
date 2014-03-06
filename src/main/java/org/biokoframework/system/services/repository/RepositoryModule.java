@@ -25,17 +25,16 @@
  * 
  */
 
-package org.biokoframework.system.services;
+package org.biokoframework.system.services.repository;
 
+import org.biokoframework.system.ConfigurationEnum;
 import org.biokoframework.system.repository.service.RepositoryService;
-import org.biokoframework.utils.domain.DomainEntity;
-import org.biokoframework.utils.domain.reflection.DummyParameterizedType;
+import org.biokoframework.system.services.injection.ServiceModule;
+import org.biokoframework.system.services.repository.impl.JitRepositoryService;
 import org.biokoframework.utils.repository.Repository;
-import org.biokoframework.utils.repository.RepositoryException;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Key;
-import com.google.inject.binder.AnnotatedBindingBuilder;
+import com.google.inject.TypeLiteral;
+import com.google.inject.name.Names;
 
 /**
  * 
@@ -43,26 +42,23 @@ import com.google.inject.binder.AnnotatedBindingBuilder;
  * @date Feb 6, 2014
  *
  */
-public abstract class RepositoryModule extends AbstractModule {
+public abstract class RepositoryModule extends ServiceModule {
+
+	public RepositoryModule(ConfigurationEnum config) {
+		super(config);
+	}
 
 	@Override
 	protected final void configure() {
-		bind(RepositoryService.class)
-			.to(DefaultRepositoryService.class);
+		super.configure();
 		
-		try {
-			configureRepositories();
-		} catch (RepositoryException exception) {
-			addError(exception);
-		}
+		bind(RepositoryService.class)
+			.to(JitRepositoryService.class);
 	}
 	
-	protected abstract void configureRepositories() throws RepositoryException;
-	
-	@SuppressWarnings("unchecked")
-	protected <DE extends DomainEntity> AnnotatedBindingBuilder<Repository<DE>> bindEntity(Class<DE> entityClass) {
-		return (AnnotatedBindingBuilder<Repository<DE>>) 
-				bind(Key.get(new DummyParameterizedType(Repository.class, entityClass)));
+	@SuppressWarnings("rawtypes")
+	protected void bindRepositoryTo(Class<? extends Repository> repositoryClass) {
+		bind(new TypeLiteral<Class>(){}).annotatedWith(Names.named("repository")).toInstance(repositoryClass);
 	}
-
+	
 }

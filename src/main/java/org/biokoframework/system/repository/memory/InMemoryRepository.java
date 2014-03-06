@@ -30,14 +30,16 @@ package org.biokoframework.system.repository.memory;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.biokoframework.system.repository.sql.SqlRepository;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.repository.RepositoryException;
 
-public class InMemoryRepository<T extends DomainEntity> extends SqlRepository<T> {
+public class InMemoryRepository<DE extends DomainEntity> extends SqlRepository<DE> {
 
-
-	public InMemoryRepository(Class<T> entityClass) throws RepositoryException {		
+	@Inject
+	public InMemoryRepository(Class entityClass) throws RepositoryException {		
 		super(entityClass, entityClass.getSimpleName(), HsqldbMemConnector.getInstance());		
 		
 		try {
@@ -51,8 +53,8 @@ public class InMemoryRepository<T extends DomainEntity> extends SqlRepository<T>
 	String getContentAsPrettyString() {
 		StringBuilder builder = new StringBuilder();
 		
-		List<T> all = getAll();
-		for (T e: all) {
+		List<DE> all = getAll();
+		for (DE e: all) {
 			builder.append(e.toJSONString());
 			builder.append("\n");
 		}

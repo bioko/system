@@ -32,26 +32,31 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
+import org.biokoframework.system.ConfigurationEnum;
 import org.biokoframework.system.entity.login.Login;
 import org.biokoframework.system.service.description.dummy.DummyEntityWithLocation;
 import org.biokoframework.system.service.description.dummy.DummyReferencingEntity;
 import org.biokoframework.system.service.description.dummy.DummySystemCommands;
-import org.biokoframework.system.services.RepositoryModule;
-import org.biokoframework.utils.repository.RepositoryException;
+import org.biokoframework.system.services.repository.RepositoryModule;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class JsonDescriptionsTest {
 
 	public final class DummyRepositoryModule extends RepositoryModule {
-		@Override
-		protected void configureRepositories() throws RepositoryException {
-		}
-	}
 
-	@BeforeClass
-	public static void log4JtoConsole() {
-//		BasicConfigurator.configure();
+		public DummyRepositoryModule() {
+			super(ConfigurationEnum.DEV);
+		}
+
+		@Override
+		protected void configureForDev() {	}
+
+		@Override
+		protected void configureForDemo() { }
+
+		@Override
+		protected void configureForProd() { }
 	}
 	
 	@Test

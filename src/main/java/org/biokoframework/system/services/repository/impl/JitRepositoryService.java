@@ -25,47 +25,72 @@
  * 
  */
 
-package org.biokoframework.system.services;
+package org.biokoframework.system.services.repository.impl;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.biokoframework.system.entity.binary.BinaryEntity;
+import org.biokoframework.system.factory.binary.BinaryEntityRepository;
 import org.biokoframework.system.repository.service.RepositoryService;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.domain.reflection.DummyParameterizedType;
 import org.biokoframework.utils.repository.Repository;
 
-import com.google.inject.Inject;
+import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Key;
-import com.google.inject.name.Names;
+import com.google.inject.TypeLiteral;
+import com.google.inject.binder.AnnotatedBindingBuilder;
 
 /**
  * 
  * @author Mikol Faro <mikol.faro@gmail.com>
- * @date Feb 6, 2014
+ * @date Mar 6, 2014
  *
  */
-public class DefaultRepositoryService implements RepositoryService {
+public class JitRepositoryService implements RepositoryService {
 
 	private final Injector fInjector;
+	private final Class<?> fRepoClass;
 
+	@SuppressWarnings("rawtypes")
 	@Inject
-	public DefaultRepositoryService(Injector injector) {
+	public JitRepositoryService(@Named("repository") Class repoClass, Injector injector) {
 		fInjector = injector;
+		fRepoClass = repoClass;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
-	public <DE extends DomainEntity, R extends Repository<DE>> R getRepository(Class<DE> entityClass) {
-		Key<R> key = (Key<R>) Key.get(new DummyParameterizedType(Repository.class, entityClass));
+	public <DE extends DomainEntity, R extends Repository<DE>> R getRepository(final Class<DE> entityClass) {
+		Injector child = fInjector.createChildInjector(new AbstractModule() {
+			@SuppressWarnings("rawtypes")
+			@Override
+			protected void configure() {
+				bind(new TypeLiteral<Class>(){}).toInstance(entityClass);
+			}
+		});
 		
-		return fInjector.getInstance(key);
+		final R repo = (R) child.getInstance(fRepoClass);
+
+		if (BinaryEntity.class.isAssignableFrom(entityClass)) {
+			child = child.createChildInjector(new AbstractModule() {
+				@Override
+				protected void configure() {
+					((AnnotatedBindingBuilder<Repository<DE>>) bind(Key.get(new DummyParameterizedType(Repository.class, entityClass)))).toInstance(repo);
+				}
+			});
+			R binaryRepo = (R) child.getInstance(BinaryEntityRepository.class);
+			return binaryRepo;
+		}
+				
+		return repo;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public <DE extends DomainEntity, R extends Repository<DE>> R getRepository(Class<DE> entityClass, String name) {
-		Key<R> key = (Key<R>) Key.get(new DummyParameterizedType(Repository.class, entityClass), Names.named(name));
-		
-		return fInjector.getInstance(key);
+		return null;
 	}
-	
+
 }
