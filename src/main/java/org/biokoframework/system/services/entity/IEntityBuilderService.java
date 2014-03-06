@@ -25,45 +25,21 @@
  * 
  */
 
-package org.biokoframework.system.repository.memory;
+package org.biokoframework.system.services.entity;
 
-import java.sql.SQLException;
-import java.util.List;
-
-import javax.inject.Inject;
-
-import org.biokoframework.system.repository.sql.SqlRepository;
-import org.biokoframework.system.services.entity.IEntityBuilderService;
 import org.biokoframework.utils.domain.DomainEntity;
-import org.biokoframework.utils.repository.RepositoryException;
+import org.biokoframework.utils.fields.Fields;
 
-public class InMemoryRepository<DE extends DomainEntity> extends SqlRepository<DE> {
-
-	@SuppressWarnings("rawtypes")
-	@Inject
-	public InMemoryRepository(Class entityClass, IEntityBuilderService entityBuilderService) throws RepositoryException {		
-		super(entityClass, entityClass.getSimpleName(), HsqldbMemConnector.getInstance(), entityBuilderService);		
-		
-		try {
-			fDbConnector.emptyTable(fTableName);
-		} catch (SQLException e) {
-			throw new RepositoryException(e);
-		}
-		
-	}
-
-	String getContentAsPrettyString() {
-		StringBuilder builder = new StringBuilder();
-		
-		List<DE> all = getAll();
-		for (DE e: all) {
-			builder.append(e.toJSONString());
-			builder.append("\n");
-		}
-		
-		return builder.toString();
-		
-	}
+/**
+ * 
+ * @author Mikol Faro <mikol.faro@gmail.com>
+ * @date Mar 6, 2014
+ *
+ */
+public interface IEntityBuilderService {
 	
+	public <DE extends DomainEntity> DE getInstance(Class<DE> entityClass);
+	
+	public <DE extends DomainEntity> DE getInstance(Class<DE> entityClass, Fields fields);
 
 }

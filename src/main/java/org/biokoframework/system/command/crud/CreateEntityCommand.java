@@ -53,23 +53,16 @@ public class CreateEntityCommand extends AbstractCommand {
 	}
 	
 	@Override
-	public Fields execute(Fields input) throws CommandException {
+	public Fields execute(Fields input) throws CommandException, ValidationException {
 		logInput(input);
 		Repository<? extends DomainEntity> repository = getRepository(fDomainEntityClass);
 		
-		DomainEntity actualEntity = null;
-		try {
-			actualEntity = fDomainEntityClass.getConstructor(Fields.class).newInstance(input);
-		} catch (Exception exception) {
-			throw new CommandException(exception);
-		}
+		DomainEntity actualEntity = createEntity(fDomainEntityClass, input);
 		
 		ArrayList<DomainEntity> response = new ArrayList<>();
 		try {
 			response.add(repository.save(actualEntity));
 		} catch (RepositoryException exception) {
-			throw CommandExceptionsFactory.createContainerException(exception);
-		} catch (ValidationException exception) {
 			throw CommandExceptionsFactory.createContainerException(exception);
 		}
 		

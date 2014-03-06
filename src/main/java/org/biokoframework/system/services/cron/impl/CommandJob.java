@@ -29,6 +29,7 @@ package org.biokoframework.system.services.cron.impl;
 
 import org.biokoframework.system.command.CommandException;
 import org.biokoframework.system.command.ICommand;
+import org.biokoframework.utils.exception.ValidationException;
 import org.biokoframework.utils.fields.Fields;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -54,7 +55,7 @@ public class CommandJob implements Job {
 		
 		try {
 			command.execute(new Fields());
-		} catch (CommandException exception) {
+		} catch (CommandException|ValidationException exception) {
 			throw new JobExecutionException(exception, !hasAlreadyFailed(context));
 		}
 	}

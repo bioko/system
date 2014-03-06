@@ -35,12 +35,15 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
+import javax.inject.Inject;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.biokoframework.system.repository.core.AbstractRepository;
 import org.biokoframework.system.repository.sql.query.SqlQuery;
 import org.biokoframework.system.repository.sql.translator.SqlTypesTranslator;
 import org.biokoframework.system.repository.sql.util.SqlStatementsHelper;
+import org.biokoframework.system.services.entity.IEntityBuilderService;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.domain.annotation.field.ComponingFieldsFactory;
 import org.biokoframework.utils.domain.annotation.field.Field;
@@ -58,8 +61,9 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 	private LinkedHashMap<String, Field> fFieldNames;
 	private SqlTypesTranslator fTranslator;
 	
-
-	public SqlRepository(Class<DE> entityClass, String tableName, SqlConnector connector) throws RepositoryException {
+	@Inject
+	public SqlRepository(Class<DE> entityClass, String tableName, SqlConnector connector, IEntityBuilderService entityBuilderService) throws RepositoryException {
+		super(entityBuilderService);
 		fEntityClass = entityClass;
 		fTableName = tableName;
 		try {
@@ -75,8 +79,8 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 	}
 	
 	
-	public SqlRepository(Class<DE> entityClass, SqlConnector connectionHelper) throws RepositoryException {
-		this(entityClass, entityClass.getSimpleName(), connectionHelper);
+	public SqlRepository(Class<DE> entityClass, SqlConnector connectionHelper, IEntityBuilderService entityBuilderService) throws RepositoryException {
+		this(entityClass, entityClass.getSimpleName(), connectionHelper, entityBuilderService);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -163,7 +167,7 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 			retrieveStatement.setObject(1, anEntityKey);
 			retrieveStatement.execute();
 			
-			entities = SqlStatementsHelper.retrieveEntities(retrieveStatement.getResultSet(), fEntityClass, fTranslator);
+			entities = SqlStatementsHelper.retrieveEntities(retrieveStatement.getResultSet(), fEntityClass, fTranslator, fEntityBuilderService);
 			connection.close();
 		} catch (SQLException exception) {
 			exception.printStackTrace();
@@ -220,7 +224,7 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 			PreparedStatement retrieveStatement = SqlStatementsHelper.preparedRetrieveAllStatement(fEntityClass, fTableName, connection);
 			retrieveStatement.execute();
 			
-			entities = SqlStatementsHelper.retrieveEntities(retrieveStatement.getResultSet(), fEntityClass, fTranslator);
+			entities = SqlStatementsHelper.retrieveEntities(retrieveStatement.getResultSet(), fEntityClass, fTranslator, fEntityBuilderService);
 			connection.close();
 		} catch (SQLException exception) {
 			exception.printStackTrace();
@@ -240,7 +244,7 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 			retrieveStatement.setObject(1, foreignKeyValue);
 			retrieveStatement.execute();
 			
-			entities = SqlStatementsHelper.retrieveEntities(retrieveStatement.getResultSet(), fEntityClass, fTranslator);
+			entities = SqlStatementsHelper.retrieveEntities(retrieveStatement.getResultSet(), fEntityClass, fTranslator, fEntityBuilderService);
 		} catch (SQLException exception) {
 			exception.printStackTrace();
 		} finally {
@@ -268,7 +272,7 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 			retrieveStatement.setString(1, foreignKeyValue);
 			retrieveStatement.execute();
 			
-			entities = SqlStatementsHelper.retrieveEntities(retrieveStatement.getResultSet(), fEntityClass, fTranslator);
+			entities = SqlStatementsHelper.retrieveEntities(retrieveStatement.getResultSet(), fEntityClass, fTranslator, fEntityBuilderService);
 			retrieveStatement.close();
 			connection.close();
 		} catch (SQLException exception) {
@@ -284,7 +288,7 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 	
 	@Override
 	public SqlQuery<DE> createQuery() {
-		return new SqlQuery<DE>(fDbConnector);
+		return new SqlQuery<DE>(fDbConnector, fEntityBuilderService);
 	}
 	
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

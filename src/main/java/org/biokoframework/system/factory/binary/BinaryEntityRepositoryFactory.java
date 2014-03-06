@@ -27,21 +27,16 @@
 
 package org.biokoframework.system.factory.binary;
 
-import java.io.File;
-
-import org.apache.commons.io.FileUtils;
-import org.biokoframework.system.entity.binary.BinaryEntity;
-import org.biokoframework.utils.repository.Repository;
 
 public class BinaryEntityRepositoryFactory {
 
-	public static BinaryEntityRepository createForRoot(File rootDirectory, String systemName, Repository<BinaryEntity> supportRepository) {
-		File systemDirectory = new File(rootDirectory, systemName);
-		return new BinaryEntityRepository(systemDirectory, supportRepository);
-	}
-
-	public static BinaryEntityRepository createForTemp(String systemName, Repository<BinaryEntity> supportRepository) {
-		return createForRoot(FileUtils.getTempDirectory(), systemName, supportRepository);
-	}
+//	public static BinaryEntityRepository createForRoot(File rootDirectory, String systemName, Repository<BinaryEntity> supportRepository) {
+//		File systemDirectory = new File(rootDirectory, systemName);
+//		return new BinaryEntityRepository(systemDirectory, supportRepository);
+//	}
+//
+//	public static BinaryEntityRepository createForTemp(String systemName, Repository<BinaryEntity> supportRepository) {
+//		return createForRoot(FileUtils.getTempDirectory(), systemName, supportRepository);
+//	}
 	
 }

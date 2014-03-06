@@ -39,6 +39,7 @@ import org.biokoframework.system.command.AbstractCommandHandler;
 import org.biokoframework.system.command.CommandException;
 import org.biokoframework.system.command.ICommand;
 import org.biokoframework.system.exceptions.CommandExceptionsFactory;
+import org.biokoframework.utils.exception.ValidationException;
 import org.biokoframework.utils.fields.FieldNames;
 import org.biokoframework.utils.fields.Fields;
 
@@ -59,7 +60,7 @@ public class MultipleCommandPlusPlus extends AbstractCommand {
 	
 
 	@Override
-	public final Fields execute(Fields input) throws CommandException {
+	public final Fields execute(Fields input) throws CommandException, ValidationException {
 		Loggers.xsystem.info("EXECUTING Multiple Command");
 		Loggers.xsystem.info("STEPS: " + fSteps.size());
 		Loggers.xsystem.info("INPUT: " + input.toString());

@@ -30,6 +30,7 @@ package org.biokoframework.system.services.queue.impl;
 import java.util.List;
 
 import org.biokoframework.system.KILL_ME.commons.logger.Loggers;
+import org.biokoframework.system.repository.service.RepositoryService;
 import org.biokoframework.system.services.queue.IQueueService;
 import org.biokoframework.system.services.queue.QueuedItem;
 import org.biokoframework.utils.exception.ValidationException;
@@ -57,8 +58,8 @@ public class QueueService implements IQueueService {
 	protected final Object pushLock = new Object();
 
 	@Inject
-	public QueueService(Repository<QueuedItem> baseRepository) {
-		fBaseRepository = baseRepository;
+	public QueueService(RepositoryService repoService) {
+		fBaseRepository = repoService.getRepository(QueuedItem.class);
 		List<QueuedItem> items = fBaseRepository.getAll();
 		
 		for (QueuedItem anItem : items) {

@@ -35,6 +35,8 @@ import java.util.List;
 
 import org.biokoframework.system.repository.memory.dummy1.ASDummyEntity1;
 import org.biokoframework.system.repository.memory.dummy1.ASDummyEntity1Builder;
+import org.biokoframework.system.services.entity.EntityModule;
+import org.biokoframework.system.services.entity.IEntityBuilderService;
 import org.biokoframework.utils.exception.ValidationException;
 import org.biokoframework.utils.repository.RepositoryException;
 import org.biokoframework.utils.validation.ValidationModule;
@@ -53,9 +55,9 @@ public class MemoryRepositoryTest {
 
 	@Before
 	public void fillExampleRepo() throws ValidationException, RepositoryException {
-		fInjector = Guice.createInjector(new ValidationModule());
+		fInjector = Guice.createInjector(new ValidationModule(), new EntityModule());
 		
-		fRepo = new InMemoryRepository<ASDummyEntity1>(ASDummyEntity1.class);
+		fRepo = new InMemoryRepository<ASDummyEntity1>(ASDummyEntity1.class, fInjector.getInstance(IEntityBuilderService.class));
 		ASDummyEntity1Builder builder = fInjector.getInstance(ASDummyEntity1Builder.class);
 
 		fRepo.save(builder.loadExample(ASDummyEntity1Builder.EXAMPLE_GINO).build(false));

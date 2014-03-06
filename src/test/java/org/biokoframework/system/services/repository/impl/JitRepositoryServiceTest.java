@@ -40,6 +40,7 @@ import org.biokoframework.system.entity.binary.BinaryEntity;
 import org.biokoframework.system.entity.login.Login;
 import org.biokoframework.system.factory.binary.BinaryEntityRepository;
 import org.biokoframework.system.repository.memory.InMemoryRepository;
+import org.biokoframework.system.services.entity.EntityModule;
 import org.biokoframework.system.services.repository.RepositoryModule;
 import org.biokoframework.utils.repository.Repository;
 import org.junit.Test;
@@ -58,7 +59,7 @@ public class JitRepositoryServiceTest {
 
 	@Test
 	public void jitRepositoryTest() {
-		Injector injector = Guice.createInjector(new DynamicModule());
+		Injector injector = Guice.createInjector(new DynamicModule(), new EntityModule());
 		JitRepositoryService service = new JitRepositoryService(InMemoryRepository.class, injector);
 		
 		Repository<Login> loginRepo = service.getRepository(Login.class);

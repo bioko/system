@@ -32,6 +32,7 @@ import javax.inject.Inject;
 import org.apache.log4j.Logger;
 import org.biokoframework.system.context.Context;
 import org.biokoframework.system.repository.service.RepositoryService;
+import org.biokoframework.system.services.entity.IEntityBuilderService;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.fields.FieldNames;
 import org.biokoframework.utils.fields.Fields;
@@ -47,10 +48,16 @@ public abstract class AbstractCommand implements ICommand {
 	protected String fCommandName;
 	
 	private RepositoryService fRepositoryService;
+	private IEntityBuilderService fBuilder;
 	
 	@Inject
 	public final void setRepositoryService(RepositoryService service) {
 		fRepositoryService = service;
+	}
+	
+	@Inject
+	public final void setEntityBuilder(IEntityBuilderService builder) {
+		fBuilder = builder;
 	}
 
 	public void fillInvocationInfo(Fields output) {
@@ -106,6 +113,17 @@ public abstract class AbstractCommand implements ICommand {
 	
 	protected void logOutput() {
 		logOutput(null);
+	}
+	
+	////////////////////////////////////////////////
+	// Helper methods
+	
+	protected <DE extends DomainEntity> DE createEntity(Class<DE> entityClass) {
+		return fBuilder.getInstance(entityClass);
+	}
+	
+	protected <DE extends DomainEntity> DE createEntity(Class<DE> entityClass, Fields fields) {
+		return fBuilder.getInstance(entityClass, fields);
 	}
 	
 	protected <DE extends DomainEntity, R extends Repository<DE>> R getRepository(Class<DE> entityClass) {

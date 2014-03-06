@@ -42,6 +42,7 @@ import org.apache.commons.io.IOUtils;
 import org.biokoframework.system.KILL_ME.commons.logger.Loggers;
 import org.biokoframework.system.entity.binary.BinaryEntity;
 import org.biokoframework.system.repository.core.AbstractRepository;
+import org.biokoframework.system.services.entity.IEntityBuilderService;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.exception.ValidationException;
 import org.biokoframework.utils.repository.Repository;
@@ -63,7 +64,8 @@ public class BinaryEntityRepository extends AbstractRepository<BinaryEntity> {
 	private Repository<BinaryEntity> fSupportRepository;
 
 	@Inject
-	public BinaryEntityRepository(@Named("fileBaseDirectory") File baseDirectory, Repository<BinaryEntity> supportRepository) {
+	public BinaryEntityRepository(@Named("fileBaseDirectory") File baseDirectory, Repository<BinaryEntity> supportRepository, IEntityBuilderService entityBuilderService) {
+		super(entityBuilderService);
 		fBaseDirectory = baseDirectory;
 		fSupportRepository = supportRepository;
 	}

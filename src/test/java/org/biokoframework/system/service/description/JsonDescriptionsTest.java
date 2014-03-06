@@ -38,7 +38,6 @@ import org.biokoframework.system.service.description.dummy.DummyEntityWithLocati
 import org.biokoframework.system.service.description.dummy.DummyReferencingEntity;
 import org.biokoframework.system.service.description.dummy.DummySystemCommands;
 import org.biokoframework.system.services.repository.RepositoryModule;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class JsonDescriptionsTest {

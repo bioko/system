@@ -34,6 +34,8 @@ import static org.junit.Assert.assertThat;
 
 import org.biokoframework.system.repository.memory.manytypes.ManyTypesEntity;
 import org.biokoframework.system.repository.memory.manytypes.ManyTypesEntityBuilder;
+import org.biokoframework.system.services.entity.EntityModule;
+import org.biokoframework.system.services.entity.IEntityBuilderService;
 import org.biokoframework.utils.domain.EntityBuilder;
 import org.biokoframework.utils.repository.Repository;
 import org.biokoframework.utils.validation.ValidationModule;
@@ -55,12 +57,12 @@ public class ManyTypesTest {
 
 	@Before
 	public void prepareInjector() {
-		fInjector = Guice.createInjector(new ValidationModule());
+		fInjector = Guice.createInjector(new ValidationModule(), new EntityModule());
 	}
 	
 	@Test
 	public void integerTypes() throws Exception {
-		Repository<ManyTypesEntity> repository = new InMemoryRepository<ManyTypesEntity>(ManyTypesEntity.class);
+		Repository<ManyTypesEntity> repository = new InMemoryRepository<ManyTypesEntity>(ManyTypesEntity.class, fInjector.getInstance(IEntityBuilderService.class));
 
 		EntityBuilder<ManyTypesEntity> entityBuilder = fInjector.getInstance(ManyTypesEntityBuilder.class).loadDefaultExample();
 		

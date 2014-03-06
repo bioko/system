@@ -27,8 +27,12 @@
 
 package org.biokoframework.system.services.repository.impl;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Singleton;
 
 import org.biokoframework.system.entity.binary.BinaryEntity;
 import org.biokoframework.system.factory.binary.BinaryEntityRepository;
@@ -49,10 +53,13 @@ import com.google.inject.binder.AnnotatedBindingBuilder;
  * @date Mar 6, 2014
  *
  */
+@Singleton
 public class JitRepositoryService implements RepositoryService {
 
 	private final Injector fInjector;
 	private final Class<?> fRepoClass;
+	
+	private Map<Class<?>, Repository<? extends DomainEntity>> fRepos = new LinkedHashMap<>();
 
 	@SuppressWarnings("rawtypes")
 	@Inject
@@ -64,6 +71,11 @@ public class JitRepositoryService implements RepositoryService {
 	@SuppressWarnings("unchecked")
 	@Override
 	public <DE extends DomainEntity, R extends Repository<DE>> R getRepository(final Class<DE> entityClass) {
+		if (fRepos.containsKey(entityClass)) {
+			return (R) fRepos.get(entityClass);
+		}
+		
+		
 		Injector child = fInjector.createChildInjector(new AbstractModule() {
 			@SuppressWarnings("rawtypes")
 			@Override
@@ -82,9 +94,11 @@ public class JitRepositoryService implements RepositoryService {
 				}
 			});
 			R binaryRepo = (R) child.getInstance(BinaryEntityRepository.class);
+			fRepos.put(entityClass, binaryRepo);
 			return binaryRepo;
 		}
 				
+		fRepos.put(entityClass, repo);
 		return repo;
 	}
 

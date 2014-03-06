@@ -25,45 +25,41 @@
  * 
  */
 
-package org.biokoframework.system.repository.memory;
-
-import java.sql.SQLException;
-import java.util.List;
+package org.biokoframework.system.services.entity.impl;
 
 import javax.inject.Inject;
 
-import org.biokoframework.system.repository.sql.SqlRepository;
 import org.biokoframework.system.services.entity.IEntityBuilderService;
 import org.biokoframework.utils.domain.DomainEntity;
-import org.biokoframework.utils.repository.RepositoryException;
+import org.biokoframework.utils.fields.Fields;
 
-public class InMemoryRepository<DE extends DomainEntity> extends SqlRepository<DE> {
+import com.google.inject.Injector;
 
-	@SuppressWarnings("rawtypes")
+/**
+ * 
+ * @author Mikol Faro <mikol.faro@gmail.com>
+ * @date Mar 6, 2014
+ *
+ */
+public class InjectedEntityBuilderService implements IEntityBuilderService {
+
+	private final Injector fInjector;
+
 	@Inject
-	public InMemoryRepository(Class entityClass, IEntityBuilderService entityBuilderService) throws RepositoryException {		
-		super(entityClass, entityClass.getSimpleName(), HsqldbMemConnector.getInstance(), entityBuilderService);		
-		
-		try {
-			fDbConnector.emptyTable(fTableName);
-		} catch (SQLException e) {
-			throw new RepositoryException(e);
-		}
-		
-	}
-
-	String getContentAsPrettyString() {
-		StringBuilder builder = new StringBuilder();
-		
-		List<DE> all = getAll();
-		for (DE e: all) {
-			builder.append(e.toJSONString());
-			builder.append("\n");
-		}
-		
-		return builder.toString();
-		
+	public InjectedEntityBuilderService(Injector injector) {
+		fInjector = injector;
 	}
 	
+	@Override
+	public <DE extends DomainEntity> DE getInstance(Class<DE> entityClass) {
+		return fInjector.getInstance(entityClass);
+	}
+
+	@Override
+	public <DE extends DomainEntity> DE getInstance(Class<DE> entityClass, Fields fields) {
+		DE entity = fInjector.getInstance(entityClass);
+		entity.setAll(fields);
+		return entity;
+	}
 
 }

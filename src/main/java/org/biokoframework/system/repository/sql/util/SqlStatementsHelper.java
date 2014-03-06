@@ -42,6 +42,7 @@ import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.biokoframework.system.repository.sql.translator.SqlTypesTranslator;
+import org.biokoframework.system.services.entity.IEntityBuilderService;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.domain.annotation.field.ComponingFieldsFactory;
 import org.biokoframework.utils.domain.annotation.field.Field;
@@ -72,7 +73,7 @@ public class SqlStatementsHelper {
 		return connection.prepareStatement(sql.toString());
 	}
 
-	public static <DE extends DomainEntity> ArrayList<DE> retrieveEntities(ResultSet result, Class<DE> entityClass, SqlTypesTranslator translator) throws SQLException {
+	public static <DE extends DomainEntity> ArrayList<DE> retrieveEntities(ResultSet result, Class<DE> entityClass, SqlTypesTranslator translator, IEntityBuilderService entityBuilder) throws SQLException {
 		ArrayList<DE> entities = new ArrayList<DE>();
 
 		Set<Entry<String, Field>> fields = new HashSet<Map.Entry<String,Field>>();
@@ -93,15 +94,7 @@ public class SqlStatementsHelper {
 			}
 			entityFields.put(DomainEntity.ID, translator.convertFromDBValue(DomainEntity.ID, result, null));
 			
-			try {
-				DE entity = entityClass.newInstance();
-				entity.setAll(entityFields);
-				entities.add(entity);
-			} catch (Exception exception) {
-				LOGGER.error("creating entity:", exception);
-				// THIS SHOULD NEVER HAPPEN
-				exception.printStackTrace();
-			}
+			entities.add(entityBuilder.getInstance(entityClass, entityFields));
 		}
 		
 		return entities;

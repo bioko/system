@@ -29,6 +29,9 @@ package org.biokoframework.system.repository.core;
 
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
+import org.biokoframework.system.services.entity.IEntityBuilderService;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.exception.ValidationException;
 import org.biokoframework.utils.repository.Repository;
@@ -47,7 +50,9 @@ public class DecoratorRepository<DE extends DomainEntity, R extends Repository<D
 
 	private R fBaseRepository;
 
-	public DecoratorRepository(R baseRepository) {
+	@Inject
+	public DecoratorRepository(R baseRepository, IEntityBuilderService entityBuilderService) {
+		super(entityBuilderService);
 		fBaseRepository = baseRepository;
 	}
 	

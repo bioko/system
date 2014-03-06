@@ -30,6 +30,7 @@ package org.biokoframework.system.repository.core;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.biokoframework.system.services.entity.IEntityBuilderService;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.exception.ValidationException;
 import org.biokoframework.utils.fields.Fields;
@@ -38,9 +39,13 @@ import org.biokoframework.utils.repository.RepositoryException;
 import org.biokoframework.utils.repository.query.Query;
 
 public abstract class AbstractRepository<T extends DomainEntity> implements Repository<T> {
+	
+	protected final IEntityBuilderService fEntityBuilderService;
 
-	@SuppressWarnings("unchecked")
-	@Override
+	public AbstractRepository(IEntityBuilderService entityBuilderService) {
+		fEntityBuilderService = entityBuilderService;
+	}
+	
 	public List<T> call(DomainEntity aDomainEntity, String aMethod) throws ValidationException, RepositoryException {
 		T repoEntity = (T) aDomainEntity;
 		
@@ -92,5 +97,9 @@ public abstract class AbstractRepository<T extends DomainEntity> implements Repo
 
 	@Override
 	public abstract Query<T> createQuery();
+
+	public T getInstance(Class<T> entityClass) {
+		return fEntityBuilderService.getInstance(entityClass);
+	}
 
 }

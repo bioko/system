@@ -34,15 +34,18 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.CommandException;
 import org.biokoframework.system.exceptions.CommandExceptionsFactory;
 import org.biokoframework.utils.domain.DomainEntity;
+import org.biokoframework.utils.domain.ErrorEntity;
 import org.biokoframework.utils.exception.ValidationException;
 import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.repository.Repository;
 import org.biokoframework.utils.repository.RepositoryException;
+import org.biokoframework.utils.validation.ValidationErrorBuilder;
 
 public class UpdateEntityCommand extends AbstractCommand {
 
@@ -55,13 +58,13 @@ public class UpdateEntityCommand extends AbstractCommand {
 	}
 	
 	@Override
-	public Fields execute(Fields input) throws CommandException {
+	public Fields execute(Fields input) throws CommandException, ValidationException {
 		logInput(input);
 		Repository<? extends DomainEntity> repository = getRepository(fDomainEntityClass);
 
 		String id = input.get(DomainEntity.ID);
 		if (StringUtils.isEmpty(id)) {
-			throw CommandExceptionsFactory.createExpectedFieldNotFound(DomainEntity.ID);
+			throw new ValidationException(ValidationErrorBuilder.buildMandatoryFieldsMissingError(DomainEntity.ID));
 		}
 		
 		DomainEntity entity = repository.retrieve(id);
@@ -77,8 +80,6 @@ public class UpdateEntityCommand extends AbstractCommand {
 		try {
 			response.add(repository.save(entity));
 		} catch (RepositoryException exception) {
-			throw CommandExceptionsFactory.createContainerException(exception);
-		} catch (ValidationException exception) {
 			throw CommandExceptionsFactory.createContainerException(exception);
 		}
 		

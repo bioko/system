@@ -34,6 +34,7 @@ import org.biokoframework.system.KILL_ME.FieldsErrors;
 import org.biokoframework.system.KILL_ME.commons.logger.Loggers;
 import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.CommandException;
+import org.biokoframework.utils.exception.ValidationException;
 import org.biokoframework.utils.fields.FieldNames;
 import org.biokoframework.utils.fields.Fields;
 
@@ -43,7 +44,7 @@ public class MultipleCommand extends AbstractCommand {
 	private LinkedHashMap<String, AbstractCommand> _steps = new LinkedHashMap<String, AbstractCommand>();
 	
 	@Override
-	public Fields execute(Fields input) throws CommandException {
+	public Fields execute(Fields input) throws CommandException, ValidationException {
 		Fields overAllOutput = Fields.successful();
 		Loggers.xsystem.info("Executing MultipleCommand: " + this.getClass().getSimpleName());
 		Loggers.xsystem.info("Steps: " + _steps.size());

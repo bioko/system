@@ -1,11 +1,12 @@
 package org.biokoframework.system.command;
 
 import org.biokoframework.system.context.Context;
+import org.biokoframework.utils.exception.ValidationException;
 import org.biokoframework.utils.fields.Fields;
 
 public interface ICommand {
 
-	public Fields execute(Fields input) throws CommandException;
+	public Fields execute(Fields input) throws CommandException, ValidationException;
 	
 	@Deprecated
 	void setContext(Context context);

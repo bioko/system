@@ -40,6 +40,7 @@ import org.biokoframework.system.entity.resolution.AnnotatedEntityResolver;
 import org.biokoframework.system.entity.resolution.EntityResolver;
 import org.biokoframework.system.exceptions.CommandExceptionsFactory;
 import org.biokoframework.utils.domain.DomainEntity;
+import org.biokoframework.utils.exception.ValidationException;
 import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.repository.Repository;
 
@@ -55,7 +56,7 @@ public class ResolvableCommand extends AbstractCommand {
 
 	
 	@Override
-	public Fields execute(Fields input) throws CommandException {
+	public Fields execute(Fields input) throws CommandException, ValidationException {
 		Loggers.xsystem.info("EXECUTING Command:" + this.getClass().getSimpleName());	
 		Loggers.xsystem.info("INPUT: " + input.toString());
 		
