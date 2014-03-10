@@ -30,8 +30,8 @@ package org.biokoframework.system.command.entityDependencies;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
-import org.biokoframework.system.KILL_ME.commons.logger.Loggers;
 import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.CommandException;
 import org.biokoframework.system.entity.EntityClassNameTranslator;
@@ -48,14 +48,16 @@ import org.biokoframework.utils.repository.Repository;
 public class DissolvedCommand extends AbstractCommand {
 
 	private static final String COMPONING_KEYS_METHOD = "componingKeys";
+
+	private static final Logger LOGGER = Logger.getLogger(DissolvedCommand.class);
 	
 	private EntityDissolver _dissolver = new AnnotatedEntityDissolver();
 	private ArrayList<Class<? extends DomainEntity>> _classes = new ArrayList<Class<? extends DomainEntity>>(); 
 	
 	@Override
 	public Fields execute(Fields input) throws CommandException {
-		Loggers.xsystem.info("EXECUTING Command:" + this.getClass().getSimpleName());	
-		Loggers.xsystem.info("INPUT: " + input.toString());		
+		LOGGER.info("EXECUTING Command:" + this.getClass().getSimpleName());	
+		LOGGER.info("INPUT: " + input.toString());		
 		
 		ArrayList<Object> response = new ArrayList<Object>();
 		
@@ -69,8 +71,8 @@ public class DissolvedCommand extends AbstractCommand {
 		
 		Fields result = new Fields(GenericFieldNames.RESPONSE, response);
 		
-		Loggers.xsystem.info("OUTPUT after execution: " + result.toString());
-		Loggers.xsystem.info("END Command:" + this.getClass().getSimpleName());
+		LOGGER.info("OUTPUT after execution: " + result.toString());
+		LOGGER.info("END Command:" + this.getClass().getSimpleName());
 		return result;
 	}
 
@@ -93,7 +95,7 @@ public class DissolvedCommand extends AbstractCommand {
 			try {
 				keys = (ArrayList<String>) aClass.getMethod(COMPONING_KEYS_METHOD).invoke(null);
 			} catch (Exception exception) {
-				Loggers.xsystem.error("Access to componing keys through reflection", exception);
+				LOGGER.error("Access to componing keys through reflection", exception);
 				return null;
 			}
 			ParameterEntityBuilder simpleParameter = new ParameterEntityBuilder();
@@ -125,7 +127,7 @@ public class DissolvedCommand extends AbstractCommand {
 			try {
 				keys = (ArrayList<String>) aClass.getMethod(COMPONING_KEYS_METHOD).invoke(null);
 			} catch (Exception exception) {
-				Loggers.xsystem.error("Access to componing keys through reflection", exception);
+				LOGGER.error("Access to componing keys through reflection", exception);
 				return null;
 			}
 			ParameterEntityBuilder simpleParameter = new ParameterEntityBuilder();

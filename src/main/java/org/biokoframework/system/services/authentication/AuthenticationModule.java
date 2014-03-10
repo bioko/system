@@ -25,18 +25,45 @@
  * 
  */
 
-package org.biokoframework.system.KILL_ME.commons.logger;
+package org.biokoframework.system.services.authentication;
 
-import org.apache.log4j.Logger;
+import org.biokoframework.system.ConfigurationEnum;
+import org.biokoframework.system.services.authentication.all.AllAuthenticationService;
+import org.biokoframework.system.services.authentication.token.ITokenAuthenticationService;
+import org.biokoframework.system.services.authentication.token.impl.TokenAuthenticationServiceImpl;
+import org.biokoframework.system.services.injection.ServiceModule;
 
-public class Loggers {
-	
-	    public static Logger console = Logger.getLogger("main");
-	    public static Logger jobs = Logger.getLogger("jobs");
-		public static Logger test = Logger.getLogger("test");
-		public static Logger xsystem = Logger.getLogger("xsystem");
+import com.google.inject.multibindings.Multibinder;
+
+/**
+ * 
+ * @author Mikol Faro <mikol.faro@gmail.com>
+ * @date Mar 6, 2014
+ *
+ */
+public class AuthenticationModule extends ServiceModule {
+
+	public AuthenticationModule(ConfigurationEnum config) {
+		super(config);
+	}
+
+	@Override
+	protected void configureForDev() {
+		configureForDemo();
+	}
+
+	@Override
+	protected void configureForDemo() {
+		configureForProd();
+	}
+
+	@Override
+	protected void configureForProd() {
+		bind(ITokenAuthenticationService.class).to(TokenAuthenticationServiceImpl.class);
 		
-		public static Logger engagedServer = Logger.getLogger("engagedServer");
-		public static Logger engagedInterface = Logger.getLogger("engagedInterface");
-		
+		Multibinder<IAuthenticationService> authService = Multibinder.newSetBinder(binder(), IAuthenticationService.class);
+		authService.addBinding().to(ITokenAuthenticationService.class);
+//		authService.addBinding().to(AllAuthenticationService.class);
+	}
+
 }

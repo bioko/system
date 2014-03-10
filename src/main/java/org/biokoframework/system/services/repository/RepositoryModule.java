@@ -28,7 +28,7 @@
 package org.biokoframework.system.services.repository;
 
 import org.biokoframework.system.ConfigurationEnum;
-import org.biokoframework.system.repository.service.RepositoryService;
+import org.biokoframework.system.repository.service.IRepositoryService;
 import org.biokoframework.system.services.injection.ServiceModule;
 import org.biokoframework.system.services.repository.impl.JitRepositoryService;
 import org.biokoframework.utils.repository.Repository;
@@ -52,7 +52,7 @@ public abstract class RepositoryModule extends ServiceModule {
 	protected final void configure() {
 		super.configure();
 		
-		bind(RepositoryService.class)
+		bind(IRepositoryService.class)
 			.to(JitRepositoryService.class);
 	}
 	

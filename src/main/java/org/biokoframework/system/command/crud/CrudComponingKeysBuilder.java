@@ -30,11 +30,11 @@ package org.biokoframework.system.command.crud;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
+import org.apache.log4j.Logger;
 import org.biokoframework.system.KILL_ME.commons.GenericCommandNames;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldValues;
 import org.biokoframework.system.KILL_ME.commons.HttpMethod;
-import org.biokoframework.system.KILL_ME.commons.logger.Loggers;
 import org.biokoframework.system.entity.EntityClassNameTranslator;
 import org.biokoframework.system.entity.description.ParameterEntity;
 import org.biokoframework.system.entity.description.ParameterEntityBuilder;
@@ -45,6 +45,8 @@ import org.biokoframework.utils.fields.Fields;
 
 @Deprecated
 public class CrudComponingKeysBuilder {
+
+	private static final Logger LOGGER = Logger.getLogger(CrudComponingKeysBuilder.class);
 
 	public static <T extends DomainEntity> LinkedHashMap<String, Fields> inputKeys(Class<T> domainEntityClass) {
 		
@@ -100,7 +102,7 @@ public class CrudComponingKeysBuilder {
 		try {
 			entityKeys = ComponingFieldsFactory.create(domainEntityClass);
 		} catch (Exception e) {
-			Loggers.xsystem.error("Unable to get componing keys for entity " + domainEntityClass.getSimpleName(), e);
+			LOGGER.error("Unable to get componing keys for entity " + domainEntityClass.getSimpleName(), e);
 			return null;
 		}
 		
@@ -123,7 +125,7 @@ public class CrudComponingKeysBuilder {
 		try {
 			keys = ComponingFieldsFactory.create(domainEntityClass);
 		} catch (Exception e) {
-			Loggers.xsystem.error("Unable to get componing keys for entity " + domainEntityClass.getSimpleName(), e);
+			LOGGER.error("Unable to get componing keys for entity " + domainEntityClass.getSimpleName(), e);
 			return null;
 		}
 		
@@ -176,7 +178,7 @@ public class CrudComponingKeysBuilder {
 		try {
 			entityKeys = ComponingFieldsFactory.create(domainEntityClass);
 		} catch (Exception e) {
-			Loggers.xsystem.error("Unable to get componing keys for entity " + domainEntityClass.getSimpleName(), e);
+			LOGGER.error("Unable to get componing keys for entity " + domainEntityClass.getSimpleName(), e);
 			return null;
 		}
 
@@ -198,7 +200,7 @@ public class CrudComponingKeysBuilder {
 		try {
 			entityKeys = ComponingFieldsFactory.create(domainEntityClass);
 		} catch (Exception e) {
-			Loggers.xsystem.error("Unable to get componing keys for entity " + domainEntityClass.getSimpleName(), e);
+			LOGGER.error("Unable to get componing keys for entity " + domainEntityClass.getSimpleName(), e);
 			return null;
 		}
 
@@ -220,7 +222,7 @@ public class CrudComponingKeysBuilder {
 		try {
 			entityKeys = ComponingFieldsFactory.create(domainEntityClass);
 		} catch (Exception e) {
-			Loggers.xsystem.error("Unable to get componing keys for entity " + domainEntityClass.getSimpleName(), e);
+			LOGGER.error("Unable to get componing keys for entity " + domainEntityClass.getSimpleName(), e);
 			return null;
 		}
 
@@ -242,7 +244,7 @@ public class CrudComponingKeysBuilder {
 		try {
 			entityKeys = ComponingFieldsFactory.create(domainEntityClass);
 		} catch (Exception e) {
-			Loggers.xsystem.error("Unable to get componing keys for entity " + domainEntityClass.getSimpleName(), e);
+			LOGGER.error("Unable to get componing keys for entity " + domainEntityClass.getSimpleName(), e);
 			return null;
 		}
 

@@ -33,21 +33,27 @@ import org.joda.time.format.DateTimeFormat;
 
 public class TestCurrentTimeService implements ICurrentTimeService {
 
-	private static DateTime _calendar = new DateTime();
+	private static DateTime fDateTime = new DateTime();
 	
 	public static void setCalendar(String dateAsString, String dateFormat) {
-		_calendar = DateTimeFormat.forPattern(dateFormat).parseDateTime(dateAsString);
+		fDateTime = DateTimeFormat.forPattern(dateFormat).parseDateTime(dateAsString);
 	}
 	
 	
 	@Override
 	public DateTime getCurrentTimeAsDateTime() {		
-		return _calendar;
+		return fDateTime;
 	}
 
 
 	public static void setCalendar(String dateAsString) {
 		setCalendar(dateAsString, ISO_DATETIME_FORMAT);
+	}
+
+
+	@Override
+	public long getCurrentTimeMillis() {
+		return fDateTime.getMillis();
 	}
 
 	

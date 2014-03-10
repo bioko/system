@@ -27,7 +27,11 @@
 
 package org.biokoframework.system.entity.login;
 
+import javax.inject.Inject;
+
 import org.biokoframework.utils.domain.EntityBuilder;
+
+import com.google.inject.Injector;
 
 
 public class LoginBuilder extends EntityBuilder<Login> {
@@ -52,7 +56,12 @@ public class LoginBuilder extends EntityBuilder<Login> {
 	public static final String MATTIA_ENCRYPTED = "mattiaEncrypted";
 	
 	public LoginBuilder() {
-		super(Login.class);
+		this(null);
+	}
+	
+	@Inject
+	public LoginBuilder(Injector injector) {
+		super(Login.class, injector);
 
 		putExample(MATTIA, MATTIA_JSON);
 		putExample(SIMONE, SIMONE_JSON);

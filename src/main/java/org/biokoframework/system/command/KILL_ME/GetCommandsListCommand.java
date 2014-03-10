@@ -29,9 +29,9 @@ package org.biokoframework.system.command.KILL_ME;
 
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
 import org.biokoframework.system.KILL_ME.commons.GenericCommandNames;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
-import org.biokoframework.system.KILL_ME.commons.logger.Loggers;
 import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.AbstractCommandHandler;
 import org.biokoframework.system.command.CommandException;
@@ -44,6 +44,8 @@ import org.biokoframework.utils.fields.Fields;
 
 @Deprecated
 public class GetCommandsListCommand extends AbstractCommand {
+	
+	private static final Logger LOGGER = Logger.getLogger(GetCommandsListCommand.class);
 	
 	private AbstractCommandHandler _commandHandler;
 
@@ -61,7 +63,7 @@ public class GetCommandsListCommand extends AbstractCommand {
 
 	@Override
 	public Fields execute(Fields input) throws CommandException {
-		Loggers.xsystem.info("EXECUTING Command:" + this.getClass().getSimpleName());
+		LOGGER.info("EXECUTING Command:" + this.getClass().getSimpleName());
 		Fields result = new Fields();
 		
 		// Meta linguaggio? Il comando descrive il command handler con lo stesso meccanismo con cui
@@ -75,7 +77,7 @@ public class GetCommandsListCommand extends AbstractCommand {
 		result.put(GenericFieldNames.RESPONSE, response);
 		result.putAll(input);
 		
-		Loggers.xsystem.info("END Command:" + this.getClass().getSimpleName());
+		LOGGER.info("END Command:" + this.getClass().getSimpleName());
 		return result;
 	}
 

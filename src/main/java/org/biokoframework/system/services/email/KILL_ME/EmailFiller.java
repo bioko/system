@@ -37,7 +37,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMessage.RecipientType;
 
-import org.biokoframework.system.KILL_ME.commons.logger.Loggers;
+import org.apache.log4j.Logger;
 import org.biokoframework.system.command.CommandException;
 import org.biokoframework.system.exceptions.CommandExceptionsFactory;
 import org.biokoframework.system.services.email.EmailException;
@@ -45,6 +45,8 @@ import org.biokoframework.system.services.email.EmailException;
 @Deprecated
 public class EmailFiller {
 
+	private static final Logger LOGGER = Logger.getLogger(EmailFiller.class);
+	
 	private Address _from;
 	private List<Address> _to = new ArrayList<Address>();
 	private List<Address> _cc = new ArrayList<Address>();
@@ -63,7 +65,7 @@ public class EmailFiller {
 			message.setSubject(subject());
 			message.setContent(content(), contentType());
 		} catch (MessagingException exception) {
-			Loggers.engagedServer.error("Fill mime message", exception);
+			LOGGER.error("Fill mime message", exception);
 			throw new EmailException(exception);
 		}
 	}
@@ -95,7 +97,7 @@ public class EmailFiller {
 		try {
 			_from = toInternetAddress(sender);
 		} catch (AddressException exception) {
-			Loggers.engagedServer.error("Set address for mail message", exception);
+			LOGGER.error("Set address for mail message", exception);
 			throw new EmailException(exception);
 		}
 	}
@@ -107,7 +109,7 @@ public class EmailFiller {
 		try {
 			_cc.add(toInternetAddress(carbonCopyReceiver));
 		} catch (AddressException exception) {
-			Loggers.engagedServer.error("Set address for mail message", exception);
+			LOGGER.error("Set address for mail message", exception);
 			throw CommandExceptionsFactory.createContainerException(exception);
 		}
 	}
@@ -119,7 +121,7 @@ public class EmailFiller {
 		try {
 			_bcc.add(toInternetAddress(blindCarbonCopyReceiver));
 		} catch (AddressException exception) {
-			Loggers.engagedServer.error("Set address for mail message", exception);
+			LOGGER.error("Set address for mail message", exception);
 			throw CommandExceptionsFactory.createContainerException(exception);
 		}
 	}

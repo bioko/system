@@ -25,20 +25,49 @@
  * 
  */
 
-package org.biokoframework.system.services.authentication;
+package org.biokoframework.system.services.authentication.all;
 
 import java.util.List;
+import java.util.Set;
 
+import javax.inject.Inject;
+
+import org.biokoframework.system.exceptions.CommandExceptionsFactory;
+import org.biokoframework.system.services.authentication.AuthenticationFailureException;
+import org.biokoframework.system.services.authentication.IAuthenticationService;
 import org.biokoframework.utils.fields.Fields;
 
 /**
+ * This authentication service actually tries to authenticate with every 
+ * possible {@link IAuthenticationService} it knowns.
+ * 
+ * Designed to be used with <a href="http://code.google.com/p/google-guice/wiki/Multibindings">Guice multibindings</a>
  * 
  * @author Mikol Faro <mikol.faro@gmail.com>
- * @date Feb 13, 2014
+ * @date Mar 7, 2014
  *
  */
-public interface IAuthenticationService {
+public class AllAuthenticationService implements IAuthenticationService {
 
-	Fields authenticate(Fields fields, List<String> requiredRoles) throws AuthenticationFailureException;
+	private Set<IAuthenticationService> fAuthServices;
+
+	@Inject
+	public AllAuthenticationService(Set<IAuthenticationService> authServices) {
+		fAuthServices = authServices;
+	}
 	
+	@Override
+	public Fields authenticate(Fields fields, List<String> requiredRoles) throws AuthenticationFailureException {
+		for (IAuthenticationService anAuthService : fAuthServices) {
+			if (!(anAuthService instanceof AllAuthenticationService)) {
+				Fields authFields = anAuthService.authenticate(fields, requiredRoles);
+				if (authFields != null) {
+					return authFields;
+				}
+			}
+		}
+		
+		throw CommandExceptionsFactory.createUnauthorisedAccessException();
+	}
+
 }

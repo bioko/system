@@ -36,7 +36,7 @@ import org.biokoframework.utils.repository.Repository;
  * @date Feb 6, 2014
  *
  */
-public interface RepositoryService extends Service {
+public interface IRepositoryService extends Service {
 	
 	public <DE extends DomainEntity, R extends Repository<DE>> R getRepository(Class<DE> entityClass);
 	

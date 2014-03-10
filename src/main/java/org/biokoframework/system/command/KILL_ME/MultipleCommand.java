@@ -30,8 +30,8 @@ package org.biokoframework.system.command.KILL_ME;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
+import org.apache.log4j.Logger;
 import org.biokoframework.system.KILL_ME.FieldsErrors;
-import org.biokoframework.system.KILL_ME.commons.logger.Loggers;
 import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.CommandException;
 import org.biokoframework.utils.exception.ValidationException;
@@ -41,24 +41,26 @@ import org.biokoframework.utils.fields.Fields;
 @Deprecated
 public class MultipleCommand extends AbstractCommand {
 	
+	private static final Logger LOGGER = Logger.getLogger(MultipleCommand.class);
+	
 	private LinkedHashMap<String, AbstractCommand> _steps = new LinkedHashMap<String, AbstractCommand>();
 	
 	@Override
 	public Fields execute(Fields input) throws CommandException, ValidationException {
 		Fields overAllOutput = Fields.successful();
-		Loggers.xsystem.info("Executing MultipleCommand: " + this.getClass().getSimpleName());
-		Loggers.xsystem.info("Steps: " + _steps.size());
+		LOGGER.info("Executing MultipleCommand: " + this.getClass().getSimpleName());
+		LOGGER.info("Steps: " + _steps.size());
 		for (Entry<String,AbstractCommand> step : _steps.entrySet()) {
 			Fields output = new Fields();
-			Loggers.xsystem.info("Executing step: " + step.getKey());
+			LOGGER.info("Executing step: " + step.getKey());
 			output = step.getValue().execute(input);
 			if (output.containsKey(FieldsErrors.FAILURE)) {
 				output.put(FieldNames.FAILED_COMMAND, step.getValue().getClass().getSimpleName());
-				Loggers.xsystem.info("Step " + step.getKey() + " execution failed!");
+				LOGGER.info("Step " + step.getKey() + " execution failed!");
 				return overAllOutput.putAll(Fields.failed()).putAll(output);
 			} else if (output.containsKey(FieldsErrors.ERROR)) {
 				output.put(FieldNames.ERROR_COMMAND, step.getValue().getClass().getSimpleName());
-				Loggers.xsystem.info("Step " + step.getKey() + " execution error!");
+				LOGGER.info("Step " + step.getKey() + " execution error!");
 				return overAllOutput.putAll(Fields.failed()).putAll(output);
 			}
 			overAllOutput.putAll(output);
@@ -66,13 +68,13 @@ public class MultipleCommand extends AbstractCommand {
 			input.putAll(output);
 
 		}
-		Loggers.xsystem.info("MultipleCommand output: " + overAllOutput.toString());
-		Loggers.xsystem.info("End MultipleCommand: " + this.getClass().getSimpleName());
+		LOGGER.info("MultipleCommand output: " + overAllOutput.toString());
+		LOGGER.info("End MultipleCommand: " + this.getClass().getSimpleName());
 		return overAllOutput;
 	}
 	
 	public void addStep(String aStepKey, AbstractCommand aCommand) {
-		Loggers.xsystem.info("Adding step: " + aStepKey + " to MultipleCommand " + this.getClass().getSimpleName());
+		LOGGER.info("Adding step: " + aStepKey + " to MultipleCommand " + this.getClass().getSimpleName());
 		_steps.put(aStepKey, aCommand);
 	}
 

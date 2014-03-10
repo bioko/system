@@ -37,4 +37,9 @@ public class ProdCurrentTimeService implements ICurrentTimeService {
 		return new DateTime();
 	}
 
+	@Override
+	public long getCurrentTimeMillis() {
+		return System.currentTimeMillis();
+	}
+
 }

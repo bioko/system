@@ -32,8 +32,8 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
+import org.apache.log4j.Logger;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
-import org.biokoframework.system.KILL_ME.commons.logger.Loggers;
 import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.AbstractCommandHandler;
 import org.biokoframework.system.command.CommandException;
@@ -46,6 +46,8 @@ import org.biokoframework.utils.fields.Fields;
 @Deprecated
 public class MultipleCommandPlusPlus extends AbstractCommand {
 
+	private static final Logger LOGGER = Logger.getLogger(MultipleCommandPlusPlus.class);
+	
 	private AbstractCommandHandler fCommandHandler;
 	private LinkedHashMap<String, String> fSteps = new LinkedHashMap<String, String>();
 
@@ -61,9 +63,9 @@ public class MultipleCommandPlusPlus extends AbstractCommand {
 
 	@Override
 	public final Fields execute(Fields input) throws CommandException, ValidationException {
-		Loggers.xsystem.info("EXECUTING Multiple Command");
-		Loggers.xsystem.info("STEPS: " + fSteps.size());
-		Loggers.xsystem.info("INPUT: " + input.toString());
+		LOGGER.info("EXECUTING Multiple Command");
+		LOGGER.info("STEPS: " + fSteps.size());
+		LOGGER.info("INPUT: " + input.toString());
 		
 		if (fCommandHandler==null)
 			fCommandHandler = fContext.getCommandHandler();
@@ -73,7 +75,7 @@ public class MultipleCommandPlusPlus extends AbstractCommand {
 		
 		Fields stepInput = input.copy();
 		for (Entry<String, String> aStep: fSteps.entrySet()) {
-			Loggers.xsystem.info("Executing step: " + aStep.getKey());
+			LOGGER.info("Executing step: " + aStep.getKey());
 						
 			ICommand stepCommand = fCommandHandler.getByName(aStep.getValue());
 			if (stepCommand == null) {
@@ -92,8 +94,8 @@ public class MultipleCommandPlusPlus extends AbstractCommand {
 		
 		postProcessingCleanUp(response, result);
 		
-		Loggers.xsystem.info("MultipleCommand output: " + result.toString());
-		Loggers.xsystem.info("END MultipleCommand");
+		LOGGER.info("MultipleCommand output: " + result.toString());
+		LOGGER.info("END MultipleCommand");
 		return result;
 	}
 

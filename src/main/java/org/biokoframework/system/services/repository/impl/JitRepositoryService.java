@@ -36,7 +36,7 @@ import javax.inject.Singleton;
 
 import org.biokoframework.system.entity.binary.BinaryEntity;
 import org.biokoframework.system.factory.binary.BinaryEntityRepository;
-import org.biokoframework.system.repository.service.RepositoryService;
+import org.biokoframework.system.repository.service.IRepositoryService;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.domain.reflection.DummyParameterizedType;
 import org.biokoframework.utils.repository.Repository;
@@ -54,7 +54,7 @@ import com.google.inject.binder.AnnotatedBindingBuilder;
  *
  */
 @Singleton
-public class JitRepositoryService implements RepositoryService {
+public class JitRepositoryService implements IRepositoryService {
 
 	private final Injector fInjector;
 	private final Class<?> fRepoClass;

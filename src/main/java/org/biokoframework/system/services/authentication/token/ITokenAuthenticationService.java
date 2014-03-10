@@ -25,17 +25,20 @@
  * 
  */
 
-package org.biokoframework.system.services.currenttime;
+package org.biokoframework.system.services.authentication.token;
 
-import org.joda.time.DateTime;
+import org.biokoframework.system.entity.authentication.Authentication;
+import org.biokoframework.system.services.authentication.IAuthenticationService;
+import org.biokoframework.utils.fields.Fields;
 
-public interface ICurrentTimeService {
+/**
+ * 
+ * @author Mikol Faro <mikol.faro@gmail.com>
+ * @date Mar 6, 2014
+ *
+ */
+public interface ITokenAuthenticationService extends IAuthenticationService {
+
+	Authentication requestToken(Fields fields);
 	
-	static final String ISO_DATETIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
-	static final String ISO_DATE_FORMAT = "yyyy-MM-dd";
-	
-	DateTime getCurrentTimeAsDateTime();
-
-	long getCurrentTimeMillis();		
-
 }

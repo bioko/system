@@ -29,8 +29,8 @@ package org.biokoframework.system.services.queue.impl;
 
 import java.util.List;
 
-import org.biokoframework.system.KILL_ME.commons.logger.Loggers;
-import org.biokoframework.system.repository.service.RepositoryService;
+import org.apache.log4j.Logger;
+import org.biokoframework.system.repository.service.IRepositoryService;
 import org.biokoframework.system.services.queue.IQueueService;
 import org.biokoframework.system.services.queue.QueuedItem;
 import org.biokoframework.utils.exception.ValidationException;
@@ -49,6 +49,8 @@ public class QueueService implements IQueueService {
 
 	private static final Long START = 0L;
 
+	private static final Logger LOGGER = Logger.getLogger(QueueService.class);
+
 	private Repository<QueuedItem> fBaseRepository;
 	
 	protected Long head = Long.MAX_VALUE;
@@ -58,7 +60,7 @@ public class QueueService implements IQueueService {
 	protected final Object pushLock = new Object();
 
 	@Inject
-	public QueueService(RepositoryService repoService) {
+	public QueueService(IRepositoryService repoService) {
 		fBaseRepository = repoService.getRepository(QueuedItem.class);
 		List<QueuedItem> items = fBaseRepository.getAll();
 		
@@ -121,7 +123,7 @@ public class QueueService implements IQueueService {
 		try {
 			push(fields.toJSONString());
 		} catch (Exception exception) {
-			Loggers.engagedServer.error("Error pushing Fields", exception);
+			LOGGER.error("Error pushing Fields", exception);
 		}
 	}
 	

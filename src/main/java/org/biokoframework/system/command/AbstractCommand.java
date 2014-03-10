@@ -31,7 +31,7 @@ import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
 import org.biokoframework.system.context.Context;
-import org.biokoframework.system.repository.service.RepositoryService;
+import org.biokoframework.system.repository.service.IRepositoryService;
 import org.biokoframework.system.services.entity.IEntityBuilderService;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.fields.FieldNames;
@@ -47,11 +47,11 @@ public abstract class AbstractCommand implements ICommand {
 	protected Context fContext;
 	protected String fCommandName;
 	
-	private RepositoryService fRepositoryService;
+	private IRepositoryService fRepositoryService;
 	private IEntityBuilderService fBuilder;
 	
 	@Inject
-	public final void setRepositoryService(RepositoryService service) {
+	public final void setRepositoryService(IRepositoryService service) {
 		fRepositoryService = service;
 	}
 	

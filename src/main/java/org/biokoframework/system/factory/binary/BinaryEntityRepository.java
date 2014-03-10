@@ -39,7 +39,7 @@ import javax.inject.Named;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.biokoframework.system.KILL_ME.commons.logger.Loggers;
+import org.apache.log4j.Logger;
 import org.biokoframework.system.entity.binary.BinaryEntity;
 import org.biokoframework.system.repository.core.AbstractRepository;
 import org.biokoframework.system.services.entity.IEntityBuilderService;
@@ -52,6 +52,8 @@ import org.joda.time.DateTime;
 
 public class BinaryEntityRepository extends AbstractRepository<BinaryEntity> {
 
+	private static final Logger LOGGER = Logger.getLogger(BinaryEntityRepository.class);
+
 	private static final String DATE_PATH_PATTERN = new StringBuilder()
 			.append("yyyy")
 			.append(File.separator)
@@ -59,6 +61,7 @@ public class BinaryEntityRepository extends AbstractRepository<BinaryEntity> {
 			.append(File.separator)
 			.append("dd")
 			.append(File.separator).toString();
+
 
 	private File fBaseDirectory;
 	private Repository<BinaryEntity> fSupportRepository;
@@ -85,7 +88,7 @@ public class BinaryEntityRepository extends AbstractRepository<BinaryEntity> {
 			fSupportRepository.save(aBlob);
 		} catch (IOException exception) {
 			fSupportRepository.delete(aBlob.getId());
-			Loggers.engagedServer.error("Save blob file", exception);
+			LOGGER.error("Save blob file", exception);
 			return null;
 		}
 		BinaryEntity filterBlob = new BinaryEntity();
@@ -104,7 +107,7 @@ public class BinaryEntityRepository extends AbstractRepository<BinaryEntity> {
 				file.delete();
 				aBlob.fields().remove(BinaryEntity.PATH);
 			} catch (IOException exception) {
-				Loggers.engagedServer.error("Delete blob file", exception);
+				LOGGER.error("Delete blob file", exception);
 				return null;
 			}
 		}
@@ -121,7 +124,7 @@ public class BinaryEntityRepository extends AbstractRepository<BinaryEntity> {
 			try {
 				returnBlob.setStream(new FileInputStream(aBlob.get(BinaryEntity.PATH).toString()));
 			} catch (IOException exception) {
-				Loggers.engagedServer.error("Save blob file", exception);
+				LOGGER.error("Save blob file", exception);
 				return null;
 			}
 		}

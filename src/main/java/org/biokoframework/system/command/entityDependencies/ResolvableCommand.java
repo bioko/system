@@ -29,9 +29,9 @@ package org.biokoframework.system.command.entityDependencies;
 
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldValues;
-import org.biokoframework.system.KILL_ME.commons.logger.Loggers;
 import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.CommandException;
 import org.biokoframework.system.command.ICommand;
@@ -46,6 +46,8 @@ import org.biokoframework.utils.repository.Repository;
 
 public class ResolvableCommand extends AbstractCommand {
 
+	private static final Logger LOGGER = Logger.getLogger(ResolvableCommand.class);
+	
 	protected ICommand fBaseCommand;
 	private EntityResolver fResolver;
 
@@ -57,8 +59,8 @@ public class ResolvableCommand extends AbstractCommand {
 	
 	@Override
 	public Fields execute(Fields input) throws CommandException, ValidationException {
-		Loggers.xsystem.info("EXECUTING Command:" + this.getClass().getSimpleName());	
-		Loggers.xsystem.info("INPUT: " + input.toString());
+		LOGGER.info("EXECUTING Command:" + this.getClass().getSimpleName());	
+		LOGGER.info("INPUT: " + input.toString());
 		
 		boolean doResolve = false;
 		if (input.containsKey(GenericFieldNames.RESOLVE_ENTITIES)) {
@@ -86,8 +88,8 @@ public class ResolvableCommand extends AbstractCommand {
 			result = unresolvedResult;
 		}
 		
-		Loggers.xsystem.info("OUTPUT after execution: " + result.toString());
-		Loggers.xsystem.info("END Command:" + this.getClass().getSimpleName());	
+		LOGGER.info("OUTPUT after execution: " + result.toString());
+		LOGGER.info("END Command:" + this.getClass().getSimpleName());	
 		return result;
 	}
 

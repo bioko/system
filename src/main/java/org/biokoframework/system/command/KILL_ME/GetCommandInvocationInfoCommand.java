@@ -30,10 +30,10 @@ package org.biokoframework.system.command.KILL_ME;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.biokoframework.system.KILL_ME.commons.GenericCommandNames;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldValues;
-import org.biokoframework.system.KILL_ME.commons.logger.Loggers;
 import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.AbstractCommandHandler;
 import org.biokoframework.system.command.CommandException;
@@ -49,6 +49,7 @@ import org.biokoframework.utils.fields.Fields;
 @Deprecated
 public class GetCommandInvocationInfoCommand extends AbstractCommand {
 	
+	private static final Logger LOGGER = Logger.getLogger(GetCommandInvocationInfoCommand.class);
 	private AbstractCommandHandler fCommandHandler;
 
 	@Override
@@ -61,7 +62,7 @@ public class GetCommandInvocationInfoCommand extends AbstractCommand {
 	// uscita verificando che i campi obbligatori siano presenti
 	@Override
 	public Fields execute(Fields input) throws CommandException {
-		Loggers.xsystem.info("EXECUTING Command:" + this.getClass().getSimpleName());
+		LOGGER.info("EXECUTING Command:" + this.getClass().getSimpleName());
 		Fields result = new Fields();
 		
 		Fields commandEntityFields = new Fields();
@@ -73,7 +74,7 @@ public class GetCommandInvocationInfoCommand extends AbstractCommand {
 		}
 		ICommand command = fCommandHandler.getByName(commandName);
 		if (command == null) {
-			Loggers.xsystem.error("Command " + commandName + " not found");
+			LOGGER.error("Command " + commandName + " not found");
 			throw CommandExceptionsFactory.createCommandNotFoundException(commandName);
 		}
 		
@@ -89,7 +90,7 @@ public class GetCommandInvocationInfoCommand extends AbstractCommand {
 		response.add(entity);
 		result.put(GenericFieldNames.RESPONSE, response);
 			
-		Loggers.xsystem.info("END Command:" + this.getClass().getSimpleName());
+		LOGGER.info("END Command:" + this.getClass().getSimpleName());
 		return input.putAll(result);
 	}
 

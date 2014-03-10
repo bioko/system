@@ -28,63 +28,52 @@
 package org.biokoframework.system.command.authentication;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
+import javax.inject.Inject;
+
+import org.apache.commons.lang3.StringUtils;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.CommandException;
-import org.biokoframework.system.context.Context;
 import org.biokoframework.system.entity.authentication.Authentication;
-import org.biokoframework.system.entity.authentication.AuthenticationManager;
 import org.biokoframework.system.entity.description.ParameterEntity;
 import org.biokoframework.system.entity.description.ParameterEntityBuilder;
-import org.biokoframework.system.entity.login.Login;
-import org.biokoframework.system.repository.core.SafeRepositoryHelper;
+import org.biokoframework.system.services.authentication.token.ITokenAuthenticationService;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.fields.Fields;
-import org.biokoframework.utils.repository.Repository;
 
 
 public class EngagedCheckInCommand extends AbstractCommand {
 
+	private ITokenAuthenticationService fAuthService;
+
+	@Inject
+	public EngagedCheckInCommand(ITokenAuthenticationService authService) {
+		fAuthService = authService;
+	}
+	
 	@Override
 	public Fields execute(Fields input) throws CommandException {
 		logInput(input);
-		Repository<Authentication> authenticationRepository = getRepository(Authentication.class);
 		
-		Fields result = new Fields();
-		List<Map<String, Object>> response = new ArrayList<Map<String,Object>>();
+		Authentication auth = fAuthService.requestToken(input);
 		
-//		AuthenticationStrategy authStrategy = AuthenticationStrategyFactory.retrieveCheckInStrategy(input);
-//		
-//		Login login = (Login) authStrategy.authenticate(fContext, input, false).get(Login.class.getSimpleName());
-//		
-//		Authentication authentication = insertNewAuthenticationFor(fContext, login, authenticationRepository);
-//	
-//		Map<String, Object> map = new HashMap<String, Object>();
-//		
-//		String token = authentication.get(GenericFieldNames.AUTH_TOKEN);
-//		Long tokenExpire = authentication.get(GenericFieldNames.AUTH_TOKEN_EXPIRE);
-//		
-//		map.put(GenericFieldNames.AUTH_TOKEN, token);
-//		map.put(GenericFieldNames.AUTH_TOKEN_EXPIRE, tokenExpire);
-//		if (login.get(Login.ROLES) != null) {
-//			map.put(Login.ROLES, login.get(Login.ROLES).toString());
-//		}
-//		response = Arrays.asList(map);
-//		result.put(GenericFieldNames.TOKEN_HEADER, token);
-//		result.put(GenericFieldNames.TOKEN_EXPIRE_HEADER, tokenExpire);
+		Fields fields = new Fields(
+				Authentication.TOKEN, auth.get(Authentication.TOKEN),
+				Authentication.TOKEN_EXPIRE, auth.get(Authentication.TOKEN_EXPIRE));
+		
+		String roles = auth.get(Authentication.ROLES);
+		if (!StringUtils.isEmpty(roles)) {
+			fields.put(Authentication.ROLES, roles);
+		}
+		
+		List<Fields> response = Arrays.asList(fields);
  		
-		result.put(GenericFieldNames.RESPONSE, response);
+		Fields result = new Fields(GenericFieldNames.RESPONSE, response);
 		logOutput(result);
 		return result;
-	}
-
-	private Authentication insertNewAuthenticationFor(Context context, Login login, Repository<Authentication> authenticationRepository) throws CommandException {
-		Authentication newAuth = AuthenticationManager.createAuthenticationFor(context, login);
-		newAuth = SafeRepositoryHelper.save(authenticationRepository, newAuth);
-		return newAuth;
 	}
 
 	public Fields componingInputKeys() {
