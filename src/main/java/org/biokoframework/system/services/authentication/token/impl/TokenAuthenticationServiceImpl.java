@@ -48,7 +48,6 @@ import org.biokoframework.system.services.currenttime.ICurrentTimeService;
 import org.biokoframework.system.services.entity.IEntityBuilderService;
 import org.biokoframework.system.services.random.IRandomService;
 import org.biokoframework.utils.exception.ValidationException;
-import org.biokoframework.utils.fields.FieldNames;
 import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.repository.Repository;
 import org.biokoframework.utils.repository.RepositoryException;
@@ -61,9 +60,10 @@ import org.biokoframework.utils.repository.RepositoryException;
  */
 public class TokenAuthenticationServiceImpl implements ITokenAuthenticationService {
 
-	private static final Logger LOGGER = Logger.getLogger(TokenAuthenticationServiceImpl.class);
+    private static final Logger LOGGER = Logger.getLogger(TokenAuthenticationServiceImpl.class);
+    public static final String AUTH_TOKEN = "authToken";
 
-	private final IEntityBuilderService fEntitiesBuilder;
+    private final IEntityBuilderService fEntitiesBuilder;
 	private final Repository<Login> fLoginRepo;
 	private final Repository<Authentication> fAuthRepo;
 	private final IRandomService fRandom;
@@ -84,17 +84,19 @@ public class TokenAuthenticationServiceImpl implements ITokenAuthenticationServi
 	
 	@Override
 	public Fields authenticate(Fields fields, List<String> requiredRoles) throws AuthenticationFailureException {
-		Authentication auth = fAuthRepo.retrieveByForeignKey(Authentication.TOKEN, (String) fields.get("authToken"));
+		Authentication auth = fAuthRepo.retrieveByForeignKey(Authentication.TOKEN, (String) fields.get(AUTH_TOKEN));
 		if (auth == null) {
 			throw CommandExceptionsFactory.createUnauthorisedAccessException();
+        } else if (isExpired(auth)) {
+            fAuthRepo.delete(auth.getId());
+            throw CommandExceptionsFactory.createTokenExpiredException();
 		} else if (!requiredRoles.isEmpty()) {
 			String userRoles = auth.get(Authentication.ROLES);
 			ensureRoles(requiredRoles, userRoles);
 		}
-		
-		// check token timestamp
-		// renew token timestamp
-		
+
+        // TODO renew token
+
 		fields.put(GenericFieldNames.AUTH_LOGIN_ID, auth.get(Authentication.LOGIN_ID));
 		
 		return fields;
@@ -139,13 +141,13 @@ public class TokenAuthenticationServiceImpl implements ITokenAuthenticationServi
 					GenericFieldNames.AUTH_TOKEN, token,
 					GenericFieldNames.AUTH_TOKEN_EXPIRE, utcTimeSecs));
 	}
-//	
-//	private boolean isExpired(Authentication authentication) {
-//		long expireTimeSecs = authentication.get(GenericFieldNames.AUTH_TOKEN_EXPIRE);
-//		long nowSecs = System.currentTimeMillis() / 1000;
-//		return nowSecs < expireTimeSecs;
-//	}
-//	
+
+	private boolean isExpired(Authentication authentication) {
+		long expireTimeSecs = authentication.get(GenericFieldNames.AUTH_TOKEN_EXPIRE);
+		long nowSecs = fTime.getCurrentTimeMillis() / 1000;
+		return nowSecs > expireTimeSecs;
+	}
+
 //	public static void renewAuthentication(Context context, Authentication authentication) {
 //		Long validityIntervalSecs = Long.parseLong(context.getSystemProperty(Context.AUTHENTICATION_VALIDITY_INTERVAL_SECS));
 //		

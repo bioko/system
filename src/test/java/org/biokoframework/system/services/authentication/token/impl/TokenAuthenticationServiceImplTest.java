@@ -27,17 +27,23 @@
 
 package org.biokoframework.system.services.authentication.token.impl;
 
+import static org.biokoframework.utils.matcher.Matchers.contains;
 import static org.biokoframework.utils.matcher.Matchers.valid;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 import org.biokoframework.system.ConfigurationEnum;
+import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.entity.authentication.Authentication;
+import org.biokoframework.system.entity.authentication.AuthenticationBuilder;
 import org.biokoframework.system.entity.login.Login;
 import org.biokoframework.system.entity.login.LoginBuilder;
+import org.biokoframework.system.exceptions.CommandExceptionsFactory;
 import org.biokoframework.system.repository.memory.InMemoryRepository;
 import org.biokoframework.system.repository.service.IRepositoryService;
+import org.biokoframework.system.services.authentication.AuthenticationFailureException;
+import org.biokoframework.system.services.authentication.annotation.Auth;
 import org.biokoframework.system.services.currenttime.CurrentTimeModule;
 import org.biokoframework.system.services.currenttime.impl.TestCurrentTimeService;
 import org.biokoframework.system.services.entity.EntityModule;
@@ -47,17 +53,25 @@ import org.biokoframework.system.services.random.impl.TestRandomGeneratorService
 import org.biokoframework.system.services.repository.RepositoryModule;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.domain.EntityBuilder;
+import org.biokoframework.utils.exception.ValidationException;
 import org.biokoframework.utils.fields.Fields;
+import org.biokoframework.utils.matcher.Matchers;
 import org.biokoframework.utils.repository.Repository;
+import org.biokoframework.utils.repository.RepositoryException;
 import org.biokoframework.utils.validation.ValidationModule;
 import org.junit.Before;
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.name.Names;
+import org.junit.rules.ExpectedException;
+
+import javax.annotation.Resource;
+import java.util.Collections;
 
 /**
  * 
@@ -71,11 +85,13 @@ public class TokenAuthenticationServiceImplTest {
 	private TokenAuthenticationServiceImpl fAuthService;
 	private Injector fInjector;
 	private Repository<Login> fLoginRepo;
+    private Repository<Authentication> fAuthRepo;
 	private IEntityBuilderService fEntitiesBuilder;
 	private EntityBuilder<Login> fLoginBuilder;
+    private EntityBuilder<Authentication> fAuthBuilder;
 	private TestCurrentTimeService fTimeService;
-	
-	@Before
+
+    @Before
 	public void createInjector() {		
 		fInjector = Guice.createInjector(
 				new EntityModule(),
@@ -103,6 +119,8 @@ public class TokenAuthenticationServiceImplTest {
 		
 		fLoginRepo = fInjector.getInstance(IRepositoryService.class).getRepository(Login.class);
 		fLoginBuilder = fInjector.getInstance(LoginBuilder.class);
+        fAuthRepo = fInjector.getInstance(IRepositoryService.class).getRepository(Authentication.class);
+        fAuthBuilder = fInjector.getInstance(AuthenticationBuilder.class);
 		fEntitiesBuilder = fInjector.getInstance(IEntityBuilderService.class);
 		fTimeService = fInjector.getInstance(TestCurrentTimeService.class);
 	}
@@ -134,15 +152,66 @@ public class TokenAuthenticationServiceImplTest {
 		
 	}
 
-	@Ignore("not yet implemented")
+    @Test
+    public void testSuccessfulAuthenticationUsingToken() throws ValidationException, RepositoryException, AuthenticationFailureException {
+        Login login = fLoginBuilder.loadDefaultExample().build(false);
+        login = fLoginRepo.save(login);
+
+        fAuthService = fInjector.getInstance(TokenAuthenticationServiceImpl.class);
+
+        Authentication auth = fAuthBuilder.loadDefaultExample()
+                .set(Authentication.LOGIN_ID, login.getId()).build(false);
+        fAuthRepo.save(auth);
+
+        Fields fields = new Fields("authToken", auth.get(Authentication.TOKEN));
+        Fields authFields = fAuthService.authenticate(fields, Collections.<String>emptyList());
+
+        assertThat(authFields, contains(GenericFieldNames.AUTH_LOGIN_ID, login.getId()));
+    }
+
 	@Test
-	public void testFailedAuthenticationBecauseTokenExpired() {
-		
-	}
-	
-	@Ignore("not yet implemented")
-	@Test
-	public void testSuccessfullAuthenticationUsingToken() {
-		
-	}
+	public void testFailedAuthenticationBecauseTokenExpired() throws ValidationException, RepositoryException, AuthenticationFailureException {
+        Login login = fLoginBuilder.loadDefaultExample().build(false);
+        login = fLoginRepo.save(login);
+
+        fAuthService = fInjector.getInstance(TokenAuthenticationServiceImpl.class);
+
+        Authentication auth = fAuthBuilder.loadDefaultExample()
+                .set(Authentication.LOGIN_ID, login.getId())
+                .set(Authentication.TOKEN_EXPIRE, 0L)
+                .build(false);
+        auth = fAuthRepo.save(auth);
+
+        Fields fields = new Fields("authToken", auth.get(Authentication.TOKEN));
+
+        try {
+            fAuthService.authenticate(fields, Collections.<String>emptyList());
+            fail(AuthenticationFailureException.class + " not thrown");
+        } catch (AuthenticationFailureException exception) {
+            assertThat(exception.getErrors(), is(equalTo(CommandExceptionsFactory.createTokenExpiredException().getErrors())));
+        }
+
+        assertThat(fAuthRepo.retrieve(auth.getId()), is(nullValue()));
+    }
+
+    @Rule
+    public ExpectedException expected = ExpectedException.none();
+
+    @Test
+    public void testFailedBecauseRoleExpected() throws ValidationException, RepositoryException, AuthenticationFailureException {
+        Login login = fLoginBuilder.loadDefaultExample().build(false);
+        login = fLoginRepo.save(login);
+
+        fAuthService = fInjector.getInstance(TokenAuthenticationServiceImpl.class);
+
+        Authentication auth = fAuthBuilder.loadDefaultExample()
+                .set(Authentication.LOGIN_ID, login.getId())
+                .build(false);
+        auth = fAuthRepo.save(auth);
+
+        Fields fields = new Fields("authToken", auth.get(Authentication.TOKEN));
+
+        expected.expect(AuthenticationFailureException.class);
+        fAuthService.authenticate(fields, Collections.singletonList("aRole"));
+    }
 }
