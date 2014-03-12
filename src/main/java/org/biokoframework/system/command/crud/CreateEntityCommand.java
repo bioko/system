@@ -56,12 +56,13 @@ public class CreateEntityCommand extends AbstractCommand {
 	public Fields execute(Fields input) throws CommandException, ValidationException {
 		logInput(input);
 		Repository<? extends DomainEntity> repository = getRepository(fDomainEntityClass);
-		
+
 		DomainEntity actualEntity = createEntity(fDomainEntityClass, input);
 		
 		ArrayList<DomainEntity> response = new ArrayList<>();
 		try {
-			response.add(repository.save(actualEntity));
+            actualEntity = repository.save(actualEntity);
+			response.add(actualEntity);
 		} catch (RepositoryException exception) {
 			throw CommandExceptionsFactory.createContainerException(exception);
 		}

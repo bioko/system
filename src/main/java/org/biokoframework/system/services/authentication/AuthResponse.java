@@ -1,9 +1,8 @@
 /*
- * Copyright (c) 2014																 
- *	Mikol Faro			<mikol.faro@gmail.com>
- *	Simone Mangano		<simone.mangano@ieee.org>
- *	Mattia Tortorelli	<mattia.tortorelli@gmail.com>
- *
+ * Copyright (c) $year.
+ * 	Mikol Faro		    <mikol.faro@gmail.com>
+ * 	Simone Mangano	 	<simone.mangano@ieee.org>
+ * 	Mattia Tortorelli	<mattia.tortorelli@gmail.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,23 +21,41 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- * 
  */
 
 package org.biokoframework.system.services.authentication;
 
-import java.util.List;
-
 import org.biokoframework.utils.fields.Fields;
 
 /**
- * 
  * @author Mikol Faro <mikol.faro@gmail.com>
- * @date Feb 13, 2014
- *
+ * @date 2014-03-12
  */
-public interface IAuthenticationService {
+public class AuthResponse {
 
-	AuthResponse authenticate(Fields fields, List<String> requiredRoles) throws AuthenticationFailureException;
-	
+    private final Fields fMergeFields;
+    private final Fields fOverrideFields;
+
+    public AuthResponse(Fields mergeFields) {
+        this(mergeFields, null);
+    }
+
+    public AuthResponse(Fields mergeFields, Fields overrideFields) {
+        fMergeFields = mergeFields;
+        fOverrideFields = overrideFields;
+    }
+
+    /**
+     * This fields should be merged with the input of a command.
+     */
+    public Fields getMergeFields() {
+        return fMergeFields;
+    }
+
+    /**
+     * This fields should be merged with the output of a command.
+     */
+    public Fields getOverrideFields() {
+        return fOverrideFields;
+    }
 }

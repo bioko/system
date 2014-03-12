@@ -33,6 +33,7 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import org.biokoframework.system.exceptions.CommandExceptionsFactory;
+import org.biokoframework.system.services.authentication.AuthResponse;
 import org.biokoframework.system.services.authentication.AuthenticationFailureException;
 import org.biokoframework.system.services.authentication.IAuthenticationService;
 import org.biokoframework.utils.fields.Fields;
@@ -57,12 +58,12 @@ public class AllAuthenticationService implements IAuthenticationService {
 	}
 	
 	@Override
-	public Fields authenticate(Fields fields, List<String> requiredRoles) throws AuthenticationFailureException {
+	public AuthResponse authenticate(Fields fields, List<String> requiredRoles) throws AuthenticationFailureException {
 		for (IAuthenticationService anAuthService : fAuthServices) {
 			if (!(anAuthService instanceof AllAuthenticationService)) {
-				Fields authFields = anAuthService.authenticate(fields, requiredRoles);
-				if (authFields != null) {
-					return authFields;
+				AuthResponse authResponse = anAuthService.authenticate(fields, requiredRoles);
+				if (authResponse != null) {
+					return authResponse;
 				}
 			}
 		}

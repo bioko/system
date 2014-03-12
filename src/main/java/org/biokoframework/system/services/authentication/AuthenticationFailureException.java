@@ -29,6 +29,7 @@ package org.biokoframework.system.services.authentication;
 
 import org.biokoframework.system.KILL_ME.exception.SystemException;
 import org.biokoframework.utils.domain.ErrorEntity;
+import org.biokoframework.utils.exception.BiokoException;
 
 public class AuthenticationFailureException extends SystemException {
 
@@ -38,4 +39,7 @@ public class AuthenticationFailureException extends SystemException {
 		super(error);
 	}
 
+    public AuthenticationFailureException(Exception exception) {
+        super(exception);
+    }
 }

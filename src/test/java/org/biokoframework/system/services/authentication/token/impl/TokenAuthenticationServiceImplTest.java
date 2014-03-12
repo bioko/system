@@ -42,6 +42,7 @@ import org.biokoframework.system.entity.login.LoginBuilder;
 import org.biokoframework.system.exceptions.CommandExceptionsFactory;
 import org.biokoframework.system.repository.memory.InMemoryRepository;
 import org.biokoframework.system.repository.service.IRepositoryService;
+import org.biokoframework.system.services.authentication.AuthResponse;
 import org.biokoframework.system.services.authentication.AuthenticationFailureException;
 import org.biokoframework.system.services.authentication.annotation.Auth;
 import org.biokoframework.system.services.currenttime.CurrentTimeModule;
@@ -164,9 +165,12 @@ public class TokenAuthenticationServiceImplTest {
         fAuthRepo.save(auth);
 
         Fields fields = new Fields("authToken", auth.get(Authentication.TOKEN));
-        Fields authFields = fAuthService.authenticate(fields, Collections.<String>emptyList());
+        AuthResponse authResponse = fAuthService.authenticate(fields, Collections.<String>emptyList());
 
-        assertThat(authFields, contains(GenericFieldNames.AUTH_LOGIN_ID, login.getId()));
+        assertThat(authResponse.getMergeFields(), contains(GenericFieldNames.AUTH_LOGIN_ID, login.getId()));
+
+        long authTokenExpire = authResponse.getOverrideFields().get(Authentication.TOKEN_EXPIRE);
+        assertThat(authTokenExpire, is(fTimeService.getCurrentTimeMillis() / 1000 + fTokenValiditySecs));
     }
 
 	@Test

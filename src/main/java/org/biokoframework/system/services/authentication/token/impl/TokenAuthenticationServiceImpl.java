@@ -41,6 +41,7 @@ import org.biokoframework.system.entity.authentication.Authentication;
 import org.biokoframework.system.entity.login.Login;
 import org.biokoframework.system.exceptions.CommandExceptionsFactory;
 import org.biokoframework.system.repository.service.IRepositoryService;
+import org.biokoframework.system.services.authentication.AuthResponse;
 import org.biokoframework.system.services.authentication.AuthenticationFailureException;
 import org.biokoframework.system.services.authentication.annotation.Auth;
 import org.biokoframework.system.services.authentication.token.ITokenAuthenticationService;
@@ -61,7 +62,9 @@ import org.biokoframework.utils.repository.RepositoryException;
 public class TokenAuthenticationServiceImpl implements ITokenAuthenticationService {
 
     private static final Logger LOGGER = Logger.getLogger(TokenAuthenticationServiceImpl.class);
+
     public static final String AUTH_TOKEN = "authToken";
+    private static final Object AUTH_TOKEN_EXPIRE = "authTokenExpire";
 
     private final IEntityBuilderService fEntitiesBuilder;
 	private final Repository<Login> fLoginRepo;
@@ -83,8 +86,9 @@ public class TokenAuthenticationServiceImpl implements ITokenAuthenticationServi
 	}
 	
 	@Override
-	public Fields authenticate(Fields fields, List<String> requiredRoles) throws AuthenticationFailureException {
-		Authentication auth = fAuthRepo.retrieveByForeignKey(Authentication.TOKEN, (String) fields.get(AUTH_TOKEN));
+	public AuthResponse authenticate(Fields fields, List<String> requiredRoles) throws AuthenticationFailureException {
+        String token = (String) fields.get(AUTH_TOKEN);
+		Authentication auth = fAuthRepo.retrieveByForeignKey(Authentication.TOKEN, token);
 		if (auth == null) {
 			throw CommandExceptionsFactory.createUnauthorisedAccessException();
         } else if (isExpired(auth)) {
@@ -95,11 +99,18 @@ public class TokenAuthenticationServiceImpl implements ITokenAuthenticationServi
 			ensureRoles(requiredRoles, userRoles);
 		}
 
-        // TODO renew token
-
-		fields.put(GenericFieldNames.AUTH_LOGIN_ID, auth.get(Authentication.LOGIN_ID));
+        auth.set(Authentication.TOKEN_EXPIRE, renewAuthentication());
+        try {
+            fAuthRepo.save(auth);
+        } catch (ValidationException|RepositoryException exception) {
+            LOGGER.error("Unexpected error while updating authentication", exception);
+            throw new AuthenticationFailureException(exception);
+        }
 		
-		return fields;
+		return new AuthResponse(
+                new Fields(GenericFieldNames.AUTH_LOGIN_ID, auth.get(Authentication.LOGIN_ID)),
+                new Fields(AUTH_TOKEN, token,
+                        AUTH_TOKEN_EXPIRE, auth.get(Authentication.TOKEN_EXPIRE)));
 	}
 
 	private void ensureRoles(List<String> requiredRoles, String userRolesString) throws AuthenticationFailureException {
@@ -148,12 +159,9 @@ public class TokenAuthenticationServiceImpl implements ITokenAuthenticationServi
 		return nowSecs > expireTimeSecs;
 	}
 
-//	public static void renewAuthentication(Context context, Authentication authentication) {
-//		Long validityIntervalSecs = Long.parseLong(context.getSystemProperty(Context.AUTHENTICATION_VALIDITY_INTERVAL_SECS));
-//		
-//		long nowSecs = System.currentTimeMillis() / 1000;
-//		authentication.fields().put(GenericFieldNames.AUTH_TOKEN_EXPIRE, nowSecs + validityIntervalSecs);
-//	}
+	private long renewAuthentication() {
+        return fTime.getCurrentTimeMillis() / 1000 + fValidityIntervalSecs;
+	}
 
 	private Login authenticateUsingAnOtherService(Fields fields) {
 		Login login = fLoginRepo.retrieveByForeignKey(Login.USER_EMAIL, (String) fields.get(Login.USER_EMAIL));
