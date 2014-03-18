@@ -36,6 +36,8 @@ import org.biokoframework.system.exceptions.CommandExceptionsFactory;
 import org.biokoframework.system.services.authentication.AuthResponse;
 import org.biokoframework.system.services.authentication.AuthenticationFailureException;
 import org.biokoframework.system.services.authentication.IAuthenticationService;
+import org.biokoframework.utils.domain.ErrorEntity;
+import org.biokoframework.utils.fields.FieldNames;
 import org.biokoframework.utils.fields.Fields;
 
 /**
@@ -61,10 +63,16 @@ public class AllAuthenticationService implements IAuthenticationService {
 	public AuthResponse authenticate(Fields fields, List<String> requiredRoles) throws AuthenticationFailureException {
 		for (IAuthenticationService anAuthService : fAuthServices) {
 			if (!(anAuthService instanceof AllAuthenticationService)) {
-				AuthResponse authResponse = anAuthService.authenticate(fields, requiredRoles);
-				if (authResponse != null) {
-					return authResponse;
-				}
+                try {
+                    AuthResponse authResponse = anAuthService.authenticate(fields, requiredRoles);
+                    if (authResponse != null) {
+                        return authResponse;
+                    }
+                } catch (AuthenticationFailureException exception) {
+                    if (exception.getErrors().get(0).get(ErrorEntity.ERROR_CODE) != FieldNames.AUTHENTICATION_REQUIRED_CODE) {
+                        throw exception;
+                    }
+                }
 			}
 		}
 		

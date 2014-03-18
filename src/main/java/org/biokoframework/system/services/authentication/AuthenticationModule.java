@@ -29,11 +29,13 @@ package org.biokoframework.system.services.authentication;
 
 import org.biokoframework.system.ConfigurationEnum;
 import org.biokoframework.system.services.authentication.all.AllAuthenticationService;
+import org.biokoframework.system.services.authentication.simple.impl.SimpleAuthenticationService;
 import org.biokoframework.system.services.authentication.token.ITokenAuthenticationService;
 import org.biokoframework.system.services.authentication.token.impl.TokenAuthenticationServiceImpl;
 import org.biokoframework.system.services.injection.ServiceModule;
 
 import com.google.inject.multibindings.Multibinder;
+import sun.java2d.pipe.SpanShapeRenderer;
 
 /**
  * 
@@ -63,6 +65,7 @@ public class AuthenticationModule extends ServiceModule {
 		
 		Multibinder<IAuthenticationService> authService = Multibinder.newSetBinder(binder(), IAuthenticationService.class);
 		authService.addBinding().to(ITokenAuthenticationService.class);
+        authService.addBinding().to(SimpleAuthenticationService.class);
 //		authService.addBinding().to(AllAuthenticationService.class);
 	}
 

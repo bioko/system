@@ -32,6 +32,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.naming.AuthenticationException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
@@ -40,9 +41,13 @@ import org.biokoframework.system.command.CommandException;
 import org.biokoframework.system.entity.authentication.Authentication;
 import org.biokoframework.system.entity.description.ParameterEntity;
 import org.biokoframework.system.entity.description.ParameterEntityBuilder;
+import org.biokoframework.system.entity.login.Login;
+import org.biokoframework.system.exceptions.CommandExceptionsFactory;
+import org.biokoframework.system.repository.service.IRepositoryService;
 import org.biokoframework.system.services.authentication.token.ITokenAuthenticationService;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.fields.Fields;
+import org.biokoframework.utils.repository.Repository;
 
 
 public class EngagedCheckInCommand extends AbstractCommand {
@@ -57,13 +62,18 @@ public class EngagedCheckInCommand extends AbstractCommand {
 	@Override
 	public Fields execute(Fields input) throws CommandException {
 		logInput(input);
-		
-		Authentication auth = fAuthService.requestToken(input);
-		
+
+        Repository<Login> loginRepo = getRepository(Login.class);
+        Login login = loginRepo.retrieve((String) input.get("authLoginId"));
+
+        Authentication auth = fAuthService.requestToken(login);
+
+        String token = auth.get(Authentication.TOKEN);
+        long tokenExpire = auth.get(Authentication.TOKEN_EXPIRE);
 		Fields fields = new Fields(
-				Authentication.TOKEN, auth.get(Authentication.TOKEN),
-				Authentication.TOKEN_EXPIRE, auth.get(Authentication.TOKEN_EXPIRE));
-		
+				Authentication.TOKEN, token,
+				Authentication.TOKEN_EXPIRE, tokenExpire);
+
 		String roles = auth.get(Authentication.ROLES);
 		if (!StringUtils.isEmpty(roles)) {
 			fields.put(Authentication.ROLES, roles);
@@ -71,7 +81,9 @@ public class EngagedCheckInCommand extends AbstractCommand {
 		
 		List<Fields> response = Arrays.asList(fields);
  		
-		Fields result = new Fields(GenericFieldNames.RESPONSE, response);
+		Fields result = new Fields(GenericFieldNames.RESPONSE, response,
+                Authentication.TOKEN, token,
+                Authentication.TOKEN_EXPIRE, tokenExpire);
 		logOutput(result);
 		return result;
 	}

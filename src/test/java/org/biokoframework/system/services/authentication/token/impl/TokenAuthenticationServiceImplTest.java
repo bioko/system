@@ -134,10 +134,6 @@ public class TokenAuthenticationServiceImplTest {
 		String token = "thisIsTheToken123456";
 		TestRandomGeneratorService.setSingleRandomValue("authToken", token);
 		
-		Fields inputFields = new Fields(
-				Login.USER_EMAIL, login.get(Login.USER_EMAIL),
-				Login.PASSWORD, login.get(Login.PASSWORD));
-
 		Authentication expectedAuthentication = fEntitiesBuilder.getInstance(Authentication.class, new Fields(
 				DomainEntity.ID, "1",
 				Authentication.LOGIN_ID, login.getId(),
@@ -147,7 +143,7 @@ public class TokenAuthenticationServiceImplTest {
 		
 		fAuthService = fInjector.getInstance(TokenAuthenticationServiceImpl.class);
 		
-		Authentication authentication = fAuthService.requestToken(inputFields);
+		Authentication authentication = fAuthService.requestToken(login);
 		assertThat(authentication, is(valid()));
 		assertThat(authentication, is(equalTo(expectedAuthentication)));
 		

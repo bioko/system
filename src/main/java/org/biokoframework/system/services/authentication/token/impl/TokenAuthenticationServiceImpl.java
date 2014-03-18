@@ -27,12 +27,11 @@
 
 package org.biokoframework.system.services.authentication.token.impl;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.naming.AuthenticationException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -43,11 +42,14 @@ import org.biokoframework.system.exceptions.CommandExceptionsFactory;
 import org.biokoframework.system.repository.service.IRepositoryService;
 import org.biokoframework.system.services.authentication.AuthResponse;
 import org.biokoframework.system.services.authentication.AuthenticationFailureException;
+import org.biokoframework.system.services.authentication.IAuthenticationService;
 import org.biokoframework.system.services.authentication.annotation.Auth;
+import org.biokoframework.system.services.authentication.impl.AbstractAuthenticationService;
 import org.biokoframework.system.services.authentication.token.ITokenAuthenticationService;
 import org.biokoframework.system.services.currenttime.ICurrentTimeService;
 import org.biokoframework.system.services.entity.IEntityBuilderService;
 import org.biokoframework.system.services.random.IRandomService;
+import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.exception.ValidationException;
 import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.repository.Repository;
@@ -59,7 +61,7 @@ import org.biokoframework.utils.repository.RepositoryException;
  * @date Mar 6, 2014
  *
  */
-public class TokenAuthenticationServiceImpl implements ITokenAuthenticationService {
+public class TokenAuthenticationServiceImpl extends AbstractAuthenticationService implements ITokenAuthenticationService {
 
     private static final Logger LOGGER = Logger.getLogger(TokenAuthenticationServiceImpl.class);
 
@@ -73,9 +75,10 @@ public class TokenAuthenticationServiceImpl implements ITokenAuthenticationServi
 	private final ICurrentTimeService fTime;
 	private final long fValidityIntervalSecs;
 
-	@Inject
+    @Inject
 	public TokenAuthenticationServiceImpl(IEntityBuilderService entityBuilderService, IRepositoryService repoService, 
-			IRandomService randomService, ICurrentTimeService currentTimeService, @Named("tokenValiditySecs") long validityIntervalSecs) {
+			IRandomService randomService, ICurrentTimeService currentTimeService,
+            @Named("tokenValiditySecs") long validityIntervalSecs) {
 		
 		fEntitiesBuilder = entityBuilderService;
 		fLoginRepo = repoService.getRepository(Login.class);
@@ -113,21 +116,8 @@ public class TokenAuthenticationServiceImpl implements ITokenAuthenticationServi
                         AUTH_TOKEN_EXPIRE, auth.get(Authentication.TOKEN_EXPIRE)));
 	}
 
-	private void ensureRoles(List<String> requiredRoles, String userRolesString) throws AuthenticationFailureException {
-		if (StringUtils.isEmpty(userRolesString)) {
-			throw CommandExceptionsFactory.createInsufficientPrivilegesException();
-		}
-		
-		List<String> userRoles = new LinkedList<>(Arrays.asList(userRolesString.split("\\|")));
-		userRoles.retainAll(requiredRoles);		
-		if (userRoles.isEmpty()) {
-			throw CommandExceptionsFactory.createInsufficientPrivilegesException();
-		}
-	}
-
 	@Override
-	public Authentication requestToken(Fields fields) {
-		Login login = authenticateUsingAnOtherService(fields);
+	public Authentication requestToken(Login login) {
 
 		Authentication auth = createAuthenticationFor(login);
 		
@@ -147,10 +137,10 @@ public class TokenAuthenticationServiceImpl implements ITokenAuthenticationServi
 		String token = fRandom.generateString("authToken", 8);
 		
 		return fEntitiesBuilder.getInstance(Authentication.class, new Fields( 
-					GenericFieldNames.LOGIN_ID, login.get(Login.ID),
+					Authentication.LOGIN_ID, login.get(DomainEntity.ID),
 					Authentication.ROLES, login.get(Login.ROLES),
-					GenericFieldNames.AUTH_TOKEN, token,
-					GenericFieldNames.AUTH_TOKEN_EXPIRE, utcTimeSecs));
+					Authentication.TOKEN, token,
+					Authentication.TOKEN_EXPIRE, utcTimeSecs));
 	}
 
 	private boolean isExpired(Authentication authentication) {
@@ -163,12 +153,4 @@ public class TokenAuthenticationServiceImpl implements ITokenAuthenticationServi
         return fTime.getCurrentTimeMillis() / 1000 + fValidityIntervalSecs;
 	}
 
-	private Login authenticateUsingAnOtherService(Fields fields) {
-		Login login = fLoginRepo.retrieveByForeignKey(Login.USER_EMAIL, (String) fields.get(Login.USER_EMAIL));
-		if (login.get(Login.PASSWORD).equals(fields.get(Login.PASSWORD))) {
-			return login;
-		}
-		return null;
-	}
-	
 }
