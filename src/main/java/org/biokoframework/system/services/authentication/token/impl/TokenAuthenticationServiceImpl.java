@@ -134,7 +134,7 @@ public class TokenAuthenticationServiceImpl extends AbstractAuthenticationServic
 	private Authentication createAuthenticationFor(Login login) {
 		
 		long utcTimeSecs = fTime.getCurrentTimeMillis() / 1000 + fValidityIntervalSecs;
-		String token = fRandom.generateString("authToken", 8);
+		String token = fRandom.generateUUID().toString();
 		
 		return fEntitiesBuilder.getInstance(Authentication.class, new Fields( 
 					Authentication.LOGIN_ID, login.get(DomainEntity.ID),

@@ -29,6 +29,8 @@ package org.biokoframework.system.services.random;
 
 import org.biokoframework.system.services.Service;
 
+import java.util.UUID;
+
 /**
  * 
  * @author Mikol Faro <mikol.faro@gmail.com>
@@ -40,5 +42,7 @@ public interface IRandomService extends Service {
 	String generateString(String label, int length);
 	
 	Long generateInteger(String label, int n);
+
+    UUID generateUUID();
 	
 }

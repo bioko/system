@@ -30,6 +30,7 @@ package org.biokoframework.system.services.random.impl;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import org.biokoframework.system.services.random.IRandomService;
 
@@ -119,7 +120,12 @@ public class TestRandomGeneratorService implements IRandomService {
 		return value;
 	}
 
-	public static void addRandomQueueInt(String queueLabel, List<Long> randomValues) {
+    @Override
+    public UUID generateUUID() {
+        return UUID.fromString("00000000-0000-0000-0000-000000000000");
+    }
+
+    public static void addRandomQueueInt(String queueLabel, List<Long> randomValues) {
 		_fakeRandomQueuesInt.put(queueLabel, randomValues);
 		Integer queueIdx = new Integer(-1);
 		_currentIndexesInt.put(queueLabel, queueIdx);
