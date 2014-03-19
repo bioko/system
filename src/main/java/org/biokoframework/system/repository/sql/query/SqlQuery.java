@@ -27,10 +27,7 @@
 
 package org.biokoframework.system.repository.sql.query;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -48,11 +45,11 @@ import org.biokoframework.utils.repository.query.Query;
 public class SqlQuery<DE extends DomainEntity> implements Query<DE> {
 
 	// SELECT, UPDATE, DELETE
-	private SqlMethod _method;
+	private SqlMethod fMethod;
 
 	// FROM
-	private SqlRepository<DE> _sqlRepository;
-	private Class<DE> _entityClass;
+	private SqlRepository<DE> fSqlRepository;
+	private Class<DE> fEntityClass;
 
 	// WHERE
 	private List<Entry<SqlLogicOperator, SqlConstraint<DE>>> fConstraints = new LinkedList<Entry<SqlLogicOperator, SqlConstraint<DE>>>();
@@ -76,8 +73,8 @@ public class SqlQuery<DE extends DomainEntity> implements Query<DE> {
 	@Override
 	public SqlQuery<DE> from(Repository<DE> repository, Class<DE> entityClass) {
 		if (repository instanceof SqlRepository) {
-			_entityClass = entityClass;
-			_sqlRepository = (SqlRepository<DE>) repository;
+			fEntityClass = entityClass;
+			fSqlRepository = (SqlRepository<DE>) repository;
 		}
 		return this;
 	}
@@ -107,26 +104,17 @@ public class SqlQuery<DE extends DomainEntity> implements Query<DE> {
 	public ArrayList<DE> getAll() {
 
 		ArrayList<DE> entities = new ArrayList<DE>();
+        ResultSet result = null;
 		try {
 			prepareStatement();
 			fStatement.execute();
-			ResultSet result = null;
 			if ((result = fStatement.getResultSet()) != null) {
-				entities = SqlStatementsHelper.retrieveEntities(result, _entityClass, _sqlRepository.getTranslator(), fEntityBuilderService);
+				entities = SqlStatementsHelper.retrieveEntities(result, fEntityClass, fSqlRepository.getTranslator(), fEntityBuilderService);
 			}
 		} catch (SQLException exception) {
 			exception.printStackTrace();
 		} finally {
-			try {
-				if (fStatement != null && !fStatement.isClosed()) {
-					fStatement.close();
-				}
-				if (fConnection != null && !fConnection.isClosed()) {
-					fConnection.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+            closeDumbSql(fConnection, fStatement, result);
 		}
 
 		return entities;
@@ -134,19 +122,19 @@ public class SqlQuery<DE extends DomainEntity> implements Query<DE> {
 
 	@Override
 	public SqlQuery<DE> select() {
-		_method = SqlMethod.SELECT;
+		fMethod = SqlMethod.SELECT;
 		return this;
 	}
 
 	@Override
 	public SqlQuery<DE> update() {
-		_method = SqlMethod.UPDATE;
+		fMethod = SqlMethod.UPDATE;
 		return this;
 	}
 
 	@Override
 	public SqlQuery<DE> delete() {
-		_method = SqlMethod.DELETE;
+		fMethod = SqlMethod.DELETE;
 		return this;
 	}
 
@@ -174,11 +162,11 @@ public class SqlQuery<DE extends DomainEntity> implements Query<DE> {
 	@Override
 	public String toString() {
 		StringBuilder s = new StringBuilder();
-		s.append(_method).append(" * ");
+		s.append(fMethod).append(" * ");
 		
 		s.append("from ");
-		if (_sqlRepository != null) {
-			s.append(_sqlRepository.getTableName());
+		if (fSqlRepository != null) {
+			s.append(fSqlRepository.getTableName());
 		} else {
 			s.append("?");
 		}
@@ -195,9 +183,9 @@ public class SqlQuery<DE extends DomainEntity> implements Query<DE> {
 
 	public String toSqlString() {
 		StringBuilder s = new StringBuilder();
-		s.append(_method).append(" * ");
-		if (_sqlRepository != null) {
-			s.append("from ").append(_sqlRepository.getTableName());
+		s.append(fMethod).append(" * ");
+		if (fSqlRepository != null) {
+			s.append("from ").append(fSqlRepository.getTableName());
 		}
 		if (!fConstraints.isEmpty()) {
 			s.append(" where");
@@ -216,11 +204,27 @@ public class SqlQuery<DE extends DomainEntity> implements Query<DE> {
 
 			for (Entry<SqlLogicOperator, SqlConstraint<DE>> aConnectedConstraint : fConstraints) {
 				SqlConstraint<DE> aConstraint = aConnectedConstraint.getValue();
-				aConstraint.prepareStatement(fStatement, _sqlRepository.getTranslator(), _sqlRepository.getFieldNames());
+				aConstraint.prepareStatement(fStatement, fSqlRepository.getTranslator(), fSqlRepository.getFieldNames());
 			}
 		}
 	}
 
-	
+    private void closeDumbSql(Connection connection, Statement statement, ResultSet set) {
+        if (set != null) {
+            try {
+                set.close();
+            } catch (SQLException e) { }
+        }
+        if (statement != null) {
+            try {
+                statement.close();
+            } catch (SQLException closeException) { }
+        }
+        if (connection != null) {
+            try {
+                connection.close();
+            } catch (SQLException closeException) { }
+        }
+    }
 
 }

@@ -33,12 +33,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.apache.log4j.Logger;
 import org.biokoframework.system.repository.sql.query.SqlOperator;
 import org.biokoframework.system.repository.sql.translator.SqlTypesTranslator;
 
-public abstract class SqlConnector {	
-	
-	protected SqlTypesTranslator _typesTranslator;
+public abstract class SqlConnector {
+
+    private static final Logger LOGGER = Logger.getLogger(SqlConnector.class);
+    protected SqlTypesTranslator _typesTranslator;
 	
 	
 	public SqlConnector() {
@@ -63,29 +65,61 @@ public abstract class SqlConnector {
 	}
 	
 	public boolean tableExist(String tableName) throws SQLException {
-		Connection connection = getConnection();
-		DatabaseMetaData meta = connection.getMetaData();
+        Connection connection = null;
+        ResultSet result = null;
+        try {
+			connection = getConnection();
+			DatabaseMetaData meta = connection.getMetaData();
 
-		ResultSet result = meta.getTables(null, null, tableName, new String[] {"TABLE"});
-		boolean exist = result.first();
-	
-		result.close();
-		connection.close();
-		
-		return exist;
+			result = meta.getTables(null, null, tableName, new String[] {"TABLE"});
+			boolean exist = result.first();
+
+			result.close();
+			connection.close();
+			return exist;
+		} catch (SQLException exception) {
+			 closeDumbSql(connection, null, result);
+            LOGGER.error("Sql Exception", exception);
+            return false;
+		}
+
 	}
 	
 	public abstract Long getLastInsertId(Connection con) throws SQLException;
 
 	public void emptyTable(String tableName) throws SQLException {
-		Connection con = getConnection();
-		Statement st = con.createStatement();
-		st.execute("TRUNCATE TABLE "+tableName);
-		st.close();
-		con.close();
+		Connection con = null;
+		Statement st = null;
+		try {
+			con = getConnection();
+			st = con.createStatement();
+			st.execute("TRUNCATE TABLE "+tableName);
+			st.close();
+			con.close();
+		} catch (SQLException exception) {
+			LOGGER.error("Sql Exception", exception);
+			closeDumbSql(con, st, null);
+		}
 	}
 
 	public abstract String createQueryFragment(String fieldName, SqlOperator operator, boolean negateOperator);
 
-	
+	    private void closeDumbSql(Connection connection, Statement statement, ResultSet resultSet) {
+        if (resultSet != null) {
+            try {
+                resultSet.close();
+            } catch (SQLException closeException) { }
+        }
+        if (statement != null) {
+            try {
+                statement.close();
+            } catch (SQLException closeException) { }
+        }
+        if (connection != null) {
+            try {
+                connection.close();
+            } catch (SQLException closeException) { }
+        }
+    }
+
 }

@@ -47,6 +47,9 @@ import org.biokoframework.system.repository.sql.translator.annotation.impl.Strin
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 
 @Translators(
 		collection = { 
@@ -66,31 +69,31 @@ public class MySQLConnector extends SqlConnector {
 
 	private static final Logger LOGGER = Logger.getLogger(MySQLConnector.class);
 	
-	private String _url;
-	private Connection _connectionInstance;
-	
-	
+	private String url;
 
-	public MySQLConnector(String dbUrl, String dbName, String dbUser, String dbPassword, String dbPort) {		
+    @Inject
+	public MySQLConnector(@Named("dbUrl") String dbUrl, @Named("dbName") String dbName, @Named("dbUser") String dbUser,
+                          @Named("dbPassword") String dbPassword, @Named("dbPort") String dbPort) {
 		configureConnectionURL(dbUrl, dbName, dbUser, dbPassword, dbPort);		
 	}
 	
 	private void configureConnectionURL(String dbUrl, String dbName, String dbUser, String dbPassword, String dbPort) {
 		try {
 		    Class.forName("com.mysql.jdbc.Driver");
-		    _url = StringUtils.replace(dbUrl, "${dbName}", dbName);
-		    _url = StringUtils.replace(_url, "${dbUser}", dbUser);
-		    _url = StringUtils.replace(_url, "${dbPassword}", dbPassword);
-		    _url = StringUtils.replace(_url, "${dbPort}", dbPort);
+		    url = StringUtils.replace(dbUrl, "${dbName}", dbName);
+		    url = StringUtils.replace(url, "${dbUser}", dbUser);
+		    url = StringUtils.replace(url, "${dbPassword}", dbPassword);
+		    url = StringUtils.replace(url, "${dbPort}", dbPort);
 		} catch (Exception e) {
 		    e.printStackTrace();
 		}
 	}
 	
     public Connection getConnection() throws SQLException {
-		try {
+        Connection connectionInstance;
+        try {
 //			if (_connectionInstance == null || _connectionInstance.isClosed()) {
-				_connectionInstance = DriverManager.getConnection(_url);
+				connectionInstance = DriverManager.getConnection(url);
 //			}
 		} catch (SQLException exception) {
 			if (exception.getMessage().contains("Unknown database")) {
@@ -102,7 +105,7 @@ public class MySQLConnector extends SqlConnector {
 			exception.printStackTrace();
 			throw exception;
 		}
-		return _connectionInstance;
+		return connectionInstance;
     }
 		
 

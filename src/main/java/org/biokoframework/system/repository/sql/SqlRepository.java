@@ -27,10 +27,7 @@
 
 package org.biokoframework.system.repository.sql;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
@@ -60,11 +57,10 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 
 	private LinkedHashMap<String, Field> fFieldNames;
 	private SqlTypesTranslator fTranslator;
-	
-	@Inject
-	public SqlRepository(Class<DE> entityClass, String tableName, SqlConnector connector, IEntityBuilderService entityBuilderService) throws RepositoryException {
+
+	public SqlRepository(Class entityClass, String tableName, SqlConnector connector, IEntityBuilderService entityBuilderService) throws RepositoryException {
 		super(entityBuilderService);
-		fEntityClass = entityClass;
+		fEntityClass = (Class<DE>) entityClass;
 		fTableName = tableName;
 		try {
 			fFieldNames = ComponingFieldsFactory.createWithAnnotation(fEntityClass);
@@ -77,9 +73,11 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 		fTranslator = connector.getTypesTranslator();
 		ensureTable();
 	}
-	
-	
-	public SqlRepository(Class<DE> entityClass, SqlConnector connectionHelper, IEntityBuilderService entityBuilderService) throws RepositoryException {
+
+
+    @SuppressWarnings("rawtypes")
+    @Inject
+	public SqlRepository(Class entityClass, SqlConnector connectionHelper, IEntityBuilderService entityBuilderService) throws RepositoryException {
 		this(entityClass, entityClass.getSimpleName(), connectionHelper, entityBuilderService);
 	}
 	
@@ -100,9 +98,11 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 
 	private DE insert(DE entity) throws RepositoryException {
 		String id = null;
+        Connection connection = null;
+        PreparedStatement insertStatement = null;
 		try {
-			Connection connection = fDbConnector.getConnection();
-			PreparedStatement insertStatement = SqlStatementsHelper.preparedCreateStatement(fEntityClass, fTableName, connection);
+			connection = fDbConnector.getConnection();
+			insertStatement = SqlStatementsHelper.preparedCreateStatement(fEntityClass, fTableName, connection);
 			
 			int i = 1;
 			for (Entry<String, Field> anEntry : fFieldNames.entrySet()) {
@@ -119,6 +119,7 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 			connection.close();
 		} catch (SQLException exception) {
 			LOGGER.error("Error in insert", exception);
+            closeDumbSql(connection, insertStatement, null);
 		}
 		
 		if (!StringUtils.isEmpty(id) && !id.equals("0")) {
@@ -131,9 +132,11 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 
 	private DE update(DE entity) {
 		boolean updated = false;
+		Connection connection = null;
+		PreparedStatement updateStatement = null;
 		try {
-			Connection connection = fDbConnector.getConnection();
-			PreparedStatement updateStatement = SqlStatementsHelper.preparedUpdateStatement(fEntityClass, fTableName, connection);
+			connection = fDbConnector.getConnection();
+			updateStatement = SqlStatementsHelper.preparedUpdateStatement(fEntityClass, fTableName, connection);
 			int i = 1;
 			for (Entry<String, Field> anEntry : fFieldNames.entrySet()) {
 				String aFieldName = anEntry.getKey();
@@ -149,6 +152,7 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 			connection.close();
 		} catch (SQLException exception) {
 			LOGGER.error("Error in retrieve", exception);
+            closeDumbSql(connection, updateStatement, null);
 		}
 		if (updated) {
 			return entity;
@@ -161,23 +165,18 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 	public DE retrieve(String anEntityKey) {
 		ArrayList<DE> entities = new ArrayList<DE>();
 		Connection connection = null;
+		PreparedStatement retrieveStatement = null;
 		try {
 			connection = fDbConnector.getConnection();
-			PreparedStatement retrieveStatement = SqlStatementsHelper.preparedRetrieveByIdStatement(fEntityClass, fTableName, connection);
+			retrieveStatement = SqlStatementsHelper.preparedRetrieveByIdStatement(fEntityClass, fTableName, connection);
 			retrieveStatement.setObject(1, anEntityKey);
 			retrieveStatement.execute();
 			
 			entities = SqlStatementsHelper.retrieveEntities(retrieveStatement.getResultSet(), fEntityClass, fTranslator, fEntityBuilderService);
-			connection.close();
 		} catch (SQLException exception) {
 			exception.printStackTrace();
 		} finally {
-			try {
-				if (connection != null && !connection.isClosed())
-					connection.close();
-			} catch (SQLException exception) {
-				exception.printStackTrace();
-			}
+            closeDumbSql(connection, retrieveStatement, null);
 		}
 		if (entities.isEmpty()) {
 			return null;
@@ -197,15 +196,20 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 	public DE delete(String anEntityKey) {
 		DE toBeDeleted = retrieve(anEntityKey);
 		boolean deleted = false;
+
+        Connection connection = null;
+        PreparedStatement deleteStatement = null;
 		try {
-			Connection connection = fDbConnector.getConnection();
-			PreparedStatement deleteStatement = SqlStatementsHelper.preparedDeleteByIdStatement(fEntityClass, fTableName, connection);
+			connection = fDbConnector.getConnection();
+			deleteStatement = SqlStatementsHelper.preparedDeleteByIdStatement(fEntityClass, fTableName, connection);
 			deleteStatement.setString(1, anEntityKey);
 			deleteStatement.execute();
 			
 			deleted = deleteStatement.getUpdateCount() > 0;
+			deleteStatement.close();
 			connection.close();
 		} catch (SQLException exception) {
+            closeDumbSql(connection, deleteStatement, null);
 			exception.printStackTrace();
 		}
 		
@@ -219,14 +223,18 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 	@Override
 	public ArrayList<DE> getAll() {
 		ArrayList<DE> entities = new ArrayList<DE>();
+		Connection connection = null;
+		PreparedStatement retrieveStatement = null;
 		try {
-			Connection connection = fDbConnector.getConnection();
-			PreparedStatement retrieveStatement = SqlStatementsHelper.preparedRetrieveAllStatement(fEntityClass, fTableName, connection);
+			connection = fDbConnector.getConnection();
+			retrieveStatement = SqlStatementsHelper.preparedRetrieveAllStatement(fEntityClass, fTableName, connection);
 			retrieveStatement.execute();
 			
 			entities = SqlStatementsHelper.retrieveEntities(retrieveStatement.getResultSet(), fEntityClass, fTranslator, fEntityBuilderService);
+			retrieveStatement.close();
 			connection.close();
 		} catch (SQLException exception) {
+            closeDumbSql(connection, retrieveStatement, null);
 			exception.printStackTrace();
 		}
 		return entities;
@@ -248,17 +256,7 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 		} catch (SQLException exception) {
 			exception.printStackTrace();
 		} finally {
-			try {
-				if (retrieveStatement != null && !retrieveStatement.isClosed()) {
-					retrieveStatement.close();
-				}
-				if (connection != null && !connection.isClosed()) {
-					connection.close();
-				}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			closeDumbSql(connection, retrieveStatement, null);
 		}
 		return entities;
 	}
@@ -266,9 +264,11 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 	@Override
 	public DE retrieveByForeignKey(String foreignKeyName, String foreignKeyValue) {
 		ArrayList<DE> entities = new ArrayList<DE>();
+		Connection connection = null;
+		PreparedStatement retrieveStatement = null;
 		try {
-			Connection connection = fDbConnector.getConnection();
-			PreparedStatement retrieveStatement = SqlStatementsHelper.prepareRetrieveOneByForeignKey(fEntityClass, fTableName, connection, foreignKeyName);
+			connection = fDbConnector.getConnection();
+			retrieveStatement = SqlStatementsHelper.prepareRetrieveOneByForeignKey(fEntityClass, fTableName, connection, foreignKeyName);
 			retrieveStatement.setString(1, foreignKeyValue);
 			retrieveStatement.execute();
 			
@@ -278,6 +278,8 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 		} catch (SQLException exception) {
 			LOGGER.error("Retrieve:", exception);
 			exception.printStackTrace();
+		} finally {
+			closeDumbSql(connection, retrieveStatement, null);
 		}
 		if (entities.isEmpty()) {
 			return null;
@@ -321,8 +323,11 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 	
 	
 	private void createTableFor(Class<DE> entityClass, SqlConnector helper) throws SQLException {
-		
-		Connection connection = helper.getConnection();
+		Connection connection = null;
+        Statement statement = null;
+        try {
+
+            connection = helper.getConnection();
 		
 		ArrayList<String> fieldEntries = new ArrayList<String>();
 		try {
@@ -344,10 +349,31 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 				append(" (").append(StringUtils.join(fieldEntries, ", ")).append(") ").append(fDbConnector.getCreateTableTail());
 		
 //		System.out.println(sql);
-		Statement statement = connection.createStatement();
-		statement.execute(sql.toString());
-		statement.close();
-		connection.close();
+			statement = connection.createStatement();
+			statement.execute(sql.toString());
+			statement.close();
+			connection.close();
+        } catch (SQLException exception) {
+            closeDumbSql(connection, statement, null);
+        }
 	}
+
+    private void closeDumbSql(Connection connection, Statement statement, ResultSet set) {
+        if (set != null) {
+            try {
+                set.close();
+            } catch (SQLException e) { }
+        }
+        if (statement != null) {
+            try {
+                statement.close();
+            } catch (SQLException closeException) { }
+        }
+        if (connection != null) {
+            try {
+                connection.close();
+            } catch (SQLException closeException) { }
+        }
+    }
 
 }
