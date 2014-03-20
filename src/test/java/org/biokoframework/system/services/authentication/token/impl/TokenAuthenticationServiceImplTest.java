@@ -131,14 +131,11 @@ public class TokenAuthenticationServiceImplTest {
 		Login login = fLoginBuilder.loadDefaultExample().build(false);
 		login = fLoginRepo.save(login);
 
-		String token = "thisIsTheToken123456";
-		TestRandomGeneratorService.setSingleRandomValue("authToken", token);
-		
 		Authentication expectedAuthentication = fEntitiesBuilder.getInstance(Authentication.class, new Fields(
 				DomainEntity.ID, "1",
 				Authentication.LOGIN_ID, login.getId(),
 				Authentication.ROLES, login.get(Login.ROLES),
-				Authentication.TOKEN, token,
+				Authentication.TOKEN, "00000000-0000-0000-0000-000000000000",
 				Authentication.TOKEN_EXPIRE, fTimeService.getCurrentTimeMillis() / 1000 + fTokenValiditySecs));
 		
 		fAuthService = fInjector.getInstance(TokenAuthenticationServiceImpl.class);
