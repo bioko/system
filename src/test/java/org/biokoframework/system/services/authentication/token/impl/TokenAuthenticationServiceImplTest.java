@@ -27,12 +27,10 @@
 
 package org.biokoframework.system.services.authentication.token.impl;
 
-import static org.biokoframework.utils.matcher.Matchers.contains;
-import static org.biokoframework.utils.matcher.Matchers.valid;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
-
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.name.Names;
 import org.biokoframework.system.ConfigurationEnum;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.entity.authentication.Authentication;
@@ -44,35 +42,31 @@ import org.biokoframework.system.repository.memory.InMemoryRepository;
 import org.biokoframework.system.repository.service.IRepositoryService;
 import org.biokoframework.system.services.authentication.AuthResponse;
 import org.biokoframework.system.services.authentication.AuthenticationFailureException;
-import org.biokoframework.system.services.authentication.annotation.Auth;
 import org.biokoframework.system.services.currenttime.CurrentTimeModule;
 import org.biokoframework.system.services.currenttime.impl.TestCurrentTimeService;
 import org.biokoframework.system.services.entity.EntityModule;
 import org.biokoframework.system.services.entity.IEntityBuilderService;
 import org.biokoframework.system.services.random.RandomModule;
-import org.biokoframework.system.services.random.impl.TestRandomGeneratorService;
 import org.biokoframework.system.services.repository.RepositoryModule;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.domain.EntityBuilder;
 import org.biokoframework.utils.exception.ValidationException;
 import org.biokoframework.utils.fields.Fields;
-import org.biokoframework.utils.matcher.Matchers;
 import org.biokoframework.utils.repository.Repository;
 import org.biokoframework.utils.repository.RepositoryException;
 import org.biokoframework.utils.validation.ValidationModule;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
-
-import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.name.Names;
 import org.junit.rules.ExpectedException;
 
-import javax.annotation.Resource;
 import java.util.Collections;
+
+import static org.biokoframework.utils.matcher.Matchers.contains;
+import static org.biokoframework.utils.matcher.Matchers.valid;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * 

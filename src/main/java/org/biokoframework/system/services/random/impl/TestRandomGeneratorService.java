@@ -27,12 +27,12 @@
 
 package org.biokoframework.system.services.random.impl;
 
+import org.biokoframework.system.services.random.IRandomService;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
-
-import org.biokoframework.system.services.random.IRandomService;
 
 public class TestRandomGeneratorService implements IRandomService {
 	

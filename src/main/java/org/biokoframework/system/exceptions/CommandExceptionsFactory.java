@@ -27,9 +27,6 @@
 
 package org.biokoframework.system.exceptions;
 
-import java.util.HashMap;
-import java.util.List;
-
 import org.biokoframework.system.KILL_ME.exception.CommandNotFoundException;
 import org.biokoframework.system.command.CommandException;
 import org.biokoframework.system.entity.EntityNotFoundException;
@@ -37,6 +34,9 @@ import org.biokoframework.system.services.authentication.AuthenticationFailureEx
 import org.biokoframework.utils.domain.ErrorEntity;
 import org.biokoframework.utils.fields.FieldNames;
 import org.biokoframework.utils.fields.Fields;
+
+import java.util.HashMap;
+import java.util.List;
 
 public class CommandExceptionsFactory {
 	

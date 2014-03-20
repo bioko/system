@@ -27,8 +27,6 @@
 
 package org.biokoframework.system.command;
 
-import javax.inject.Inject;
-
 import org.apache.log4j.Logger;
 import org.biokoframework.system.context.Context;
 import org.biokoframework.system.repository.service.IRepositoryService;
@@ -38,6 +36,8 @@ import org.biokoframework.utils.fields.FieldNames;
 import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.json.JSonBuilder;
 import org.biokoframework.utils.repository.Repository;
+
+import javax.inject.Inject;
 
 
 public abstract class AbstractCommand implements ICommand {

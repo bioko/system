@@ -27,13 +27,6 @@
 
 package org.biokoframework.system.command.authentication;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
 import org.apache.commons.lang3.StringUtils;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.command.AbstractCommand;
@@ -53,6 +46,12 @@ import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.repository.Repository;
 import org.joda.time.DateTime;
 import org.joda.time.format.ISODateTimeFormat;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RequestPasswordResetCommand extends AbstractCommand {
 

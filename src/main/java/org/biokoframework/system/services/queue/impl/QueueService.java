@@ -27,8 +27,7 @@
 
 package org.biokoframework.system.services.queue.impl;
 
-import java.util.List;
-
+import com.google.inject.Inject;
 import org.apache.log4j.Logger;
 import org.biokoframework.system.repository.service.IRepositoryService;
 import org.biokoframework.system.services.queue.IQueueService;
@@ -38,7 +37,7 @@ import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.repository.Repository;
 import org.biokoframework.utils.repository.RepositoryException;
 
-import com.google.inject.Inject;
+import java.util.List;
 
 
 // TODO all the queue can be replaced by two queries:

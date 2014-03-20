@@ -27,6 +27,7 @@
 
 package org.biokoframework.system.services.email.impl;
 
+import com.google.inject.Inject;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.CommandException;
@@ -34,8 +35,6 @@ import org.biokoframework.system.services.email.EmailException;
 import org.biokoframework.system.services.email.IEmailService;
 import org.biokoframework.system.services.queue.IQueueService;
 import org.biokoframework.utils.fields.Fields;
-
-import com.google.inject.Inject;
 
 public class SendMailCommand extends AbstractCommand {
 

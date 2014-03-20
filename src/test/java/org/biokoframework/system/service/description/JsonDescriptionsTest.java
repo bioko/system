@@ -27,11 +27,6 @@
 
 package org.biokoframework.system.service.description;
 
-import static org.biokoframework.utils.matcher.Matchers.matchesJSONString;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
-
 import org.biokoframework.system.ConfigurationEnum;
 import org.biokoframework.system.entity.login.Login;
 import org.biokoframework.system.service.description.dummy.DummyEntityWithLocation;
@@ -39,6 +34,11 @@ import org.biokoframework.system.service.description.dummy.DummyReferencingEntit
 import org.biokoframework.system.service.description.dummy.DummySystemCommands;
 import org.biokoframework.system.services.repository.RepositoryModule;
 import org.junit.Test;
+
+import static org.biokoframework.utils.matcher.Matchers.matchesJSONString;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
 public class JsonDescriptionsTest {
 

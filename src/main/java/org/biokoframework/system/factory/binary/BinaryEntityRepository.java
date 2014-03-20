@@ -27,16 +27,6 @@
 
 package org.biokoframework.system.factory.binary;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.UUID;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
@@ -49,6 +39,15 @@ import org.biokoframework.utils.repository.Repository;
 import org.biokoframework.utils.repository.RepositoryException;
 import org.biokoframework.utils.repository.query.Query;
 import org.joda.time.DateTime;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.UUID;
 
 public class BinaryEntityRepository extends AbstractRepository<BinaryEntity> {
 

@@ -27,13 +27,13 @@
 
 package org.biokoframework.system.services.push.impl;
 
+import org.biokoframework.system.services.push.IPushNotificationService;
+import org.biokoframework.system.services.push.NotificationFailureException;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
-import org.biokoframework.system.services.push.IPushNotificationService;
-import org.biokoframework.system.services.push.NotificationFailureException;
 
 public class TestPushNotificationService implements IPushNotificationService {
 

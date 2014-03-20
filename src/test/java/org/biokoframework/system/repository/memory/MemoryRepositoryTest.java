@@ -27,12 +27,8 @@
 
 package org.biokoframework.system.repository.memory;
 
-import static org.hamcrest.Matchers.arrayContainingInAnyOrder;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-
-import java.util.List;
-
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import org.biokoframework.system.repository.memory.dummy1.ASDummyEntity1;
 import org.biokoframework.system.repository.memory.dummy1.ASDummyEntity1Builder;
 import org.biokoframework.system.services.entity.EntityModule;
@@ -44,8 +40,11 @@ import org.json.simple.JSONValue;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
+import java.util.List;
+
+import static org.hamcrest.Matchers.arrayContainingInAnyOrder;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 
 public class MemoryRepositoryTest {

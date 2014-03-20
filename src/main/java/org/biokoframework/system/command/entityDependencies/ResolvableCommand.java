@@ -27,8 +27,6 @@
 
 package org.biokoframework.system.command.entityDependencies;
 
-import java.util.ArrayList;
-
 import org.apache.log4j.Logger;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldValues;
@@ -43,6 +41,8 @@ import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.exception.ValidationException;
 import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.repository.Repository;
+
+import java.util.ArrayList;
 
 public class ResolvableCommand extends AbstractCommand {
 

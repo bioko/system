@@ -27,13 +27,13 @@
 
 package org.biokoframework.system.services.random;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.ArrayList;
-
 import org.biokoframework.system.services.random.impl.ProdRandomGeneratorService;
 import org.biokoframework.system.services.random.impl.TestRandomGeneratorService;
 import org.junit.Test;
+
+import java.util.ArrayList;
+
+import static org.junit.Assert.assertEquals;
 
 public class RandomGeneratorServiceTests {
 	

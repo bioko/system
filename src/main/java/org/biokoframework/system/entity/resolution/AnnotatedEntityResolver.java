@@ -27,15 +27,15 @@
 
 package org.biokoframework.system.entity.resolution;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map.Entry;
-
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.domain.annotation.field.ForeignKeysFactory;
 import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.repository.Repository;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map.Entry;
 
 public class AnnotatedEntityResolver implements EntityResolver {
 

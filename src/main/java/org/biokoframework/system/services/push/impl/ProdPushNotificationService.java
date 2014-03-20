@@ -27,10 +27,9 @@
 
 package org.biokoframework.system.services.push.impl;
 
-import org.biokoframework.system.services.queue.IQueueService;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import org.biokoframework.system.services.queue.IQueueService;
 
 /**
  * 

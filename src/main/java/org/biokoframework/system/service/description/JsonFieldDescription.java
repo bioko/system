@@ -27,10 +27,10 @@
 
 package org.biokoframework.system.service.description;
 
-import java.util.HashMap;
-
 import org.json.simple.JSONAware;
 import org.json.simple.JSONValue;
+
+import java.util.HashMap;
 
 public class JsonFieldDescription implements JSONAware {
 

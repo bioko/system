@@ -27,9 +27,6 @@
 
 package org.biokoframework.system.command.KILL_ME;
 
-import java.util.LinkedHashMap;
-import java.util.Map.Entry;
-
 import org.apache.log4j.Logger;
 import org.biokoframework.system.KILL_ME.FieldsErrors;
 import org.biokoframework.system.command.AbstractCommand;
@@ -37,6 +34,9 @@ import org.biokoframework.system.command.CommandException;
 import org.biokoframework.utils.exception.ValidationException;
 import org.biokoframework.utils.fields.FieldNames;
 import org.biokoframework.utils.fields.Fields;
+
+import java.util.LinkedHashMap;
+import java.util.Map.Entry;
 
 @Deprecated
 public class MultipleCommand extends AbstractCommand {

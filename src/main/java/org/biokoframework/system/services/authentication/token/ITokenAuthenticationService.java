@@ -29,9 +29,7 @@ package org.biokoframework.system.services.authentication.token;
 
 import org.biokoframework.system.entity.authentication.Authentication;
 import org.biokoframework.system.entity.login.Login;
-import org.biokoframework.system.services.authentication.AuthenticationFailureException;
 import org.biokoframework.system.services.authentication.IAuthenticationService;
-import org.biokoframework.utils.fields.Fields;
 
 /**
  * 

@@ -27,13 +27,6 @@
 
 package org.biokoframework.system.command.authentication;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.naming.AuthenticationException;
-
 import org.apache.commons.lang3.StringUtils;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.command.AbstractCommand;
@@ -42,12 +35,15 @@ import org.biokoframework.system.entity.authentication.Authentication;
 import org.biokoframework.system.entity.description.ParameterEntity;
 import org.biokoframework.system.entity.description.ParameterEntityBuilder;
 import org.biokoframework.system.entity.login.Login;
-import org.biokoframework.system.exceptions.CommandExceptionsFactory;
-import org.biokoframework.system.repository.service.IRepositoryService;
 import org.biokoframework.system.services.authentication.token.ITokenAuthenticationService;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.repository.Repository;
+
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 public class EngagedCheckInCommand extends AbstractCommand {

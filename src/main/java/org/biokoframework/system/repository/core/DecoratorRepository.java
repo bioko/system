@@ -27,16 +27,15 @@
 
 package org.biokoframework.system.repository.core;
 
-import java.util.ArrayList;
-
-import javax.inject.Inject;
-
 import org.biokoframework.system.services.entity.IEntityBuilderService;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.exception.ValidationException;
 import org.biokoframework.utils.repository.Repository;
 import org.biokoframework.utils.repository.RepositoryException;
 import org.biokoframework.utils.repository.query.Query;
+
+import javax.inject.Inject;
+import java.util.ArrayList;
 
 /**
  * 

@@ -27,12 +27,12 @@
 
 package org.biokoframework.system.command.annotation;
 
+import org.biokoframework.system.command.AbstractFilter;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
-import org.biokoframework.system.command.AbstractFilter;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)

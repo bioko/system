@@ -27,10 +27,10 @@
 
 package org.biokoframework.system.KILL_ME;
 
+import org.biokoframework.utils.fields.Fields;
+
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-
-import org.biokoframework.utils.fields.Fields;
 
 
 public interface XRmiServerInterface extends Remote {

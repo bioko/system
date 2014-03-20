@@ -27,9 +27,9 @@
 
 package org.biokoframework.system.entity.description;
 
-import java.util.ArrayList;
-
 import org.biokoframework.utils.domain.EntityBuilder;
+
+import java.util.ArrayList;
 
 
 public class CommandEntityBuilder extends EntityBuilder<CommandEntity> {

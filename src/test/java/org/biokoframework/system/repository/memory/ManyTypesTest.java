@@ -27,11 +27,8 @@
 
 package org.biokoframework.system.repository.memory;
 
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
-
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import org.biokoframework.system.repository.memory.manytypes.ManyTypesEntity;
 import org.biokoframework.system.repository.memory.manytypes.ManyTypesEntityBuilder;
 import org.biokoframework.system.services.entity.EntityModule;
@@ -42,8 +39,8 @@ import org.biokoframework.utils.validation.ValidationModule;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThat;
 
 /**
  * 

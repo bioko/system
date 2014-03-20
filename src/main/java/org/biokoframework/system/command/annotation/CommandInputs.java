@@ -27,12 +27,12 @@
 
 package org.biokoframework.system.command.annotation;
 
+import org.biokoframework.utils.domain.annotation.field.Field;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
-import org.biokoframework.utils.domain.annotation.field.Field;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)

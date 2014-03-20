@@ -27,13 +27,6 @@
 
 package org.biokoframework.system.repository.sql;
 
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map.Entry;
-
-import javax.inject.Inject;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.biokoframework.system.repository.core.AbstractRepository;
@@ -46,6 +39,12 @@ import org.biokoframework.utils.domain.annotation.field.ComponingFieldsFactory;
 import org.biokoframework.utils.domain.annotation.field.Field;
 import org.biokoframework.utils.exception.ValidationException;
 import org.biokoframework.utils.repository.RepositoryException;
+
+import javax.inject.Inject;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map.Entry;
 
 public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<DE> {
 	

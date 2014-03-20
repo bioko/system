@@ -27,8 +27,8 @@
 
 package org.biokoframework.system.services.email.impl;
 
-import javax.mail.internet.MimeMessage;
-
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import org.biokoframework.system.services.cron.ICronService;
 import org.biokoframework.system.services.email.EmailException;
 import org.biokoframework.system.services.email.IEmailService;
@@ -37,8 +37,7 @@ import org.biokoframework.system.services.email.KILL_ME.EmailServiceImplementati
 import org.biokoframework.system.services.queue.IQueueService;
 import org.biokoframework.utils.fields.Fields;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
+import javax.mail.internet.MimeMessage;
 
 public class EmailService implements IEmailService {
 

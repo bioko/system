@@ -27,9 +27,6 @@
 
 package org.biokoframework.system.command.KILL_ME;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.biokoframework.system.KILL_ME.commons.GenericCommandNames;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
@@ -45,6 +42,9 @@ import org.biokoframework.system.exceptions.CommandExceptionsFactory;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.fields.FieldNames;
 import org.biokoframework.utils.fields.Fields;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Deprecated
 public class GetCommandInvocationInfoCommand extends AbstractCommand {

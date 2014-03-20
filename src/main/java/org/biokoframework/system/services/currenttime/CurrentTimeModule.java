@@ -27,12 +27,11 @@
 
 package org.biokoframework.system.services.currenttime;
 
+import com.google.inject.Module;
 import org.biokoframework.system.ConfigurationEnum;
 import org.biokoframework.system.services.currenttime.impl.ProdCurrentTimeService;
 import org.biokoframework.system.services.currenttime.impl.TestCurrentTimeService;
 import org.biokoframework.system.services.injection.ServiceModule;
-
-import com.google.inject.Module;
 
 /**
  * 

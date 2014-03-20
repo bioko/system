@@ -27,31 +27,26 @@
 
 package org.biokoframework.system.services.cron.impl;
 
-import static org.quartz.CronScheduleBuilder.cronSchedule;
-import static org.quartz.JobBuilder.newJob;
-import static org.quartz.TriggerBuilder.newTrigger;
-import static org.quartz.impl.matchers.KeyMatcher.keyEquals;
-
-import java.util.ArrayList;
-import java.util.List;
-
+import com.google.inject.Inject;
+import com.google.inject.Injector;
+import com.google.inject.Singleton;
+import com.google.inject.name.Named;
 import org.biokoframework.system.KILL_ME.exception.SystemException;
 import org.biokoframework.system.command.ICommand;
 import org.biokoframework.system.services.cron.CronException;
 import org.biokoframework.system.services.cron.ICronListener;
 import org.biokoframework.system.services.cron.ICronService;
 import org.biokoframework.system.services.email.IEmailService;
-import org.quartz.JobDataMap;
-import org.quartz.JobDetail;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
-import org.quartz.Trigger;
+import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
-import com.google.inject.Inject;
-import com.google.inject.Injector;
-import com.google.inject.Singleton;
-import com.google.inject.name.Named;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.quartz.CronScheduleBuilder.cronSchedule;
+import static org.quartz.JobBuilder.newJob;
+import static org.quartz.TriggerBuilder.newTrigger;
+import static org.quartz.impl.matchers.KeyMatcher.keyEquals;
 
 /**
  * 

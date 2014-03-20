@@ -27,6 +27,8 @@
 
 package org.biokoframework.system.services.push.impl;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -43,9 +45,6 @@ import org.biokoframework.system.services.push.IPushNotificationService;
 import org.biokoframework.system.services.push.NotificationFailureException;
 import org.biokoframework.system.services.queue.IQueueService;
 import org.biokoframework.utils.fields.Fields;
-
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
 
 public class SendPushCommand extends AbstractCommand {
 

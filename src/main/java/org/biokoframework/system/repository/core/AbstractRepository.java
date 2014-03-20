@@ -27,9 +27,6 @@
 
 package org.biokoframework.system.repository.core;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.biokoframework.system.services.entity.IEntityBuilderService;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.exception.ValidationException;
@@ -37,6 +34,9 @@ import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.repository.Repository;
 import org.biokoframework.utils.repository.RepositoryException;
 import org.biokoframework.utils.repository.query.Query;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class AbstractRepository<T extends DomainEntity> implements Repository<T> {
 	

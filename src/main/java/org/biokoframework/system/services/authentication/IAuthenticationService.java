@@ -27,9 +27,9 @@
 
 package org.biokoframework.system.services.authentication;
 
-import java.util.List;
-
 import org.biokoframework.utils.fields.Fields;
+
+import java.util.List;
 
 /**
  * 

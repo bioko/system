@@ -26,10 +26,9 @@
  */
 package org.biokoframework.system.command.crud;
 
+import com.google.inject.Provider;
 import org.biokoframework.system.command.ICommand;
 import org.biokoframework.utils.domain.DomainEntity;
-
-import com.google.inject.Provider;
 
 /**
  * 

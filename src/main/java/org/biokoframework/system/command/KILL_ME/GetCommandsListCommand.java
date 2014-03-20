@@ -27,8 +27,6 @@
 
 package org.biokoframework.system.command.KILL_ME;
 
-import java.util.ArrayList;
-
 import org.apache.log4j.Logger;
 import org.biokoframework.system.KILL_ME.commons.GenericCommandNames;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
@@ -41,6 +39,8 @@ import org.biokoframework.system.entity.description.ParameterEntityBuilder;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.fields.FieldNames;
 import org.biokoframework.utils.fields.Fields;
+
+import java.util.ArrayList;
 
 @Deprecated
 public class GetCommandsListCommand extends AbstractCommand {

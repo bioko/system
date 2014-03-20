@@ -27,12 +27,12 @@
 
 package org.biokoframework.system.command;
 
+import org.biokoframework.utils.domain.ErrorEntity;
+import org.biokoframework.utils.fields.Fields;
+
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 import java.util.Set;
-
-import org.biokoframework.utils.domain.ErrorEntity;
-import org.biokoframework.utils.fields.Fields;
 
 public class CommandHandlerImpl extends AbstractCommandHandler {
 

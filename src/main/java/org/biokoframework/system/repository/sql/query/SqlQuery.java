@@ -27,13 +27,6 @@
 
 package org.biokoframework.system.repository.sql.query;
 
-import java.sql.*;
-import java.util.AbstractMap.SimpleEntry;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map.Entry;
-
 import org.biokoframework.system.repository.sql.SqlConnector;
 import org.biokoframework.system.repository.sql.SqlRepository;
 import org.biokoframework.system.repository.sql.util.SqlStatementsHelper;
@@ -41,6 +34,13 @@ import org.biokoframework.system.services.entity.IEntityBuilderService;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.repository.Repository;
 import org.biokoframework.utils.repository.query.Query;
+
+import java.sql.*;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map.Entry;
 
 public class SqlQuery<DE extends DomainEntity> implements Query<DE> {
 

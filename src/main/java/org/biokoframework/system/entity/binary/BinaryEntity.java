@@ -27,16 +27,16 @@
 
 package org.biokoframework.system.entity.binary;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.apache.commons.io.IOUtils;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.domain.annotation.field.Field;
 import org.biokoframework.utils.domain.annotation.hint.Hint;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class BinaryEntity extends DomainEntity {
 

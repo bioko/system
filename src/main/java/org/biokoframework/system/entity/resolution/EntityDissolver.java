@@ -27,11 +27,11 @@
 
 package org.biokoframework.system.entity.resolution;
 
-import java.util.Map;
-
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.repository.Repository;
+
+import java.util.Map;
 
 public interface EntityDissolver {
 

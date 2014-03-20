@@ -27,17 +27,17 @@
 
 package org.biokoframework.system.services.crypto.impl;
 
-import java.io.UnsupportedEncodingException;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.biokoframework.system.services.crypto.IEncryptionService;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.domain.annotation.hint.HintFactory;
 import org.springframework.security.crypto.bcrypt.BCrypt;
+
+import java.io.UnsupportedEncodingException;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class ProdEntityEncryptionService implements IEncryptionService {
 

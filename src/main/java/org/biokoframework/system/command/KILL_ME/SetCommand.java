@@ -27,10 +27,10 @@
 
 package org.biokoframework.system.command.KILL_ME;
 
-import java.util.LinkedHashMap;
-
 import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.utils.fields.Fields;
+
+import java.util.LinkedHashMap;
 
 @Deprecated
 public abstract class SetCommand extends AbstractCommand {

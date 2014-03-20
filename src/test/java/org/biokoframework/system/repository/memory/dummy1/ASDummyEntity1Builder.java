@@ -27,11 +27,10 @@
 
 package org.biokoframework.system.repository.memory.dummy1;
 
-import javax.inject.Inject;
-
+import com.google.inject.Injector;
 import org.biokoframework.utils.domain.EntityBuilder;
 
-import com.google.inject.Injector;
+import javax.inject.Inject;
 
 
 public class ASDummyEntity1Builder extends EntityBuilder<ASDummyEntity1> {

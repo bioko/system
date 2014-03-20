@@ -27,8 +27,10 @@
 
 package org.biokoframework.system.services.email.KILL_ME;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.apache.log4j.Logger;
+import org.biokoframework.system.command.CommandException;
+import org.biokoframework.system.exceptions.CommandExceptionsFactory;
+import org.biokoframework.system.services.email.EmailException;
 
 import javax.mail.Address;
 import javax.mail.MessagingException;
@@ -36,11 +38,8 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMessage.RecipientType;
-
-import org.apache.log4j.Logger;
-import org.biokoframework.system.command.CommandException;
-import org.biokoframework.system.exceptions.CommandExceptionsFactory;
-import org.biokoframework.system.services.email.EmailException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Deprecated
 public class EmailFiller {

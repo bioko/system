@@ -27,16 +27,16 @@
 
 package org.biokoframework.system.KILL_ME;
 
+import org.apache.log4j.Logger;
+import org.biokoframework.system.KILL_ME.exception.StackTracePrinter;
+import org.biokoframework.utils.fields.Fields;
+
 import java.net.MalformedURLException;
 import java.rmi.AccessException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-
-import org.apache.log4j.Logger;
-import org.biokoframework.system.KILL_ME.exception.StackTracePrinter;
-import org.biokoframework.utils.fields.Fields;
 
 
 public class XRemoteClient {

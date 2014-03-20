@@ -27,12 +27,12 @@
 
 package org.biokoframework.system.repository.sql.translator.annotation;
 
+import org.biokoframework.system.repository.sql.translator.annotation.impl.PlainTranslator;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
-import org.biokoframework.system.repository.sql.translator.annotation.impl.PlainTranslator;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)

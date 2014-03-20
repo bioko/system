@@ -27,11 +27,10 @@
 
 package org.biokoframework.system.services.queue;
 
+import com.google.inject.Module;
 import org.biokoframework.system.ConfigurationEnum;
 import org.biokoframework.system.services.injection.ServiceModule;
 import org.biokoframework.system.services.queue.impl.QueueService;
-
-import com.google.inject.Module;
 
 /**
  * 

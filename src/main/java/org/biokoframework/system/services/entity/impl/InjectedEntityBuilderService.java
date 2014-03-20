@@ -27,13 +27,12 @@
 
 package org.biokoframework.system.services.entity.impl;
 
-import javax.inject.Inject;
-
+import com.google.inject.Injector;
 import org.biokoframework.system.services.entity.IEntityBuilderService;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.fields.Fields;
 
-import com.google.inject.Injector;
+import javax.inject.Inject;
 
 /**
  * 

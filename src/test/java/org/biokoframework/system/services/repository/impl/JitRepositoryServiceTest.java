@@ -27,12 +27,9 @@
 
 package org.biokoframework.system.services.repository.impl;
 
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
-
-import java.io.File;
-
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.name.Names;
 import org.apache.commons.io.FileUtils;
 import org.biokoframework.system.ConfigurationEnum;
 import org.biokoframework.system.entity.authentication.Authentication;
@@ -45,9 +42,11 @@ import org.biokoframework.system.services.repository.RepositoryModule;
 import org.biokoframework.utils.repository.Repository;
 import org.junit.Test;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.name.Names;
+import java.io.File;
+
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
 /**
  * 

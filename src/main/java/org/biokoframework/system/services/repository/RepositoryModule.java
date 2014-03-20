@@ -27,14 +27,13 @@
 
 package org.biokoframework.system.services.repository;
 
+import com.google.inject.TypeLiteral;
+import com.google.inject.name.Names;
 import org.biokoframework.system.ConfigurationEnum;
 import org.biokoframework.system.repository.service.IRepositoryService;
 import org.biokoframework.system.services.injection.ServiceModule;
 import org.biokoframework.system.services.repository.impl.JitRepositoryService;
 import org.biokoframework.utils.repository.Repository;
-
-import com.google.inject.TypeLiteral;
-import com.google.inject.name.Names;
 
 /**
  * 

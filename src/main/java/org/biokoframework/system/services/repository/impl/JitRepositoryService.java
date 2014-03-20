@@ -27,13 +27,11 @@
 
 package org.biokoframework.system.services.repository.impl;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Singleton;
-
+import com.google.inject.AbstractModule;
+import com.google.inject.Injector;
+import com.google.inject.Key;
+import com.google.inject.TypeLiteral;
+import com.google.inject.binder.AnnotatedBindingBuilder;
 import org.biokoframework.system.entity.binary.BinaryEntity;
 import org.biokoframework.system.factory.binary.BinaryEntityRepository;
 import org.biokoframework.system.repository.service.IRepositoryService;
@@ -41,11 +39,11 @@ import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.domain.reflection.DummyParameterizedType;
 import org.biokoframework.utils.repository.Repository;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Injector;
-import com.google.inject.Key;
-import com.google.inject.TypeLiteral;
-import com.google.inject.binder.AnnotatedBindingBuilder;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * 

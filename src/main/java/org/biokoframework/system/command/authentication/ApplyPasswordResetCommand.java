@@ -27,8 +27,7 @@
 
 package org.biokoframework.system.command.authentication;
 
-import java.util.ArrayList;
-
+import com.google.inject.Inject;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.CommandException;
@@ -43,7 +42,7 @@ import org.biokoframework.utils.repository.Repository;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 
-import com.google.inject.Inject;
+import java.util.ArrayList;
 
 public class ApplyPasswordResetCommand extends AbstractCommand {
 

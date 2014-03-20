@@ -27,15 +27,12 @@
 
 package org.biokoframework.system.services.authentication;
 
+import com.google.inject.multibindings.Multibinder;
 import org.biokoframework.system.ConfigurationEnum;
-import org.biokoframework.system.services.authentication.all.AllAuthenticationService;
 import org.biokoframework.system.services.authentication.simple.impl.SimpleAuthenticationService;
 import org.biokoframework.system.services.authentication.token.ITokenAuthenticationService;
 import org.biokoframework.system.services.authentication.token.impl.TokenAuthenticationServiceImpl;
 import org.biokoframework.system.services.injection.ServiceModule;
-
-import com.google.inject.multibindings.Multibinder;
-import sun.java2d.pipe.SpanShapeRenderer;
 
 /**
  * 

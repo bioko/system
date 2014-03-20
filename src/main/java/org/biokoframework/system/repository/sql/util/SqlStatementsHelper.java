@@ -27,18 +27,6 @@
 
 package org.biokoframework.system.repository.sql.util;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.biokoframework.system.repository.sql.translator.SqlTypesTranslator;
@@ -47,6 +35,10 @@ import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.domain.annotation.field.ComponingFieldsFactory;
 import org.biokoframework.utils.domain.annotation.field.Field;
 import org.biokoframework.utils.fields.Fields;
+
+import java.sql.*;
+import java.util.*;
+import java.util.Map.Entry;
 
 public class SqlStatementsHelper {
 	

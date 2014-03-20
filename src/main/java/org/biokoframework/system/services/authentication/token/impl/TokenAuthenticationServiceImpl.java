@@ -27,13 +27,6 @@
 
 package org.biokoframework.system.services.authentication.token.impl;
 
-import java.util.*;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.naming.AuthenticationException;
-
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.entity.authentication.Authentication;
@@ -42,8 +35,6 @@ import org.biokoframework.system.exceptions.CommandExceptionsFactory;
 import org.biokoframework.system.repository.service.IRepositoryService;
 import org.biokoframework.system.services.authentication.AuthResponse;
 import org.biokoframework.system.services.authentication.AuthenticationFailureException;
-import org.biokoframework.system.services.authentication.IAuthenticationService;
-import org.biokoframework.system.services.authentication.annotation.Auth;
 import org.biokoframework.system.services.authentication.impl.AbstractAuthenticationService;
 import org.biokoframework.system.services.authentication.token.ITokenAuthenticationService;
 import org.biokoframework.system.services.currenttime.ICurrentTimeService;
@@ -54,6 +45,10 @@ import org.biokoframework.utils.exception.ValidationException;
 import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.repository.Repository;
 import org.biokoframework.utils.repository.RepositoryException;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.List;
 
 /**
  * 

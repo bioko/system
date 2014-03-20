@@ -27,14 +27,14 @@
 
 package org.biokoframework.system.context;
 
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.biokoframework.system.command.AbstractCommandHandler;
 import org.biokoframework.system.event.SystemListener;
 import org.biokoframework.system.repository.core.AbstractRepository;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.repository.Repository;
+
+import java.util.List;
 
 @Deprecated
 public abstract class Context {

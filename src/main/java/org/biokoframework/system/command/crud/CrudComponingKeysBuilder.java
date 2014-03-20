@@ -27,9 +27,6 @@
 
 package org.biokoframework.system.command.crud;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-
 import org.apache.log4j.Logger;
 import org.biokoframework.system.KILL_ME.commons.GenericCommandNames;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
@@ -42,6 +39,9 @@ import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.domain.annotation.field.ComponingFieldsFactory;
 import org.biokoframework.utils.fields.FieldNames;
 import org.biokoframework.utils.fields.Fields;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 @Deprecated
 public class CrudComponingKeysBuilder {

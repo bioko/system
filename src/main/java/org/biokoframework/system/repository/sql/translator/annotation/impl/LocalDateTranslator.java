@@ -27,15 +27,15 @@
 
 package org.biokoframework.system.repository.sql.translator.annotation.impl;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
-
 import org.biokoframework.system.repository.sql.translator.annotation.Translator;
 import org.biokoframework.utils.domain.annotation.field.Field;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
 
 public class LocalDateTranslator implements Translator {
 

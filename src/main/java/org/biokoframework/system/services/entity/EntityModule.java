@@ -27,10 +27,9 @@
 
 package org.biokoframework.system.services.entity;
 
-import org.biokoframework.system.services.entity.impl.InjectedEntityBuilderService;
-
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
+import org.biokoframework.system.services.entity.impl.InjectedEntityBuilderService;
 
 /**
  * 

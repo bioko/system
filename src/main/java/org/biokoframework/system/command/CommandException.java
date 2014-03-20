@@ -27,10 +27,10 @@
 
 package org.biokoframework.system.command;
 
-import java.util.List;
-
 import org.biokoframework.system.KILL_ME.exception.SystemException;
 import org.biokoframework.utils.domain.ErrorEntity;
+
+import java.util.List;
 
 public class CommandException extends SystemException {
 

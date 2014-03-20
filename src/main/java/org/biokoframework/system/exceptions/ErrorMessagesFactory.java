@@ -27,9 +27,9 @@
 
 package org.biokoframework.system.exceptions;
 
-import java.util.HashMap;
-
 import org.biokoframework.utils.fields.FieldNames;
+
+import java.util.HashMap;
 
 public class ErrorMessagesFactory {
 

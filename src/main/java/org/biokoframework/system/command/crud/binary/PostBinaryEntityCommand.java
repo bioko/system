@@ -27,8 +27,6 @@
 
 package org.biokoframework.system.command.crud.binary;
 
-import java.util.ArrayList;
-
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.CommandException;
@@ -38,6 +36,8 @@ import org.biokoframework.system.exceptions.CommandExceptionsFactory;
 import org.biokoframework.system.factory.binary.BinaryEntityRepository;
 import org.biokoframework.system.repository.core.SafeRepositoryHelper;
 import org.biokoframework.utils.fields.Fields;
+
+import java.util.ArrayList;
 
 public class PostBinaryEntityCommand extends AbstractCommand {
 

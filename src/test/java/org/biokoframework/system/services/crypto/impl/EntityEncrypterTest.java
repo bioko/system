@@ -27,18 +27,14 @@
 
 package org.biokoframework.system.services.crypto.impl;
 
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
-
 import org.apache.commons.lang3.StringUtils;
 import org.biokoframework.system.entity.login.Login;
 import org.biokoframework.system.entity.login.LoginBuilder;
 import org.junit.Test;
 import org.springframework.security.crypto.bcrypt.BCrypt;
+
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThat;
 
 public class EntityEncrypterTest {
 

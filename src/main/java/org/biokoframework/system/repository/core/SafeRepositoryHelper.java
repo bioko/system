@@ -27,12 +27,12 @@
 
 package org.biokoframework.system.repository.core;
 
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.biokoframework.system.command.CommandException;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.repository.Repository;
+
+import java.util.List;
 
 public class SafeRepositoryHelper {
 	

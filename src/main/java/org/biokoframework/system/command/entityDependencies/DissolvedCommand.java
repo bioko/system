@@ -27,9 +27,6 @@
 
 package org.biokoframework.system.command.entityDependencies;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.command.AbstractCommand;
@@ -44,6 +41,9 @@ import org.biokoframework.system.exceptions.CommandExceptionsFactory;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.repository.Repository;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DissolvedCommand extends AbstractCommand {
 

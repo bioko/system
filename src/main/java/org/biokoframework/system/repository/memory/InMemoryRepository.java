@@ -27,15 +27,14 @@
 
 package org.biokoframework.system.repository.memory;
 
-import java.sql.SQLException;
-import java.util.List;
-
-import javax.inject.Inject;
-
 import org.biokoframework.system.repository.sql.SqlRepository;
 import org.biokoframework.system.services.entity.IEntityBuilderService;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.repository.RepositoryException;
+
+import javax.inject.Inject;
+import java.sql.SQLException;
+import java.util.List;
 
 public class InMemoryRepository<DE extends DomainEntity> extends SqlRepository<DE> {
 

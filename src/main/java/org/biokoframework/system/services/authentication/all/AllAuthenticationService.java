@@ -27,11 +27,6 @@
 
 package org.biokoframework.system.services.authentication.all;
 
-import java.util.List;
-import java.util.Set;
-
-import javax.inject.Inject;
-
 import org.biokoframework.system.exceptions.CommandExceptionsFactory;
 import org.biokoframework.system.services.authentication.AuthResponse;
 import org.biokoframework.system.services.authentication.AuthenticationFailureException;
@@ -39,6 +34,10 @@ import org.biokoframework.system.services.authentication.IAuthenticationService;
 import org.biokoframework.utils.domain.ErrorEntity;
 import org.biokoframework.utils.fields.FieldNames;
 import org.biokoframework.utils.fields.Fields;
+
+import javax.inject.Inject;
+import java.util.List;
+import java.util.Set;
 
 /**
  * This authentication service actually tries to authenticate with every 

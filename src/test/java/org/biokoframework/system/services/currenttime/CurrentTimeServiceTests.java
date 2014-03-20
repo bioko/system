@@ -27,15 +27,15 @@
 
 package org.biokoframework.system.services.currenttime;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
-
 import org.biokoframework.system.services.currenttime.impl.ProdCurrentTimeService;
 import org.biokoframework.system.services.currenttime.impl.TestCurrentTimeService;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.junit.Test;
+
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
 public class CurrentTimeServiceTests {
 	

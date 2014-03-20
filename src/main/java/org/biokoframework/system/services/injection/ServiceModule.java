@@ -27,9 +27,8 @@
 
 package org.biokoframework.system.services.injection;
 
-import org.biokoframework.system.ConfigurationEnum;
-
 import com.google.inject.AbstractModule;
+import org.biokoframework.system.ConfigurationEnum;
 
 /**
  * 

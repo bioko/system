@@ -28,13 +28,12 @@
 
 package org.biokoframework.system.services.email;
 
+import com.google.inject.Singleton;
+import com.google.inject.name.Names;
 import org.biokoframework.system.ConfigurationEnum;
 import org.biokoframework.system.services.email.impl.EmailService;
 import org.biokoframework.system.services.injection.ServiceModule;
 import org.biokoframework.system.services.queue.IQueueService;
-
-import com.google.inject.Singleton;
-import com.google.inject.name.Names;
 
 /**
  * 

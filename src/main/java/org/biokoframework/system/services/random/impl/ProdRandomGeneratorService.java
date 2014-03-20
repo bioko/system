@@ -27,11 +27,11 @@
 
 package org.biokoframework.system.services.random.impl;
 
-import java.util.Random;
-import java.util.UUID;
-
 import org.apache.commons.lang3.RandomStringUtils;
 import org.biokoframework.system.services.random.IRandomService;
+
+import java.util.Random;
+import java.util.UUID;
 
 public class ProdRandomGeneratorService implements IRandomService {
 

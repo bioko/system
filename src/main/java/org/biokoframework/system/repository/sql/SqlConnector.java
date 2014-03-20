@@ -27,15 +27,11 @@
 
 package org.biokoframework.system.repository.sql;
 
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-
 import org.apache.log4j.Logger;
 import org.biokoframework.system.repository.sql.query.SqlOperator;
 import org.biokoframework.system.repository.sql.translator.SqlTypesTranslator;
+
+import java.sql.*;
 
 public abstract class SqlConnector {
 

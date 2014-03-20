@@ -27,28 +27,18 @@
 
 package org.biokoframework.system.repository.sql;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.biokoframework.system.repository.sql.query.SqlOperator;
 import org.biokoframework.system.repository.sql.translator.annotation.Translate;
 import org.biokoframework.system.repository.sql.translator.annotation.Translators;
-import org.biokoframework.system.repository.sql.translator.annotation.impl.BooleanTranslator;
-import org.biokoframework.system.repository.sql.translator.annotation.impl.DoubleTranslator;
-import org.biokoframework.system.repository.sql.translator.annotation.impl.ISODateTimeTranslator;
-import org.biokoframework.system.repository.sql.translator.annotation.impl.LocalDateTranslator;
-import org.biokoframework.system.repository.sql.translator.annotation.impl.MySQLIDTranslator;
-import org.biokoframework.system.repository.sql.translator.annotation.impl.StringTranslator;
+import org.biokoframework.system.repository.sql.translator.annotation.impl.*;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.sql.*;
 
 
 @Translators(

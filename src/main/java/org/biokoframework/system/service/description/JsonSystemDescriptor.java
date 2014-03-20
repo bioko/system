@@ -27,11 +27,6 @@
 
 package org.biokoframework.system.service.description;
 
-import java.lang.reflect.Field;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map.Entry;
-
 import org.biokoframework.system.command.crud.annotation.CrudCommand;
 import org.biokoframework.system.context.Context;
 import org.biokoframework.utils.domain.DomainEntity;
@@ -39,6 +34,11 @@ import org.biokoframework.utils.domain.annotation.field.ComponingFieldsFactory;
 import org.biokoframework.utils.domain.annotation.field.VirtualField;
 import org.biokoframework.utils.domain.annotation.field.VirtualFieldsFactory;
 import org.biokoframework.utils.domain.annotation.hint.Hint;
+
+import java.lang.reflect.Field;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map.Entry;
 
 
 public class JsonSystemDescriptor {

@@ -27,12 +27,12 @@
 
 package org.biokoframework.system.services.cron.annotation;
 
+import org.biokoframework.system.ConfigurationEnum;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
-import org.biokoframework.system.ConfigurationEnum;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)

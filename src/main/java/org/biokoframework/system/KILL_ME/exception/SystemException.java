@@ -27,10 +27,10 @@
 
 package org.biokoframework.system.KILL_ME.exception;
 
-import java.util.List;
-
 import org.biokoframework.utils.domain.ErrorEntity;
 import org.biokoframework.utils.exception.BiokoException;
+
+import java.util.List;
 
 public class SystemException extends BiokoException {
 

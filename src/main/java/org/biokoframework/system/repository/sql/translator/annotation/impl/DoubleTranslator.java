@@ -27,6 +27,10 @@
 
 package org.biokoframework.system.repository.sql.translator.annotation.impl;
 
+import org.apache.commons.lang3.StringUtils;
+import org.biokoframework.system.repository.sql.translator.annotation.Translator;
+import org.biokoframework.utils.domain.annotation.field.Field;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -34,10 +38,6 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
-
-import org.apache.commons.lang3.StringUtils;
-import org.biokoframework.system.repository.sql.translator.annotation.Translator;
-import org.biokoframework.utils.domain.annotation.field.Field;
 
 public class DoubleTranslator implements Translator {
 

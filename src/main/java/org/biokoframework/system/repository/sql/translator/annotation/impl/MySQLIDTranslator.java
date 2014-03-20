@@ -27,15 +27,15 @@
 
 package org.biokoframework.system.repository.sql.translator.annotation.impl;
 
+import org.biokoframework.system.repository.sql.translator.annotation.Translator;
+import org.biokoframework.utils.domain.DomainEntity;
+import org.biokoframework.utils.domain.annotation.field.Field;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.List;
-
-import org.biokoframework.system.repository.sql.translator.annotation.Translator;
-import org.biokoframework.utils.domain.DomainEntity;
-import org.biokoframework.utils.domain.annotation.field.Field;
 
 public class MySQLIDTranslator implements Translator {
 

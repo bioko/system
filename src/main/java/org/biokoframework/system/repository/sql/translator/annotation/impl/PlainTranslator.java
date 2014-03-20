@@ -27,13 +27,13 @@
 
 package org.biokoframework.system.repository.sql.translator.annotation.impl;
 
+import org.biokoframework.system.repository.sql.translator.annotation.Translator;
+import org.biokoframework.utils.domain.annotation.field.Field;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-
-import org.biokoframework.system.repository.sql.translator.annotation.Translator;
-import org.biokoframework.utils.domain.annotation.field.Field;
 
 public class PlainTranslator implements Translator {
 

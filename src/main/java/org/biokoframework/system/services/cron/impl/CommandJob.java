@@ -27,6 +27,7 @@
 
 package org.biokoframework.system.services.cron.impl;
 
+import com.google.inject.Injector;
 import org.biokoframework.system.command.CommandException;
 import org.biokoframework.system.command.ICommand;
 import org.biokoframework.utils.exception.ValidationException;
@@ -34,8 +35,6 @@ import org.biokoframework.utils.fields.Fields;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
-
-import com.google.inject.Injector;
 
 /**
  * 
