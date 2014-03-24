@@ -55,6 +55,8 @@ import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.repository.Repository;
 import org.biokoframework.utils.repository.RepositoryException;
 import org.biokoframework.utils.validation.ValidationModule;
+import org.joda.time.DateTime;
+import org.joda.time.format.ISODateTimeFormat;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -125,12 +127,14 @@ public class TokenAuthenticationServiceImplTest {
 		Login login = fLoginBuilder.loadDefaultExample().build(false);
 		login = fLoginRepo.save(login);
 
+        DateTime tokenExpire = fTimeService.getCurrentTimeAsDateTime().withDurationAdded(fTokenValiditySecs * 1000, 1);
+
 		Authentication expectedAuthentication = fEntitiesBuilder.getInstance(Authentication.class, new Fields(
 				DomainEntity.ID, "1",
 				Authentication.LOGIN_ID, login.getId(),
 				Authentication.ROLES, login.get(Login.ROLES),
 				Authentication.TOKEN, "00000000-0000-0000-0000-000000000000",
-				Authentication.TOKEN_EXPIRE, fTimeService.getCurrentTimeMillis() / 1000 + fTokenValiditySecs));
+				Authentication.TOKEN_EXPIRE, tokenExpire.toString(ISODateTimeFormat.dateTimeNoMillis())));
 		
 		fAuthService = fInjector.getInstance(TokenAuthenticationServiceImpl.class);
 		
@@ -142,6 +146,8 @@ public class TokenAuthenticationServiceImplTest {
 
     @Test
     public void testSuccessfulAuthenticationUsingToken() throws ValidationException, RepositoryException, AuthenticationFailureException {
+        TestCurrentTimeService.setCalendar("2014-01-22T18:00:05Z");
+
         Login login = fLoginBuilder.loadDefaultExample().build(false);
         login = fLoginRepo.save(login);
 
@@ -156,12 +162,14 @@ public class TokenAuthenticationServiceImplTest {
 
         assertThat(authResponse.getMergeFields(), contains(GenericFieldNames.AUTH_LOGIN_ID, login.getId()));
 
-        long authTokenExpire = authResponse.getOverrideFields().get(Authentication.TOKEN_EXPIRE);
-        assertThat(authTokenExpire, is(fTimeService.getCurrentTimeMillis() / 1000 + fTokenValiditySecs));
+        DateTime authTokenExpire = ISODateTimeFormat.dateTimeNoMillis().parseDateTime((String) authResponse.getOverrideFields().get(Authentication.TOKEN_EXPIRE));
+        assertThat(authTokenExpire, is(equalTo(fTimeService.getCurrentTimeAsDateTime().plus(fTokenValiditySecs * 1000))));
     }
 
 	@Test
 	public void testFailedAuthenticationBecauseTokenExpired() throws ValidationException, RepositoryException, AuthenticationFailureException {
+        TestCurrentTimeService.setCalendar("2014-01-24T18:00:05Z");
+
         Login login = fLoginBuilder.loadDefaultExample().build(false);
         login = fLoginRepo.save(login);
 
@@ -169,7 +177,6 @@ public class TokenAuthenticationServiceImplTest {
 
         Authentication auth = fAuthBuilder.loadDefaultExample()
                 .set(Authentication.LOGIN_ID, login.getId())
-                .set(Authentication.TOKEN_EXPIRE, 0L)
                 .build(false);
         auth = fAuthRepo.save(auth);
 
@@ -190,6 +197,8 @@ public class TokenAuthenticationServiceImplTest {
 
     @Test
     public void testFailedBecauseRoleExpected() throws ValidationException, RepositoryException, AuthenticationFailureException {
+        TestCurrentTimeService.setCalendar("2014-01-22T18:00:05Z");
+
         Login login = fLoginBuilder.loadDefaultExample().build(false);
         login = fLoginRepo.save(login);
 
@@ -203,6 +212,7 @@ public class TokenAuthenticationServiceImplTest {
         Fields fields = new Fields("authToken", auth.get(Authentication.TOKEN));
 
         expected.expect(AuthenticationFailureException.class);
+        expected.expectMessage(containsString("\"errorCode\":\"113\""));
         fAuthService.authenticate(fields, Collections.singletonList("aRole"));
     }
 }

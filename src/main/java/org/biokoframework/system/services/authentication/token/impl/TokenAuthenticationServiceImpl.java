@@ -37,6 +37,7 @@ import org.biokoframework.system.services.authentication.AuthResponse;
 import org.biokoframework.system.services.authentication.AuthenticationFailureException;
 import org.biokoframework.system.services.authentication.impl.AbstractAuthenticationService;
 import org.biokoframework.system.services.authentication.token.ITokenAuthenticationService;
+import org.biokoframework.system.services.authentication.token.TokenCreationException;
 import org.biokoframework.system.services.currenttime.ICurrentTimeService;
 import org.biokoframework.system.services.entity.IEntityBuilderService;
 import org.biokoframework.system.services.random.IRandomService;
@@ -45,6 +46,8 @@ import org.biokoframework.utils.exception.ValidationException;
 import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.repository.Repository;
 import org.biokoframework.utils.repository.RepositoryException;
+import org.joda.time.DateTime;
+import org.joda.time.format.ISODateTimeFormat;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -112,40 +115,42 @@ public class TokenAuthenticationServiceImpl extends AbstractAuthenticationServic
 	}
 
 	@Override
-	public Authentication requestToken(Login login) {
+	public Authentication requestToken(Login login) throws TokenCreationException {
 
 		Authentication auth = createAuthenticationFor(login);
 		
 		try {
 			auth = fAuthRepo.save(auth);
 		} catch (ValidationException|RepositoryException exception) {
-			LOGGER.error("Unexpected behaviour", exception);
-			return null;
-		}
+            LOGGER.error("Unexpected error while updating authentication", exception);
+            throw new TokenCreationException(exception);
+        }
 		
 		return auth;
 	}
 
 	private Authentication createAuthenticationFor(Login login) {
-		
-		long utcTimeSecs = fTime.getCurrentTimeMillis() / 1000 + fValidityIntervalSecs;
+
+        DateTime tokenExpiration = fTime.getCurrentTimeAsDateTime().withDurationAdded(fValidityIntervalSecs * 1000, 1);
 		String token = fRandom.generateUUID().toString();
 		
 		return fEntitiesBuilder.getInstance(Authentication.class, new Fields( 
 					Authentication.LOGIN_ID, login.get(DomainEntity.ID),
 					Authentication.ROLES, login.get(Login.ROLES),
 					Authentication.TOKEN, token,
-					Authentication.TOKEN_EXPIRE, utcTimeSecs));
+					Authentication.TOKEN_EXPIRE, tokenExpiration.toString(ISODateTimeFormat.dateTimeNoMillis())));
 	}
 
 	private boolean isExpired(Authentication authentication) {
-		long expireTimeSecs = authentication.get(GenericFieldNames.AUTH_TOKEN_EXPIRE);
-		long nowSecs = fTime.getCurrentTimeMillis() / 1000;
-		return nowSecs > expireTimeSecs;
+        String expireStr = authentication.get(GenericFieldNames.AUTH_TOKEN_EXPIRE);
+        DateTime expire = DateTime.parse(expireStr);
+
+		return expire.isBefore(fTime.getCurrentTimeAsDateTime());
 	}
 
-	private long renewAuthentication() {
-        return fTime.getCurrentTimeMillis() / 1000 + fValidityIntervalSecs;
+	private String renewAuthentication() {
+        DateTime expire = fTime.getCurrentTimeAsDateTime().plus(fValidityIntervalSecs * 1000);
+        return expire.toString(ISODateTimeFormat.dateTimeNoMillis());
 	}
 
 }

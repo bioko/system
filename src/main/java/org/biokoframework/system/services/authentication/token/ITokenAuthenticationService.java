@@ -39,6 +39,6 @@ import org.biokoframework.system.services.authentication.IAuthenticationService;
  */
 public interface ITokenAuthenticationService extends IAuthenticationService {
 
-	Authentication requestToken(Login login);
+	Authentication requestToken(Login login) throws TokenCreationException;
 	
 }

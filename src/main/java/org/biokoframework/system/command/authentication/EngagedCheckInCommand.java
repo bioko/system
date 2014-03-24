@@ -28,6 +28,7 @@
 package org.biokoframework.system.command.authentication;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.CommandException;
@@ -35,7 +36,9 @@ import org.biokoframework.system.entity.authentication.Authentication;
 import org.biokoframework.system.entity.description.ParameterEntity;
 import org.biokoframework.system.entity.description.ParameterEntityBuilder;
 import org.biokoframework.system.entity.login.Login;
+import org.biokoframework.system.exceptions.CommandExceptionsFactory;
 import org.biokoframework.system.services.authentication.token.ITokenAuthenticationService;
+import org.biokoframework.system.services.authentication.token.TokenCreationException;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.repository.Repository;
@@ -48,7 +51,9 @@ import java.util.List;
 
 public class EngagedCheckInCommand extends AbstractCommand {
 
-	private ITokenAuthenticationService fAuthService;
+    private static final Logger LOGGER = Logger.getLogger(EngagedCheckInCommand.class);
+
+    private ITokenAuthenticationService fAuthService;
 
 	@Inject
 	public EngagedCheckInCommand(ITokenAuthenticationService authService) {
@@ -62,7 +67,13 @@ public class EngagedCheckInCommand extends AbstractCommand {
         Repository<Login> loginRepo = getRepository(Login.class);
         Login login = loginRepo.retrieve((String) input.get("authLoginId"));
 
-        Authentication auth = fAuthService.requestToken(login);
+        Authentication auth = null;
+        try {
+            fAuthService.requestToken(login);
+        } catch (TokenCreationException exception) {
+            LOGGER.error("Cannot create token", exception);
+            throw CommandExceptionsFactory.createContainerException(exception);
+        }
 
         String token = auth.get(Authentication.TOKEN);
         long tokenExpire = auth.get(Authentication.TOKEN_EXPIRE);
