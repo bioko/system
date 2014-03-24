@@ -69,14 +69,14 @@ public class EngagedCheckInCommand extends AbstractCommand {
 
         Authentication auth = null;
         try {
-            fAuthService.requestToken(login);
+            auth = fAuthService.requestToken(login);
         } catch (TokenCreationException exception) {
             LOGGER.error("Cannot create token", exception);
             throw CommandExceptionsFactory.createContainerException(exception);
         }
 
         String token = auth.get(Authentication.TOKEN);
-        long tokenExpire = auth.get(Authentication.TOKEN_EXPIRE);
+        String tokenExpire = auth.get(Authentication.TOKEN_EXPIRE);
 		Fields fields = new Fields(
 				Authentication.TOKEN, token,
 				Authentication.TOKEN_EXPIRE, tokenExpire);
