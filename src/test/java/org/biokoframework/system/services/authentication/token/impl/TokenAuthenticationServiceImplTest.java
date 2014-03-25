@@ -212,7 +212,7 @@ public class TokenAuthenticationServiceImplTest {
         Fields fields = new Fields("authToken", auth.get(Authentication.TOKEN));
 
         expected.expect(AuthenticationFailureException.class);
-        expected.expectMessage(containsString("\"errorCode\":\"113\""));
+        expected.expectMessage(containsString("\"errorCode\":113"));
         fAuthService.authenticate(fields, Collections.singletonList("aRole"));
     }
 }

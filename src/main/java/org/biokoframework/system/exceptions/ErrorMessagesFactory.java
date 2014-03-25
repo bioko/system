@@ -33,8 +33,8 @@ import java.util.HashMap;
 
 public class ErrorMessagesFactory {
 
-	public static HashMap<String, String[]> createMap() {
-		HashMap<String, String[]> errorMap = new HashMap<String, String[]>();
+	public static HashMap<Long, String[]> createMap() {
+		HashMap<Long, String[]> errorMap = new HashMap<Long, String[]>();
 		
 		errorMap.put(FieldNames.BAD_COMMAND_INVOCATION_CODE, new String[] { "Error in command invocation" });
 		errorMap.put(FieldNames.COMMAND_NOT_FOUND_CODE, new String[] { "Command ", " not found."});

@@ -40,7 +40,7 @@ import java.util.List;
 
 public class CommandExceptionsFactory {
 	
-	public static HashMap<String, String[]> sErrorMap = ErrorMessagesFactory.createMap();
+	public static HashMap<Long, String[]> sErrorMap = ErrorMessagesFactory.createMap();
 
 	public static CommandException createBadCommandInvocationException() {
 		String[] message = sErrorMap.get(FieldNames.BAD_COMMAND_INVOCATION_CODE);
