@@ -114,10 +114,11 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 			
 			//id = SqlStatementsHelper.retrieveId(insertStatement.getGeneratedKeys());
 			id = fDbConnector.getLastInsertId(connection).toString();
-			
-			connection.close();
+
 		} catch (SQLException exception) {
-			LOGGER.error("Error in insert", exception);
+
+            LOGGER.error("Error in insert", exception);
+        } finally {
             closeDumbSql(connection, insertStatement, null);
 		}
 		
