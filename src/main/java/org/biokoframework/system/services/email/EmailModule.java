@@ -28,12 +28,9 @@
 
 package org.biokoframework.system.services.email;
 
-import com.google.inject.Singleton;
-import com.google.inject.name.Names;
 import org.biokoframework.system.ConfigurationEnum;
 import org.biokoframework.system.services.email.impl.EmailService;
 import org.biokoframework.system.services.injection.ServiceModule;
-import org.biokoframework.system.services.queue.IQueueService;
 
 /**
  * 
@@ -60,11 +57,11 @@ public class EmailModule extends ServiceModule {
 	@Override
 	protected void configureForProd() {
 		bind(IEmailService.class).to(EmailService.class);
-		
-		bind(IQueueService.class)
-			.annotatedWith(Names.named("mailQueue"))
-			.to(IQueueService.class)
-			.in(Singleton.class);
+
+//		bind(IQueueService.class)
+//			.annotatedWith(Names.named("mailQueue"))
+//			.to(IQueueService.class)
+//			.in(Singleton.class);
 	}
 
 }

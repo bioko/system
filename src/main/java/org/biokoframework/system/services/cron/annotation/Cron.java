@@ -27,6 +27,8 @@
 
 package org.biokoframework.system.services.cron.annotation;
 
+import org.biokoframework.system.command.ICommand;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -37,6 +39,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Cron {
+    Class<? extends ICommand> impl();
 	String notifyTo() default "";
 	String input() default "";
 	CronExpression[] expressions();
