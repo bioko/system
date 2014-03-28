@@ -4,7 +4,7 @@
 	<groupId>org.biokoframework</groupId>
 	<artifactId>system</artifactId>
 	<version>0.1-SNAPSHOT</version>
-	<name>Biokio Framework</name>
+	<name>Bioko Framework - System</name>
 	<url>http://biokoframework.org</url>
 	<dependencies>
 		<dependency>
