@@ -69,7 +69,7 @@ public class ResponseEmailConfirmationCommand extends AbstractCommand {
 			String timestamp = fCurrentTimeService.getCurrentTimeAsDateTime().toString(ISO_TIMESTAMP);
 			
 			confirmation.set(EmailConfirmation.CONFIRMATION_TIMESTAMP, timestamp);
-			confirmation.set(EmailConfirmation.CONFIRMED, FieldValues.TRUE);
+			confirmation.set(EmailConfirmation.CONFIRMED, true);
 			SafeRepositoryHelper.save(emailConfirmationRepo, confirmation);
 		}
 				
