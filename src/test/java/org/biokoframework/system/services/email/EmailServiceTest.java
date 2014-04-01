@@ -50,7 +50,7 @@ import static org.junit.Assert.assertThat;
  * @author Mikol Faro <mikol.faro@gmail.com>
  * @date 2014-03-27
  */
-public class MailServiceTest {
+public class EmailServiceTest {
 
     private IEmailService fEmailService;
 
