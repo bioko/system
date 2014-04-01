@@ -140,7 +140,7 @@ public class SimpleAuthenticationServiceTest {
     }
 
     @Test
-    public void failBeacuseAuthInfosAreNotFound() throws AuthenticationFailureException {
+    public void failBecauseAuthInfosAreNotFound() throws AuthenticationFailureException {
         SimpleAuthenticationService authenticationService = fInjector.getInstance(SimpleAuthenticationService.class);
 
         Fields fields = new Fields();
