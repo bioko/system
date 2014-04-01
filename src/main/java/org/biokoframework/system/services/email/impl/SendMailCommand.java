@@ -28,6 +28,7 @@
 package org.biokoframework.system.services.email.impl;
 
 import com.google.inject.Inject;
+import org.apache.log4j.Logger;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.CommandException;
@@ -37,6 +38,8 @@ import org.biokoframework.system.services.queue.IQueueService;
 import org.biokoframework.utils.fields.Fields;
 
 public class SendMailCommand extends AbstractCommand {
+
+	private static final Logger LOGGER = Logger.getLogger(SendMailCommand.class);
 
 	public static final String CONTENT = GenericFieldNames.CONTENT;
 	public static final String TO = "to";
@@ -67,8 +70,8 @@ public class SendMailCommand extends AbstractCommand {
 				// TODO use this
 				fEmailService.sendASAP(destinationAddress, sourceAddress, content, subject);
 			} catch (EmailException exception) {
-				// TODO call logger
-				
+                LOGGER.error("error while sending mail", exception);
+
 				fMailQueueService.pushFields(mailFields);
 				
 				throw new CommandException(exception);

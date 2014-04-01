@@ -31,6 +31,7 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
+import org.apache.log4j.Logger;
 import org.biokoframework.system.KILL_ME.exception.SystemException;
 import org.biokoframework.system.command.ICommand;
 import org.biokoframework.system.services.cron.CronException;
@@ -57,10 +58,11 @@ import static org.quartz.impl.matchers.KeyMatcher.keyEquals;
 @Singleton
 public class QuartzCronService implements ICronService {
 
-	static final String COMMAND = "command";
-	static final String INJECTOR = "injector";
-	
-	private final Scheduler fScheduler;
+    private static final Logger LOGGER = Logger.getLogger(QuartzCronService.class);
+    static final String COMMAND = "command";
+    static final String INJECTOR = "injector";
+
+    private final Scheduler fScheduler;
 	private final IEmailService fMailService;
 	private final String fCronEmailAddress;
 	private final Injector fInjector;
@@ -71,7 +73,7 @@ public class QuartzCronService implements ICronService {
 			fScheduler = StdSchedulerFactory.getDefaultScheduler();
 			fScheduler.start();
 		} catch (SchedulerException exception) {
-			// TODO logger call
+			LOGGER.error("Cron service did not started", exception);
 			throw new RuntimeException(exception);
 		}
 		fMailService = mailService;
@@ -109,7 +111,7 @@ public class QuartzCronService implements ICronService {
 			
 			fScheduler.scheduleJob(jobDetail, jobTrigger);
 		} catch (SchedulerException exception) {
-			// TODO logger call
+            LOGGER.error("Cannot start scheduler", exception);
 			throw new CronException(exception);
 		}
 	}

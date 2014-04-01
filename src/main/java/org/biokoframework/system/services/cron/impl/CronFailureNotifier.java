@@ -28,6 +28,7 @@
 package org.biokoframework.system.services.cron.impl;
 
 import org.apache.commons.io.output.WriterOutputStream;
+import org.apache.log4j.Logger;
 import org.biokoframework.system.command.ICommand;
 import org.biokoframework.system.services.cron.ICronListener;
 import org.biokoframework.system.services.email.EmailException;
@@ -39,9 +40,10 @@ import java.io.StringWriter;
 
 public class CronFailureNotifier implements ICronListener {
 
-	private static final String SCHEDULED_ERROR_SUBJECT = "Bioko cron service - failure report";
-	
-	private final IEmailService fMailService;
+    private static final Logger LOGGER = Logger.getLogger(CronFailureNotifier.class);
+    private static final String SCHEDULED_ERROR_SUBJECT = "Bioko cron service - failure report";
+
+    private final IEmailService fMailService;
 	
 	private final String fSourceEmailAddress;
 	private final String fDestinationEmailAddress;
@@ -76,9 +78,8 @@ public class CronFailureNotifier implements ICronListener {
 			
 		} catch (EmailException exception) {
 			// The system failed at failing (looks like Windows) 
-			
-			// TODO log error
-			// Loggers.jobs.error("Error while reporting error for cron", exception);
+
+			LOGGER.error("Error while reporting error for cron", exception);
 		}
 		
 
