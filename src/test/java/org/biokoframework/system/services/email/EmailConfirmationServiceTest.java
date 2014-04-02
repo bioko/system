@@ -1,5 +1,5 @@
 /*
- * Copyright (c) $year.
+ * Copyright (c) 2014.
  * 	Mikol Faro		<mikol.faro@gmail.com>
  * 	Simone Mangano	 	<simone.mangano@ieee.org>
  * 	Mattia Tortorelli	<mattia.tortorelli@gmail.com>
@@ -38,8 +38,14 @@ import org.biokoframework.system.repository.service.IRepositoryService;
 import org.biokoframework.system.services.email.impl.EmailConfirmationServiceImpl;
 import org.biokoframework.system.services.email.impl.EmailService;
 import org.biokoframework.system.services.entity.EntityModule;
+import org.biokoframework.system.services.entity.IEntityBuilderService;
+import org.biokoframework.system.services.random.IRandomService;
+import org.biokoframework.system.services.random.RandomModule;
 import org.biokoframework.system.services.random.impl.TestRandomGeneratorService;
 import org.biokoframework.system.services.repository.RepositoryModule;
+import org.biokoframework.system.services.templates.ITemplatingService;
+import org.biokoframework.system.services.templates.TemplatingException;
+import org.biokoframework.system.services.templates.TemplatingModule;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.domain.EntityBuilder;
 import org.biokoframework.utils.exception.ValidationException;
@@ -82,6 +88,8 @@ public class EmailConfirmationServiceTest {
         fInjector = Guice.createInjector(
                 new ValidationModule(),
                 new EntityModule(),
+                new RandomModule(ConfigurationEnum.DEV),
+                new TemplatingModule(ConfigurationEnum.DEV),
                 new RepositoryModule(ConfigurationEnum.DEV) {
                     @Override
                     protected void configureForDev() {
@@ -111,38 +119,39 @@ public class EmailConfirmationServiceTest {
         fLoginRepo = repos.getRepository(Login.class);
         fConfirmRepo = repos.getRepository(EmailConfirmation.class);
 
-        fService = new EmailConfirmationServiceImpl(fInjector.getInstance(IEmailService.class), repos, "no.reply@example.com");
+        fService = new EmailConfirmationServiceImpl(repos, fInjector.getInstance(IEntityBuilderService.class),
+                fInjector.getInstance(IRandomService.class), fInjector.getInstance(IEmailService.class),
+                fInjector.getInstance(ITemplatingService.class), "no.reply@example.com");
 
         fLoginBuilder = fInjector.getInstance(LoginBuilder.class);
     }
 
     @Test
-    public void emailSendingTest() throws ValidationException, RepositoryException, MessagingException, IOException {
+    public void emailSendingTest() throws Exception {
         Login login = fLoginBuilder.loadDefaultExample().build(false);
         login = fLoginRepo.save(login);
 
         Template template = fInjector.getInstance(Template.class);
         template.setAll(new Fields(
                 Template.TITLE, "Email confirmation",
-                Template.BODY, "<html><body><a href=\"${url}\">Click here</a>"));
+                Template.BODY, "<html><body><a href=\"${url}?token=${token}\">Click here</a>"));
 
         Map<String, Object> params = new HashMap<>();
-        params.put("url", "http://confirm.example.it?token=${token}");
+        params.put("url", "http://confirm.example.it");
 
-        String emailAddress = login.get(Login.USER_EMAIL);
-        fService.sendConfirmationEmail(emailAddress, template, params);
+        fService.sendConfirmationEmail(login, template, params);
 
-        Mailbox box =  Mailbox.get(emailAddress);
+        Mailbox box =  Mailbox.get((String) login.get(Login.USER_EMAIL));
         assertThat(box, Matchers.hasSize(1));
         Message email = box.get(0);
         assertThat(email.getSubject(), is(equalTo("Email confirmation")));
         assertThat(email.getFrom()[0].toString(), is(equalTo("no.reply@example.com")));
-        assertThat(email.getContentType(), is(equalTo("text/html")));
-        assertThat(email.getContent(), Matchers.<Object>is(equalTo("<html><body><a href=\"http://confirm.example.it?token=0000-0000-0000-0000\">Click here</a>")));
+        assertThat(email.getContentType(), startsWith("text/html"));
+        assertThat((String) email.getContent(), is(equalTo("<html><body><a href=\"http://confirm.example.it?token=00000000-0000-0000-0000-000000000000\">Click here</a>")));
 
         EmailConfirmation confirm = fConfirmRepo.retrieveByForeignKey(EmailConfirmation.LOGIN_ID, login.getId());
-        assertThat(confirm, has(EmailConfirmation.TOKEN, equalTo("0000-0000-0000-0000")));
-        assertThat(confirm, has(EmailConfirmation.CONFIRMATION_TIMESTAMP, equalTo(nullValue())));
+        assertThat(confirm, has(EmailConfirmation.TOKEN, equalTo("00000000-0000-0000-0000-000000000000")));
+        assertThat(confirm, has(EmailConfirmation.CONFIRMATION_TIMESTAMP, nullValue()));
         assertThat(confirm, has(EmailConfirmation.CONFIRMED, equalTo(false)));
     }
 

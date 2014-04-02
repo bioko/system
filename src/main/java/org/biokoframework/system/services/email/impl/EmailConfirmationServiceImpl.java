@@ -25,12 +25,24 @@
 
 package org.biokoframework.system.services.email.impl;
 
+import org.apache.log4j.Logger;
 import org.biokoframework.system.entity.authentication.EmailConfirmation;
+import org.biokoframework.system.entity.login.Login;
 import org.biokoframework.system.entity.template.Template;
+import org.biokoframework.system.exceptions.CommandExceptionsFactory;
+import org.biokoframework.system.repository.core.SafeRepositoryHelper;
 import org.biokoframework.system.repository.service.IRepositoryService;
+import org.biokoframework.system.services.email.EmailException;
 import org.biokoframework.system.services.email.IEmailConfirmationService;
 import org.biokoframework.system.services.email.IEmailService;
+import org.biokoframework.system.services.entity.IEntityBuilderService;
+import org.biokoframework.system.services.random.IRandomService;
+import org.biokoframework.system.services.templates.ITemplatingService;
+import org.biokoframework.system.services.templates.TemplatingException;
+import org.biokoframework.utils.exception.ValidationException;
+import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.repository.Repository;
+import org.biokoframework.utils.repository.RepositoryException;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -42,20 +54,56 @@ import java.util.Map;
  */
 public class EmailConfirmationServiceImpl implements IEmailConfirmationService {
 
-    private final IEmailService fEmailService;
-    private final String fNoReplyEmailAddress;
+    private static final Logger LOGGER = Logger.getLogger(EmailConfirmationServiceImpl.class);
+
+    private final IEntityBuilderService fEntityBuilder;
     private final Repository<EmailConfirmation> fConfirmationRepo;
+    private final IRandomService fRandomTokenService;
+
+    private final ITemplatingService fTemplatingService;
+    private final IEmailService fEmailService;
+
+    private final String fNoReplyEmailAddress;
 
     @Inject
-    public EmailConfirmationServiceImpl(IEmailService emailService, IRepositoryService repos, @Named("noReplyEmailAddress") String noreplyEmailAddress) {
-        fEmailService = emailService;
+    public EmailConfirmationServiceImpl(IRepositoryService repos, IEntityBuilderService entityBuilderService, IRandomService randomTokenService,
+                                        IEmailService emailService, ITemplatingService templatingService,
+                                        @Named("noReplyEmailAddress") String noreplyEmailAddress) {
         fConfirmationRepo = repos.getRepository(EmailConfirmation.class);
+        fRandomTokenService = randomTokenService;
+        fEntityBuilder = entityBuilderService;
+
+        fTemplatingService = templatingService;
+        fEmailService = emailService;
 
         fNoReplyEmailAddress = noreplyEmailAddress;
     }
 
     @Override
-    public void sendConfirmationEmail(String userEmail, Template mailTemplate, Map<String, Object> content) {
+    public void sendConfirmationEmail(Login login, Template mailTemplate, Map<String, Object> content) throws EmailException, TemplatingException {
+
+        String token = fRandomTokenService.generateUUID().toString();
+
+        EmailConfirmation confirmation = fEntityBuilder.getInstance(EmailConfirmation.class, new Fields(
+                EmailConfirmation.LOGIN_ID, login.getId(),
+                EmailConfirmation.TOKEN, token,
+                EmailConfirmation.CONFIRMED, false));
+
+        try {
+            fConfirmationRepo.save(confirmation);
+        } catch (ValidationException|RepositoryException exception) {
+            LOGGER.error("Cannot save confirmation entity", exception);
+            throw new EmailException(exception);
+        }
+
+        String userEmail = login.get(Login.USER_EMAIL);
+
+        content.put("token", token);
+        Template compiled = fTemplatingService.compileTemplate(mailTemplate, content);
+
+        String message = compiled.get(Template.BODY);
+        String subject = compiled.get(Template.TITLE);
+        fEmailService.sendASAP(userEmail, fNoReplyEmailAddress, message, subject);
 
     }
 

@@ -31,6 +31,7 @@ package org.biokoframework.system.services.email;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.biokoframework.system.ConfigurationEnum;
+import org.biokoframework.system.services.email.impl.EmailService;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -58,9 +59,9 @@ public class EmailServiceTest {
     public void createMailService() {
         Mailbox.clearAll();
 
-        Injector injector = Guice.createInjector(new EmailModule(ConfigurationEnum.DEV));
+        Injector injector = Guice.createInjector();
 
-        fEmailService = injector.getInstance(IEmailService.class);
+        fEmailService = injector.getInstance(EmailService.class);
     }
 
     @Test

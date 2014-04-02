@@ -25,7 +25,9 @@
 
 package org.biokoframework.system.services.email;
 
+import org.biokoframework.system.entity.login.Login;
 import org.biokoframework.system.entity.template.Template;
+import org.biokoframework.system.services.templates.TemplatingException;
 
 import java.util.Map;
 
@@ -35,7 +37,7 @@ import java.util.Map;
  */
 public interface IEmailConfirmationService {
 
-    void sendConfirmationEmail(String userEmail, Template mailTemplate, Map<String, Object> content);
+    void sendConfirmationEmail(Login login, Template mailTemplate, Map<String, Object> content) throws EmailException, TemplatingException;
 
     void confirmEmailAddress(String loginId, String token);
 
