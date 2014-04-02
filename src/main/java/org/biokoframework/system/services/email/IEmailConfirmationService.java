@@ -25,6 +25,7 @@
 
 package org.biokoframework.system.services.email;
 
+import org.biokoframework.system.command.CommandException;
 import org.biokoframework.system.entity.login.Login;
 import org.biokoframework.system.entity.template.Template;
 import org.biokoframework.system.services.templates.TemplatingException;
@@ -39,7 +40,7 @@ public interface IEmailConfirmationService {
 
     void sendConfirmationEmail(Login login, Template mailTemplate, Map<String, Object> content) throws EmailException, TemplatingException;
 
-    void confirmEmailAddress(String loginId, String token);
+    void confirmEmailAddress(String loginId, String token) throws CommandException, EmailException;
 
-    void isConfirmed(String loginId);
+    boolean isConfirmed(String loginId);
 }

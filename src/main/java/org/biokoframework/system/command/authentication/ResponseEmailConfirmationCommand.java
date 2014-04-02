@@ -33,8 +33,12 @@ import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.CommandException;
 import org.biokoframework.system.entity.authentication.EmailConfirmation;
 import org.biokoframework.system.entity.login.Login;
+import org.biokoframework.system.exceptions.CommandExceptionsFactory;
 import org.biokoframework.system.repository.core.SafeRepositoryHelper;
+import org.biokoframework.system.repository.service.IRepositoryService;
 import org.biokoframework.system.services.currenttime.ICurrentTimeService;
+import org.biokoframework.system.services.email.EmailException;
+import org.biokoframework.system.services.email.IEmailConfirmationService;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.fields.FieldValues;
 import org.biokoframework.utils.fields.Fields;
@@ -46,33 +50,35 @@ import java.util.ArrayList;
 public class ResponseEmailConfirmationCommand extends AbstractCommand {
 
 	private static final String ISO_TIMESTAMP = "yyyy-MM-dd'T'HH:mm:ssZ";
-	private ICurrentTimeService fCurrentTimeService;
-	
-	@Inject
-	public ResponseEmailConfirmationCommand(ICurrentTimeService currentTimeService) {
-		fCurrentTimeService = currentTimeService;
-	}
+
+    private final IEmailConfirmationService fConfirmationService;
+    private final Repository<Login> fLoginRepo;
+
+    @Inject
+	public ResponseEmailConfirmationCommand(IEmailConfirmationService confirmationService, IRepositoryService repos) {
+        fConfirmationService = confirmationService;
+        fLoginRepo = repos.getRepository(Login.class);
+    }
 
 	@Override
 	public Fields execute(Fields input) throws CommandException {
 		logInput(input);
 
-		Repository<Login> loginRepo = getRepository(Login.class);
-		Repository<EmailConfirmation> emailConfirmationRepo = getRepository(EmailConfirmation.class);
-		
-		String loginUserEmail = input.get(Login.USER_EMAIL);
+		String userEmail = input.get(Login.USER_EMAIL);
 		String token = input.get(EmailConfirmation.TOKEN);
-		
-		EmailConfirmation confirmation = emailConfirmationRepo.retrieveByForeignKey(EmailConfirmation.TOKEN, token);
-		Login login = loginRepo.retrieve(confirmation.get(EmailConfirmation.LOGIN_ID).toString());
-		if (login != null && login.get(Login.USER_EMAIL).equals(loginUserEmail)) {
-			String timestamp = fCurrentTimeService.getCurrentTimeAsDateTime().toString(ISO_TIMESTAMP);
-			
-			confirmation.set(EmailConfirmation.CONFIRMATION_TIMESTAMP, timestamp);
-			confirmation.set(EmailConfirmation.CONFIRMED, true);
-			SafeRepositoryHelper.save(emailConfirmationRepo, confirmation);
-		}
-				
+
+        Repository<Login> loginRepo = getRepository(Login.class);
+        Login login = loginRepo.retrieveByForeignKey(Login.USER_EMAIL, userEmail);
+        if (login == null) {
+            throw CommandExceptionsFactory.createEntityNotFound(Login.class.toString(), Login.USER_EMAIL,userEmail);
+        }
+
+        try {
+            fConfirmationService.confirmEmailAddress(login.getId(), token);
+        } catch (EmailException exception) {
+            throw CommandExceptionsFactory.createContainerException(exception);
+        }
+
 		logOutput();
 		return new Fields(GenericFieldNames.RESPONSE, new ArrayList<DomainEntity>());
 	}

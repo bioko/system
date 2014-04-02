@@ -26,12 +26,13 @@
 package org.biokoframework.system.services.email.impl;
 
 import org.apache.log4j.Logger;
+import org.biokoframework.system.command.CommandException;
 import org.biokoframework.system.entity.authentication.EmailConfirmation;
 import org.biokoframework.system.entity.login.Login;
 import org.biokoframework.system.entity.template.Template;
 import org.biokoframework.system.exceptions.CommandExceptionsFactory;
-import org.biokoframework.system.repository.core.SafeRepositoryHelper;
 import org.biokoframework.system.repository.service.IRepositoryService;
+import org.biokoframework.system.services.currenttime.ICurrentTimeService;
 import org.biokoframework.system.services.email.EmailException;
 import org.biokoframework.system.services.email.IEmailConfirmationService;
 import org.biokoframework.system.services.email.IEmailService;
@@ -43,6 +44,7 @@ import org.biokoframework.utils.exception.ValidationException;
 import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.repository.Repository;
 import org.biokoframework.utils.repository.RepositoryException;
+import org.joda.time.format.ISODateTimeFormat;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -58,20 +60,22 @@ public class EmailConfirmationServiceImpl implements IEmailConfirmationService {
 
     private final IEntityBuilderService fEntityBuilder;
     private final Repository<EmailConfirmation> fConfirmationRepo;
+    private final ICurrentTimeService fCurrentTime;
+
     private final IRandomService fRandomTokenService;
-
     private final ITemplatingService fTemplatingService;
-    private final IEmailService fEmailService;
 
+    private final IEmailService fEmailService;
     private final String fNoReplyEmailAddress;
 
     @Inject
     public EmailConfirmationServiceImpl(IRepositoryService repos, IEntityBuilderService entityBuilderService, IRandomService randomTokenService,
-                                        IEmailService emailService, ITemplatingService templatingService,
+                                        ICurrentTimeService currentTimeService, IEmailService emailService, ITemplatingService templatingService,
                                         @Named("noReplyEmailAddress") String noreplyEmailAddress) {
         fConfirmationRepo = repos.getRepository(EmailConfirmation.class);
         fRandomTokenService = randomTokenService;
         fEntityBuilder = entityBuilderService;
+        fCurrentTime = currentTimeService;
 
         fTemplatingService = templatingService;
         fEmailService = emailService;
@@ -108,12 +112,26 @@ public class EmailConfirmationServiceImpl implements IEmailConfirmationService {
     }
 
     @Override
-    public void confirmEmailAddress(String loginId, String token) {
+    public void confirmEmailAddress(String loginId, String token) throws CommandException, EmailException {
+        EmailConfirmation confirmation = fConfirmationRepo.retrieveByForeignKey(EmailConfirmation.TOKEN, token);
+        if (confirmation == null) {
+            throw CommandExceptionsFactory.createEntityNotFound(EmailConfirmation.class.getSimpleName(), EmailConfirmation.TOKEN, token);
+        }
 
+        confirmation.set(EmailConfirmation.CONFIRMED, true);
+        confirmation.set(EmailConfirmation.CONFIRMATION_TIMESTAMP, fCurrentTime.getCurrentTimeAsDateTime().toString(ISODateTimeFormat.dateTimeNoMillis()));
+
+        try {
+            fConfirmationRepo.save(confirmation);
+        } catch (ValidationException|RepositoryException exception) {
+            LOGGER.error("Cannot update confirmation", exception);
+            throw new EmailException(exception);
+        }
     }
 
     @Override
-    public void isConfirmed(String loginId) {
-
+    public boolean isConfirmed(String loginId) {
+        EmailConfirmation confirmation = fConfirmationRepo.retrieveByForeignKey(EmailConfirmation.LOGIN_ID, loginId);
+        return (Boolean) confirmation.get(EmailConfirmation.CONFIRMED);
     }
 }

@@ -35,6 +35,10 @@ import org.biokoframework.system.entity.login.LoginBuilder;
 import org.biokoframework.system.entity.template.Template;
 import org.biokoframework.system.repository.memory.InMemoryRepository;
 import org.biokoframework.system.repository.service.IRepositoryService;
+import org.biokoframework.system.services.currenttime.CurrentTimeModule;
+import org.biokoframework.system.services.currenttime.CurrentTimeServiceTests;
+import org.biokoframework.system.services.currenttime.ICurrentTimeService;
+import org.biokoframework.system.services.currenttime.impl.TestCurrentTimeService;
 import org.biokoframework.system.services.email.impl.EmailConfirmationServiceImpl;
 import org.biokoframework.system.services.email.impl.EmailService;
 import org.biokoframework.system.services.entity.EntityModule;
@@ -90,6 +94,7 @@ public class EmailConfirmationServiceTest {
                 new EntityModule(),
                 new RandomModule(ConfigurationEnum.DEV),
                 new TemplatingModule(ConfigurationEnum.DEV),
+                new CurrentTimeModule(ConfigurationEnum.DEV),
                 new RepositoryModule(ConfigurationEnum.DEV) {
                     @Override
                     protected void configureForDev() {
@@ -120,8 +125,8 @@ public class EmailConfirmationServiceTest {
         fConfirmRepo = repos.getRepository(EmailConfirmation.class);
 
         fService = new EmailConfirmationServiceImpl(repos, fInjector.getInstance(IEntityBuilderService.class),
-                fInjector.getInstance(IRandomService.class), fInjector.getInstance(IEmailService.class),
-                fInjector.getInstance(ITemplatingService.class), "no.reply@example.com");
+                fInjector.getInstance(IRandomService.class), fInjector.getInstance(ICurrentTimeService.class),
+                fInjector.getInstance(IEmailService.class), fInjector.getInstance(ITemplatingService.class), "no.reply@example.com");
 
         fLoginBuilder = fInjector.getInstance(LoginBuilder.class);
     }
@@ -153,6 +158,60 @@ public class EmailConfirmationServiceTest {
         assertThat(confirm, has(EmailConfirmation.TOKEN, equalTo("00000000-0000-0000-0000-000000000000")));
         assertThat(confirm, has(EmailConfirmation.CONFIRMATION_TIMESTAMP, nullValue()));
         assertThat(confirm, has(EmailConfirmation.CONFIRMED, equalTo(false)));
+    }
+
+    @Test
+    public void emailConfirm() throws Exception {
+        TestCurrentTimeService.setCalendar("2014-01-12T01:45:23+0100");
+
+        Login login = fLoginBuilder.loadDefaultExample().build(false);
+        login = fLoginRepo.save(login);
+
+        String token = "00000000-0000-0000-0000-000000000001";
+
+        EmailConfirmation confirmation = fInjector.getInstance(EmailConfirmation.class);
+        confirmation.setAll(new Fields(
+                EmailConfirmation.LOGIN_ID, login.getId(),
+                EmailConfirmation.CONFIRMED, false,
+                EmailConfirmation.TOKEN, token));
+
+        confirmation = fConfirmRepo.save(confirmation);
+
+        fService.confirmEmailAddress(login.getId(), token);
+
+        EmailConfirmation confirmed = fConfirmRepo.retrieve(confirmation.getId());
+
+        assertThat(confirmed, has(EmailConfirmation.LOGIN_ID, equalTo(login.getId())));
+        assertThat(confirmed, has(EmailConfirmation.CONFIRMED, equalTo(true)));
+        assertThat(confirmed, has(EmailConfirmation.TOKEN, equalTo(token)));
+        assertThat(confirmed, has(EmailConfirmation.CONFIRMATION_TIMESTAMP, equalTo("2014-01-12T01:45:23+0100")));
+    }
+
+    @Test
+    public void emailConfirmCheck() throws Exception {
+        Login login = fLoginBuilder.loadDefaultExample().build(false);
+        login = fLoginRepo.save(login);
+
+        String token = "00000000-0000-0000-0000-000000000001";
+
+        EmailConfirmation confirmation = fInjector.getInstance(EmailConfirmation.class);
+        confirmation.setAll(new Fields(
+                EmailConfirmation.LOGIN_ID, login.getId(),
+                EmailConfirmation.CONFIRMED, false,
+                EmailConfirmation.TOKEN, token));
+
+        confirmation = fConfirmRepo.save(confirmation);
+
+        assertThat(fService.isConfirmed(login.getId()), is(false));
+
+        confirmation.setAll(new Fields(
+                EmailConfirmation.CONFIRMED, true,
+                EmailConfirmation.CONFIRMATION_TIMESTAMP, "2014-01-12T01:45:23+0100"));
+
+        fConfirmRepo.save(confirmation);
+
+        assertThat(fService.isConfirmed(login.getId()), is(true));
+
     }
 
 }
