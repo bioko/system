@@ -1,5 +1,5 @@
 /*
- * Copyright (c) $year.
+ * Copyright (c) 2014.
  * 	Mikol Faro		<mikol.faro@gmail.com>
  * 	Simone Mangano	 	<simone.mangano@ieee.org>
  * 	Mattia Tortorelli	<mattia.tortorelli@gmail.com>
