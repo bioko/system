@@ -28,12 +28,17 @@
 package org.biokoframework.system.services.repository;
 
 import com.google.inject.TypeLiteral;
+import com.google.inject.multibindings.Multibinder;
 import com.google.inject.name.Names;
 import org.biokoframework.system.ConfigurationEnum;
+import org.biokoframework.system.repository.population.IRepositoryPopulator;
 import org.biokoframework.system.repository.service.IRepositoryService;
 import org.biokoframework.system.services.injection.ServiceModule;
 import org.biokoframework.system.services.repository.impl.JitRepositoryService;
 import org.biokoframework.utils.repository.Repository;
+
+import java.util.Collections;
+import java.util.Set;
 
 /**
  * 
@@ -53,11 +58,28 @@ public abstract class RepositoryModule extends ServiceModule {
 		
 		bind(IRepositoryService.class)
 			.to(JitRepositoryService.class);
+
+        populateRepository();
 	}
-	
-	@SuppressWarnings("rawtypes")
+
+    @SuppressWarnings("rawtypes")
 	protected void bindRepositoryTo(Class<? extends Repository> repositoryClass) {
 		bind(new TypeLiteral<Class>(){}).annotatedWith(Names.named("repository")).toInstance(repositoryClass);
 	}
-	
+
+    /**
+     * Override this method if you are interested in populating the repository.<br/>
+     * <b>Do not call {@code super.populateRepository()}</b>
+     *
+     * @see  #populateRepositoryWith(Class<? extends IRepositoryPopulator)
+     */
+    protected void populateRepository() {
+        bind(new TypeLiteral<Set<IRepositoryPopulator>>() {}).toInstance(Collections.<IRepositoryPopulator>emptySet());
+    }
+
+    protected void populateRepositoryWith(Class<? extends IRepositoryPopulator> populator) {
+        Multibinder<IRepositoryPopulator> repositoryPopulatorBinder = Multibinder.newSetBinder(binder(), IRepositoryPopulator.class);
+        repositoryPopulatorBinder.addBinding().to(populator);
+    }
+
 }
