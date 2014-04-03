@@ -34,13 +34,10 @@ import org.biokoframework.system.command.CommandException;
 import org.biokoframework.system.entity.authentication.EmailConfirmation;
 import org.biokoframework.system.entity.login.Login;
 import org.biokoframework.system.exceptions.CommandExceptionsFactory;
-import org.biokoframework.system.repository.core.SafeRepositoryHelper;
 import org.biokoframework.system.repository.service.IRepositoryService;
-import org.biokoframework.system.services.currenttime.ICurrentTimeService;
 import org.biokoframework.system.services.email.EmailException;
 import org.biokoframework.system.services.email.IEmailConfirmationService;
 import org.biokoframework.utils.domain.DomainEntity;
-import org.biokoframework.utils.fields.FieldValues;
 import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.repository.Repository;
 

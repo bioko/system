@@ -30,7 +30,6 @@ package org.biokoframework.system.services.email;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import org.biokoframework.system.ConfigurationEnum;
 import org.biokoframework.system.services.email.impl.EmailService;
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -39,12 +38,9 @@ import org.jvnet.mock_javamail.Mailbox;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
-
 import java.io.IOException;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.startsWith;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
 /**
