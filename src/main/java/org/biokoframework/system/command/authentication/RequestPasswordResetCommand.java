@@ -55,54 +55,53 @@ import java.util.Map;
 
 public class RequestPasswordResetCommand extends AbstractCommand {
 
-	private static final String NO_REPLY = "no-reply@engaged.it";
-
 	public static final String PASSWORD_RESET_TOKEN = "passwordResetToken";
 
 	public static final String PASSWORD_RESET_MAIL_TEMPLATE = "passwordResetMailTemplate";
 
-	private static final String RESET_PASSWORD_LANDING_PAGE_URL = "resetPasswordLandingPage";
-	
 	private final ICurrentTimeService fCurrentTimeService;
-	private final IRandomService fRandomTokenService;
-	private final IEmailService fEmailService;
 
-	private final String fLandingPageUrl;
+    private final IRandomService fRandomTokenService;
+    private final IEmailService fEmailService;
+
+    private final String fLandingPageUrl;
+    private final String fNoReply;
 
 	@Inject
 	public RequestPasswordResetCommand(ICurrentTimeService currentTimeService, IRandomService randomTokenService, 
-			IEmailService emailService, @Named("resetPasswordLandingPage") String landingPageUrl) {
+			IEmailService emailService, @Named("resetPasswordLandingPage") String landingPageUrl, @Named("noReplyEmailAddress") String noReply) {
 		fCurrentTimeService = currentTimeService;
 		fRandomTokenService = randomTokenService;
 		fEmailService = emailService;
 		fLandingPageUrl = landingPageUrl;
+        fNoReply = noReply;
 	}
 	
 	@Override
 	public Fields execute(Fields input) throws CommandException {
 		logInput(input);
 		
-		Repository<Login> _loginRepo = getRepository(Login.class);
-		Repository<PasswordReset> _passwordResetRepo = getRepository(PasswordReset.class);
-		Repository<Template> _templateRepo = getRepository(Template.class);
+		Repository<Login> loginRepo = getRepository(Login.class);
+		Repository<PasswordReset> passwordResetRepo = getRepository(PasswordReset.class);
+		Repository<Template> templateRepo = getRepository(Template.class);
 		
 		String userEmail = input.get(Login.USER_EMAIL);
-		Login login = _loginRepo.retrieveByForeignKey(Login.USER_EMAIL, userEmail);
+		Login login = loginRepo.retrieveByForeignKey(Login.USER_EMAIL, userEmail);
 		if (login == null) {
 			throw CommandExceptionsFactory.createEntityNotFound(Login.class.getSimpleName(), Login.USER_EMAIL, userEmail);
 		}
-		
-		DateTime now = fCurrentTimeService.getCurrentTimeAsDateTime();
-		
-		PasswordReset passwordReset = new PasswordReset();
-		passwordReset.set(PasswordReset.LOGIN_ID, login.getId());
-		passwordReset.set(PasswordReset.TOKEN_EXPIRATION, now.plusDays(1).toString(ISODateTimeFormat.dateTimeNoMillis()));
-		String randomToken = fRandomTokenService.generateString(PASSWORD_RESET_TOKEN, 20);
-		passwordReset.set(PasswordReset.TOKEN, randomToken);
-		SafeRepositoryHelper.save(_passwordResetRepo, passwordReset);
+
+        DateTime tomorrow = fCurrentTimeService.getCurrentTimeAsDateTime().plusDays(1);
+        String randomToken = fRandomTokenService.generateString(PASSWORD_RESET_TOKEN, 20);
+
+        PasswordReset passwordReset = createEntity(PasswordReset.class, new Fields(
+                PasswordReset.LOGIN_ID, login.getId(),
+                PasswordReset.TOKEN_EXPIRATION, tomorrow.toString(ISODateTimeFormat.dateTimeNoMillis()),
+                PasswordReset.TOKEN, randomToken));
+		SafeRepositoryHelper.save(passwordResetRepo, passwordReset);
 
 
-		Template mailTemplate = _templateRepo.retrieveByForeignKey(Template.TRACK, PASSWORD_RESET_MAIL_TEMPLATE);
+		Template mailTemplate = templateRepo.retrieveByForeignKey(Template.TRACK, PASSWORD_RESET_MAIL_TEMPLATE);
 		if (mailTemplate != null) {
 			
 			
@@ -114,7 +113,7 @@ public class RequestPasswordResetCommand extends AbstractCommand {
 			
 			String targetEmail = login.get(Login.USER_EMAIL);
 			try {
-				fEmailService.sendASAP(targetEmail, NO_REPLY, contentBuilder.buildBody(), contentBuilder.buildTitle());
+				fEmailService.sendASAP(targetEmail, fNoReply, contentBuilder.buildBody(), contentBuilder.buildTitle());
 			} catch (EmailException exception) {
 				throw CommandExceptionsFactory.createContainerException(exception);
 			}
