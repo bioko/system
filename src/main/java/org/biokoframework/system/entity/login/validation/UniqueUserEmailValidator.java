@@ -30,7 +30,7 @@ public class UniqueUserEmailValidator extends AbstractAdditionalValidator {
         if (existingLogin == null) {
             clearError();
             return true;
-        } else if (existingLogin.getId() == entity.getId()) {
+        } else if (existingLogin.getId().equals(entity.getId())) {
             clearError();
             return true;
         } else {
