@@ -38,16 +38,19 @@ import org.biokoframework.system.services.passwordreset.IPasswordResetService;
 import org.biokoframework.system.services.random.IRandomService;
 import org.biokoframework.system.services.templates.ITemplatingService;
 import org.biokoframework.system.services.templates.TemplatingException;
+import org.biokoframework.utils.domain.ErrorEntity;
 import org.biokoframework.utils.exception.ValidationException;
+import org.biokoframework.utils.fields.FieldNames;
 import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.repository.Repository;
 import org.biokoframework.utils.repository.RepositoryException;
 import org.joda.time.DateTime;
-import org.joda.time.format.ISODateTimeFormat;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.Map;
+
+import static org.joda.time.format.ISODateTimeFormat.dateTimeNoMillis;
 
 /**
  * @author Mikol Faro <mikol.faro@gmail.com>
@@ -123,14 +126,37 @@ public class EmailPasswordResetService implements IPasswordResetService {
 
         PasswordReset passwordReset = fEntityBuilder.getInstance(PasswordReset.class, new Fields(
                 PasswordReset.LOGIN_ID, loginId,
-                PasswordReset.TOKEN_EXPIRATION, tomorrow.toString(ISODateTimeFormat.dateTimeNoMillis()),
+                PasswordReset.TOKEN_EXPIRATION, tomorrow.toString(dateTimeNoMillis()),
                 PasswordReset.TOKEN, randomToken));
         fPasswordResetRepo.save(passwordReset);
         return passwordReset;
     }
 
     @Override
-    public void performPasswordReset() {
+    public void performPasswordReset(String token, String newPassword) throws ValidationException, RepositoryException {
+        PasswordReset reset = fPasswordResetRepo.retrieveByForeignKey(PasswordReset.TOKEN, token);
+        if (reset != null) {
+            if (!isPast((String) reset.get(PasswordReset.TOKEN_EXPIRATION))) {
+                String loginId = reset.get(PasswordReset.LOGIN_ID);
+                Login login = fLoginRepo.retrieve(loginId);
+                login.set(Login.PASSWORD, newPassword);
+                fLoginRepo.save(login);
+            } else {
+                fPasswordResetRepo.delete(reset.getId());
 
+                ErrorEntity error = new ErrorEntity();
+                error.setAll(new Fields(
+                        ErrorEntity.ERROR_CODE, FieldNames.TOKEN_EXPIRED_CODE,
+                        ErrorEntity.ERROR_MESSAGE, "The token is expired",
+                        ErrorEntity.ERROR_FIELD, PasswordReset.TOKEN_EXPIRATION));
+
+                throw new ValidationException(error);
+            }
+        }
+    }
+
+    private boolean isPast(String timeStamp) {
+        DateTime expiration = DateTime.parse(timeStamp, dateTimeNoMillis());
+        return fCurrentTime.getCurrentTimeAsDateTime().isAfter(expiration);
     }
 }

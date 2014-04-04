@@ -26,6 +26,8 @@
 package org.biokoframework.system.services.passwordreset;
 
 import org.biokoframework.system.entity.template.Template;
+import org.biokoframework.utils.exception.ValidationException;
+import org.biokoframework.utils.repository.RepositoryException;
 
 import java.util.Map;
 
@@ -37,6 +39,6 @@ public interface IPasswordResetService {
 
     void requestPasswordReset(String userEmail, Template template, Map<String, Object> templateContent);
 
-    void performPasswordReset();
+    void performPasswordReset(String token, String newPassword) throws ValidationException, RepositoryException;
 
 }

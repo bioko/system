@@ -48,16 +48,20 @@ import org.biokoframework.system.services.repository.RepositoryModule;
 import org.biokoframework.system.services.templates.ITemplatingService;
 import org.biokoframework.system.services.templates.TemplatingModule;
 import org.biokoframework.utils.domain.EntityBuilder;
+import org.biokoframework.utils.exception.ValidationException;
 import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.repository.Repository;
 import org.biokoframework.utils.validation.ValidationModule;
+import org.hamcrest.Matchers;
 import org.junit.Before;
-import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.jvnet.mock_javamail.Mailbox;
 
 import javax.mail.Message;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.google.inject.name.Names.named;
@@ -126,7 +130,7 @@ public class EmailPasswordResetServiceTest {
     }
 
     @Test
-    public void simpleTest() throws Exception {
+    public void requestPasswordReset() throws Exception {
         String now = "2014-01-12T01:45:23+0100";
         String tomorrow = "2014-01-13T01:45:23+0100";
         TestCurrentTimeService.setCalendar(now);
@@ -158,10 +162,89 @@ public class EmailPasswordResetServiceTest {
         assertThat((String) message.getContent(), is(equalTo("<a href=\"http://example.com/reset-password?token=00000000-0000-0000-0000-000000000000\">Click me</a>")));
     }
 
-    @Ignore("not yet implemented")
     @Test
-    public void resetPasswordOfUnexistingAccount() {
+    public void performPasswordReset() throws Exception {
+        String now = "2014-01-12T01:45:23+0100";
+        String anHourLater = "2014-01-12T02:45:23+0100";
+        TestCurrentTimeService.setCalendar(now);
 
+        String token = "00000000-0000-0000-0000-000000000001";
+
+        Login login = fLoginBuilder.loadDefaultExample().build(false);
+        login = fLoginRepo.save(login);
+
+        PasswordReset reset = fInjector.getInstance(PasswordReset.class);
+        reset.setAll(new Fields(
+                PasswordReset.TOKEN, token,
+                PasswordReset.TOKEN_EXPIRATION, anHourLater,
+                PasswordReset.LOGIN_ID, login.getId()));
+        fPasswordResetRepo.save(reset);
+
+        String newPassword = "newPassword";
+        fPasswordResetService.performPasswordReset(token, newPassword);
+
+        login = fLoginRepo.retrieve(login.getId());
+        assertThat(login, has(Login.PASSWORD, equalTo(newPassword)));
+    }
+
+    @Test
+    public void requestResetPasswordOfUnexistingAccount() throws Exception {
+
+        String now = "2014-01-12T01:45:23+0100";
+        TestCurrentTimeService.setCalendar(now);
+
+        Login login = fLoginBuilder.loadDefaultExample().build(false);
+        fLoginRepo.save(login);
+
+        String userEmail = "this-is-not-a-login@example.com";
+
+        Template template = fInjector.getInstance(Template.class);
+        template.setAll(new Fields(
+                Template.BODY, "<a href=\"${url}?token=${token}\">Click me</a>",
+                Template.TITLE, "Reset password"));
+
+        Map<String, Object> content = new HashMap<>();
+        content.put("url", "http://example.com/reset-password");
+
+        fPasswordResetService.requestPasswordReset(userEmail, template, content);
+
+        List<PasswordReset> resets = fPasswordResetRepo.getAll();
+        assertThat(resets, is(Matchers.<PasswordReset>empty()));
+
+        Mailbox mailbox = Mailbox.get(userEmail);
+        assertThat(mailbox, is(Matchers.<Message>empty()));
+
+    }
+
+    @Rule
+    public ExpectedException expected = ExpectedException.none();
+
+    @Test
+    public void performPasswordResetWithTokenExpired() throws Exception {
+        expected.expect(ValidationException.class);
+
+        String now = "2014-01-12T01:45:23+0100";
+        String anHourAgo = "2014-01-12T00:45:23+0100";
+        TestCurrentTimeService.setCalendar(now);
+
+        String token = "00000000-0000-0000-0000-000000000001";
+
+        Login login = fLoginBuilder.loadDefaultExample().build(false);
+        login = fLoginRepo.save(login);
+
+        PasswordReset reset = fInjector.getInstance(PasswordReset.class);
+        reset.setAll(new Fields(
+                PasswordReset.TOKEN, token,
+                PasswordReset.TOKEN_EXPIRATION, anHourAgo,
+                PasswordReset.LOGIN_ID, login.getId()));
+        fPasswordResetRepo.save(reset);
+
+        String oldPassword = login.get(Login.PASSWORD);
+        String newPassword = "newPassword";
+        fPasswordResetService.performPasswordReset(token, newPassword);
+
+        login = fLoginRepo.retrieve(login.getId());
+        assertThat(login, has(Login.PASSWORD, equalTo(oldPassword)));
     }
 
 }

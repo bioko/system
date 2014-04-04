@@ -25,9 +25,18 @@
 
 package org.biokoframework.system.services.passwordreset;
 
+import com.google.inject.AbstractModule;
+import org.biokoframework.system.services.passwordreset.impl.EmailPasswordResetService;
+
 /**
  * @author Mikol Faro <mikol.faro@gmail.com>
  * @date 2014 Apr 03
  */
-public class PasswordResetModule {
+public class PasswordResetModule extends AbstractModule {
+
+    @Override
+    protected void configure() {
+        bind(IPasswordResetService.class).to(EmailPasswordResetService.class);
+    }
+
 }
