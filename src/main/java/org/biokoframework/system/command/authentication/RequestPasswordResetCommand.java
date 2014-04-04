@@ -64,25 +64,35 @@ public class RequestPasswordResetCommand extends AbstractCommand {
 		logInput(input);
 		
 		Repository<Login> loginRepo = getRepository(Login.class);
-		Repository<Template> templateRepo = getRepository(Template.class);
-		
+
 		String userEmail = input.get(Login.USER_EMAIL);
-		Login login = loginRepo.retrieveByForeignKey(Login.USER_EMAIL, userEmail);
-		if (login == null) {
-			throw CommandExceptionsFactory.createEntityNotFound(Login.class.getSimpleName(), Login.USER_EMAIL, userEmail);
-		}
+        ensureLoginExists(loginRepo, userEmail);
 
-        Template mailTemplate = templateRepo.retrieveByForeignKey(Template.TRACK, PASSWORD_RESET_MAIL_TEMPLATE);
-        if (mailTemplate != null) {
-            Map<String, Object> contentMap = new HashMap<>();
-            contentMap.put("url", StringUtils.defaultString(fLandingPageUrl));
+        Template mailTemplate = retrieveTemplateOrFailTrying();
 
-            fPasswordResetService.requestPasswordReset(userEmail, mailTemplate, contentMap);
+        Map<String, Object> contentMap = new HashMap<>();
+        contentMap.put("url", StringUtils.defaultString(fLandingPageUrl));
 
-        }
+        fPasswordResetService.requestPasswordReset(userEmail, mailTemplate, contentMap);
 
 		logOutput();
 		return new Fields(GenericFieldNames.RESPONSE, new ArrayList<DomainEntity>());
 	}
+
+    private void ensureLoginExists(Repository<Login> loginRepo, String userEmail) throws CommandException {
+        Login login = loginRepo.retrieveByForeignKey(Login.USER_EMAIL, userEmail);
+        if (login == null) {
+            throw CommandExceptionsFactory.createEntityNotFound(Login.class, Login.USER_EMAIL, userEmail);
+        }
+    }
+
+    private Template retrieveTemplateOrFailTrying() throws CommandException {
+        Repository<Template> templateRepo = getRepository(Template.class);
+        Template mailTemplate = templateRepo.retrieveByForeignKey(Template.TRACK, PASSWORD_RESET_MAIL_TEMPLATE);
+        if (mailTemplate == null) {
+            throw CommandExceptionsFactory.createEntityNotFound(Template.class, Template.TRACK, PASSWORD_RESET_MAIL_TEMPLATE);
+        }
+        return mailTemplate;
+    }
 
 }

@@ -57,7 +57,7 @@ public class HeadBinaryEntityCommand extends AbstractCommand {
 				
 		BinaryEntity blob = blobRepo.retrieveWithoutFile(blobId);
 		if (blob == null) {
-			throw CommandExceptionsFactory.createEntityNotFound(BinaryEntity.class.getSimpleName(), blobId);
+			throw CommandExceptionsFactory.createEntityNotFound(BinaryEntity.class, blobId);
 		}
 		response.add(blob);
 		

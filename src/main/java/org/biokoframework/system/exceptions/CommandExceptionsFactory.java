@@ -31,6 +31,7 @@ import org.biokoframework.system.KILL_ME.exception.CommandNotFoundException;
 import org.biokoframework.system.command.CommandException;
 import org.biokoframework.system.entity.EntityNotFoundException;
 import org.biokoframework.system.services.authentication.AuthenticationFailureException;
+import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.domain.ErrorEntity;
 import org.biokoframework.utils.fields.FieldNames;
 import org.biokoframework.utils.fields.Fields;
@@ -69,13 +70,13 @@ public class CommandExceptionsFactory {
 		return new CommandNotFoundException(entity);
 	}
 	
-	public static CommandException createEntityNotFound(String entityName, String entityId) {
+	public static CommandException createEntityNotFound(Class<? extends DomainEntity> entityClass, String entityId) {
 		String[] message = sErrorMap.get(FieldNames.ENTITY_WITH_ID_NOT_FOUND_CODE);
 		Fields fields = new Fields(
 				ErrorEntity.ERROR_CODE, FieldNames.ENTITY_WITH_ID_NOT_FOUND_CODE,
 				ErrorEntity.ERROR_MESSAGE, new StringBuilder()
 					.append(message[0])
-					.append(entityName)
+					.append(entityClass.getSimpleName())
 					.append(message[1])
 					.append(entityId)
 					.append(message[2])
@@ -86,13 +87,13 @@ public class CommandExceptionsFactory {
 		return new EntityNotFoundException(entity);
 	}
 	
-	public static CommandException createEntityNotFound(String entityName, String fieldName, String fieldValue) {
+	public static CommandException createEntityNotFound(Class<? extends DomainEntity> entityClass, String fieldName, String fieldValue) {
 		String[] message = sErrorMap.get(FieldNames.ENTITY_WITH_FIELD_NOT_FOUND_CODE);
 		Fields fields = new Fields(
 				ErrorEntity.ERROR_CODE, FieldNames.ENTITY_WITH_FIELD_NOT_FOUND_CODE,
 				ErrorEntity.ERROR_MESSAGE, new StringBuilder()
 					.append(message[0])
-					.append(entityName)
+					.append(entityClass.getSimpleName())
 					.append(message[1])
 					.append(fieldName)
 					.append(message[2])

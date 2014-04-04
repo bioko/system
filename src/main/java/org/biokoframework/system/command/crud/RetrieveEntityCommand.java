@@ -65,7 +65,7 @@ public class RetrieveEntityCommand extends AbstractCommand {
 		} else {
 			DomainEntity entity = repository.retrieve(id);
 			if (entity == null) {
-				throw CommandExceptionsFactory.createEntityNotFound(fDomainEntityClass.getSimpleName(), id);
+				throw CommandExceptionsFactory.createEntityNotFound(fDomainEntityClass, id);
 			}
 			entities.add(entity);
 		}

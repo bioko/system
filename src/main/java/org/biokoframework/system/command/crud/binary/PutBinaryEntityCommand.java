@@ -61,7 +61,7 @@ public class PutBinaryEntityCommand extends AbstractCommand {
 		}
 		BinaryEntity existingBlob = blobRepo.retrieveWithoutFile(blobId);
 		if (existingBlob == null) {
-			throw CommandExceptionsFactory.createEntityNotFound(BinaryEntity.class.getSimpleName(), blobId);
+			throw CommandExceptionsFactory.createEntityNotFound(BinaryEntity.class, blobId);
 		}
 		
 		BinaryEntity newBlob = input.get(fBlobFieldName);

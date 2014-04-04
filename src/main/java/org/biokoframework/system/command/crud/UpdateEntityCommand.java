@@ -66,7 +66,7 @@ public class UpdateEntityCommand extends AbstractCommand {
 		
 		DomainEntity entity = repository.retrieve(id);
 		if (entity == null) {
-			throw CommandExceptionsFactory.createEntityNotFound(fDomainEntityClass.getSimpleName(), id);
+			throw CommandExceptionsFactory.createEntityNotFound(fDomainEntityClass, id);
 		}
 		
 		for (String aKey : input.keys()) {

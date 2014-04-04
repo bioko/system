@@ -67,7 +67,7 @@ public class ResponseEmailConfirmationCommand extends AbstractCommand {
         Repository<Login> loginRepo = getRepository(Login.class);
         Login login = loginRepo.retrieveByForeignKey(Login.USER_EMAIL, userEmail);
         if (login == null) {
-            throw CommandExceptionsFactory.createEntityNotFound(Login.class.toString(), Login.USER_EMAIL,userEmail);
+            throw CommandExceptionsFactory.createEntityNotFound(Login.class, Login.USER_EMAIL,userEmail);
         }
 
         try {

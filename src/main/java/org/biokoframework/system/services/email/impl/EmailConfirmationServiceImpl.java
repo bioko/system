@@ -115,7 +115,7 @@ public class EmailConfirmationServiceImpl implements IEmailConfirmationService {
     public void confirmEmailAddress(String loginId, String token) throws CommandException, EmailException {
         EmailConfirmation confirmation = fConfirmationRepo.retrieveByForeignKey(EmailConfirmation.TOKEN, token);
         if (confirmation == null) {
-            throw CommandExceptionsFactory.createEntityNotFound(EmailConfirmation.class.getSimpleName(), EmailConfirmation.TOKEN, token);
+            throw CommandExceptionsFactory.createEntityNotFound(EmailConfirmation.class, EmailConfirmation.TOKEN, token);
         }
 
         confirmation.set(EmailConfirmation.CONFIRMED, true);

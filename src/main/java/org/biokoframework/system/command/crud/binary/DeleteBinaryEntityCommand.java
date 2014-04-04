@@ -58,7 +58,7 @@ public class DeleteBinaryEntityCommand extends AbstractCommand {
 				
 		BinaryEntity blob = blobRepo.delete(blobId);
 		if (blob == null) {
-			throw CommandExceptionsFactory.createEntityNotFound(BinaryEntity.class.getSimpleName(), blobId);
+			throw CommandExceptionsFactory.createEntityNotFound(BinaryEntity.class, blobId);
 		}
 		
 		result.put(GenericFieldNames.RESPONSE, response);
