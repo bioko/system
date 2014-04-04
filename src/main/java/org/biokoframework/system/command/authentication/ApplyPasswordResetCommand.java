@@ -31,56 +31,38 @@ import com.google.inject.Inject;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.CommandException;
-import org.biokoframework.system.entity.authentication.PasswordReset;
-import org.biokoframework.system.entity.login.Login;
 import org.biokoframework.system.exceptions.CommandExceptionsFactory;
-import org.biokoframework.system.repository.core.SafeRepositoryHelper;
-import org.biokoframework.system.services.currenttime.ICurrentTimeService;
+import org.biokoframework.system.services.passwordreset.IPasswordResetService;
 import org.biokoframework.utils.domain.DomainEntity;
+import org.biokoframework.utils.exception.ValidationException;
 import org.biokoframework.utils.fields.Fields;
-import org.biokoframework.utils.repository.Repository;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
+import org.biokoframework.utils.repository.RepositoryException;
 
 import java.util.ArrayList;
 
 public class ApplyPasswordResetCommand extends AbstractCommand {
 
-	private static final String ISO_TIMESTAMP = "yyyy-MM-dd'T'HH:mm:ssZ";
-	private final ICurrentTimeService fCurrentTimeService;
-	
+    private final IPasswordResetService fPasswordResetService;
 
-	@Inject
-	public ApplyPasswordResetCommand(ICurrentTimeService currentTimeService) {
-		fCurrentTimeService = currentTimeService;
+    @Inject
+	public ApplyPasswordResetCommand(IPasswordResetService passwordResetService) {
+		fPasswordResetService = passwordResetService;
 	}
 	
 	@Override
-	public Fields execute(Fields input) throws CommandException {
+	public Fields execute(Fields input) throws CommandException, ValidationException {
 		logInput(input);
 
-		Repository<Login> loginRepo = getRepository(Login.class);
-		Repository<PasswordReset> passwordResetRepo = getRepository(PasswordReset.class);
-		
-		String token = input.get(PasswordReset.TOKEN);
-		PasswordReset passwordReset = passwordResetRepo.retrieveByForeignKey(PasswordReset.TOKEN, token);
-		
-		if (passwordReset != null) {
-			passwordResetRepo.delete(passwordReset.getId());
+        String token = input.get("token");
+        String newPassword = input.get("password");
 
-			DateTime tokenExpireTime = DateTime.parse(passwordReset.get(PasswordReset.TOKEN_EXPIRATION).toString(), DateTimeFormat.forPattern(ISO_TIMESTAMP));
-			DateTime now = fCurrentTimeService.getCurrentTimeAsDateTime();
-			if (now.isBefore(tokenExpireTime)) {
-				Login login = loginRepo.retrieve(passwordReset.get(PasswordReset.LOGIN_ID).toString());
-				login.set(Login.PASSWORD, input.get(Login.PASSWORD).toString());
-				SafeRepositoryHelper.save(loginRepo, login);
-			}
-		} else {
-			throw CommandExceptionsFactory.createEntityNotFound(PasswordReset.class.getSimpleName(), PasswordReset.TOKEN, token);
-		}
-		
+        try {
+            fPasswordResetService.performPasswordReset(token, newPassword);
+        } catch (RepositoryException exception) {
+            throw CommandExceptionsFactory.createContainerException(exception);
+        }
 
-		logOutput();
+        logOutput();
 		return new Fields(GenericFieldNames.RESPONSE, new ArrayList<DomainEntity>());
 	}
 

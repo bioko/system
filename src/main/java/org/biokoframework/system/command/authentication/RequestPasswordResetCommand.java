@@ -27,13 +27,14 @@
 
 package org.biokoframework.system.command.authentication;
 
+import org.apache.commons.lang3.StringUtils;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.CommandException;
+import org.biokoframework.system.entity.login.Login;
 import org.biokoframework.system.entity.template.Template;
-import org.biokoframework.system.services.currenttime.ICurrentTimeService;
-import org.biokoframework.system.services.email.IEmailService;
-import org.biokoframework.system.services.random.IRandomService;
+import org.biokoframework.system.exceptions.CommandExceptionsFactory;
+import org.biokoframework.system.services.passwordreset.IPasswordResetService;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.repository.Repository;
@@ -41,73 +42,46 @@ import org.biokoframework.utils.repository.Repository;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RequestPasswordResetCommand extends AbstractCommand {
 
 	public static final String PASSWORD_RESET_MAIL_TEMPLATE = "passwordResetMailTemplate";
 
-	private final ICurrentTimeService fCurrentTimeService;
 
-    private final IRandomService fRandomTokenService;
-    private final IEmailService fEmailService;
-
+    private final IPasswordResetService fPasswordResetService;
     private final String fLandingPageUrl;
-    private final String fNoReply;
 
-	@Inject
-	public RequestPasswordResetCommand(ICurrentTimeService currentTimeService, IRandomService randomTokenService, 
-			IEmailService emailService, @Named("resetPasswordLandingPage") String landingPageUrl, @Named("noReplyEmailAddress") String noReply) {
-		fCurrentTimeService = currentTimeService;
-		fRandomTokenService = randomTokenService;
-		fEmailService = emailService;
+    @Inject
+	public RequestPasswordResetCommand(IPasswordResetService passwordResetService, @Named("resetPasswordLandingPage") String landingPageUrl) {
+        fPasswordResetService = passwordResetService;
 		fLandingPageUrl = landingPageUrl;
-        fNoReply = noReply;
 	}
 	
 	@Override
 	public Fields execute(Fields input) throws CommandException {
 		logInput(input);
 		
-//		Repository<Login> loginRepo = getRepository(Login.class);
-//		Repository<PasswordReset> passwordResetRepo = getRepository(PasswordReset.class);
+		Repository<Login> loginRepo = getRepository(Login.class);
 		Repository<Template> templateRepo = getRepository(Template.class);
 		
-//		String userEmail = input.get(Login.USER_EMAIL);
-//		Login login = loginRepo.retrieveByForeignKey(Login.USER_EMAIL, userEmail);
-//		if (login == null) {
-//			throw CommandExceptionsFactory.createEntityNotFound(Login.class.getSimpleName(), Login.USER_EMAIL, userEmail);
-//		}
+		String userEmail = input.get(Login.USER_EMAIL);
+		Login login = loginRepo.retrieveByForeignKey(Login.USER_EMAIL, userEmail);
+		if (login == null) {
+			throw CommandExceptionsFactory.createEntityNotFound(Login.class.getSimpleName(), Login.USER_EMAIL, userEmail);
+		}
 
-//        DateTime tomorrow = fCurrentTimeService.getCurrentTimeAsDateTime().plusDays(1);
-//        String randomToken = fRandomTokenService.generateString(PASSWORD_RESET_TOKEN, 20);
-//
-//        PasswordReset passwordReset = createEntity(PasswordReset.class, new Fields(
-//                PasswordReset.LOGIN_ID, login.getId(),
-//                PasswordReset.TOKEN_EXPIRATION, tomorrow.toString(ISODateTimeFormat.dateTimeNoMillis()),
-//                PasswordReset.TOKEN, randomToken));
-//		SafeRepositoryHelper.save(passwordResetRepo, passwordReset);
+        Template mailTemplate = templateRepo.retrieveByForeignKey(Template.TRACK, PASSWORD_RESET_MAIL_TEMPLATE);
+        if (mailTemplate != null) {
+            Map<String, Object> contentMap = new HashMap<>();
+            contentMap.put("url", StringUtils.defaultString(fLandingPageUrl));
 
+            fPasswordResetService.requestPasswordReset(userEmail, mailTemplate, contentMap);
 
-//		Template mailTemplate = templateRepo.retrieveByForeignKey(Template.TRACK, PASSWORD_RESET_MAIL_TEMPLATE);
-//		if (mailTemplate != null) {
-//			Map<String, Object> contentMap = new HashMap<String, Object>();
-//			contentMap.put("url", StringUtils.defaultString(fLandingPageUrl));
-//			contentMap.put("token", randomToken);
-//			contentMap.put("userEmail", login.get(Login.USER_EMAIL));
-//			ContentBuilder contentBuilder = new ContentBuilder(mailTemplate, contentMap);
-//
-//			String targetEmail = login.get(Login.USER_EMAIL);
-//			try {
-//				fEmailService.sendASAP(targetEmail, fNoReply, contentBuilder.buildBody(), contentBuilder.buildTitle());
-//			} catch (EmailException exception) {
-//				throw CommandExceptionsFactory.createContainerException(exception);
-//			}
-//
-//		} else {
-//			throw CommandExceptionsFactory.createEntityNotFound(Template.class.getSimpleName(), Template.TRACK, PASSWORD_RESET_MAIL_TEMPLATE);
-//		}
-//
-//		logOutput();
+        }
+
+		logOutput();
 		return new Fields(GenericFieldNames.RESPONSE, new ArrayList<DomainEntity>());
 	}
 
