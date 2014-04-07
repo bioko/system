@@ -42,14 +42,14 @@ import java.util.Map.Entry;
 
 
 public class JsonSystemDescriptor {
-	
+
 	public JsonSystemDescription describeSystem(Context context) {
 		JsonSystemDescription description = new JsonSystemDescription();
 
 		for (Class<? extends DomainEntity> anEntityClass : findEntities((Class<?>)context.get(Context.COMMANDS_CLASS))) {
 			description.addEntity(anEntityClass.getSimpleName(), describeEntity(anEntityClass));
 		}
-		
+
 		return description;
 	}
 

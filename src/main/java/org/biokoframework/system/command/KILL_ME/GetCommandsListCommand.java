@@ -57,11 +57,6 @@ public class GetCommandsListCommand extends AbstractCommand {
 	}
 	
 	@Override
-	public void onContextInitialized() {
-		_commandHandler = fContext.getCommandHandler();
-	}
-
-	@Override
 	public Fields execute(Fields input) throws CommandException {
 		LOGGER.info("EXECUTING Command:" + this.getClass().getSimpleName());
 		Fields result = new Fields();

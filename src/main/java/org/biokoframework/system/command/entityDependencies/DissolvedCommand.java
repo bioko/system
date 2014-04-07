@@ -45,6 +45,7 @@ import org.biokoframework.utils.repository.Repository;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 public class DissolvedCommand extends AbstractCommand {
 
 	private static final String COMPONING_KEYS_METHOD = "componingKeys";

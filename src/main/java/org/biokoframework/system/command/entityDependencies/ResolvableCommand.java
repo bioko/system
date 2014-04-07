@@ -44,6 +44,7 @@ import org.biokoframework.utils.repository.Repository;
 
 import java.util.ArrayList;
 
+@Deprecated
 public class ResolvableCommand extends AbstractCommand {
 
 	private static final Logger LOGGER = Logger.getLogger(ResolvableCommand.class);

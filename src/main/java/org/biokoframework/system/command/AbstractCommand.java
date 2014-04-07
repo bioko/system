@@ -80,20 +80,10 @@ public abstract class AbstractCommand implements ICommand {
 	}
 	
 	@Override
-	public void setCommandName(String commandName) {
-		fCommandName = commandName;
-	}
-	
-	@Override
 	public void setContext(Context context) {
 		fContext = context;
 	}
-	
-	@Deprecated
-	@Override
-	public void onContextInitialized() {
-	}
-	
+
 	protected void logInput(Fields input) { 
 		LOGGER.info("EXECUTING Command:" + this.getClass().getSimpleName());
 		LOGGER.info("INPUT: " + input.toString());

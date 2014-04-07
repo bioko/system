@@ -38,10 +38,6 @@ public interface ICommand {
 	@Deprecated
 	void setContext(Context context);
 	@Deprecated
-	void setCommandName(String commandName);
-	@Deprecated
-	void onContextInitialized();
-	@Deprecated
 	Fields componingInputKeys();
 	@Deprecated
 	Fields componingOutputKeys();
