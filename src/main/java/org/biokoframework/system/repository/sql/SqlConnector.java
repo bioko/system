@@ -60,7 +60,7 @@ public abstract class SqlConnector {
 		return "";
 	}
 	
-	public boolean tableExist(String tableName) throws SQLException {
+	public boolean tableExists(String tableName) throws SQLException {
         Connection connection = null;
         ResultSet result = null;
         try {

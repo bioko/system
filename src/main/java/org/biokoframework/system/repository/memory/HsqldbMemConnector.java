@@ -90,7 +90,7 @@ public class HsqldbMemConnector extends SqlConnector {
 	
 	
 	@Override
-	public boolean tableExist(String tableName) throws SQLException {		
+	public boolean tableExists(String tableName) throws SQLException {
 		Connection con = getConnection();		
 		PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) AS n FROM information_schema.tables WHERE table_schema='PUBLIC' AND table_name like ?");
 		ps.setString(1, tableName.toUpperCase());		

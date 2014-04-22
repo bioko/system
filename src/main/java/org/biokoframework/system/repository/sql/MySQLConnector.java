@@ -59,21 +59,23 @@ public class MySQLConnector extends SqlConnector {
 
 	private static final Logger LOGGER = Logger.getLogger(MySQLConnector.class);
 	
-	private String url;
+	private final String fUrl;
 
     @Inject
 	public MySQLConnector(@Named("dbUrl") String dbUrl, @Named("dbName") String dbName, @Named("dbUser") String dbUser,
                           @Named("dbPassword") String dbPassword, @Named("dbPort") String dbPort) {
-		configureConnectionURL(dbUrl, dbName, dbUser, dbPassword, dbPort);		
+
+        dbUrl = StringUtils.replace(dbUrl, "${dbName}", dbName);
+        dbUrl = StringUtils.replace(dbUrl, "${dbUser}", dbUser);
+        dbUrl = StringUtils.replace(dbUrl, "${dbPassword}", dbPassword);
+        fUrl = StringUtils.replace(dbUrl, "${dbPort}", dbPort);
+
+        loadDriver();
 	}
 	
-	private void configureConnectionURL(String dbUrl, String dbName, String dbUser, String dbPassword, String dbPort) {
+	private void loadDriver() {
 		try {
 		    Class.forName("com.mysql.jdbc.Driver");
-		    url = StringUtils.replace(dbUrl, "${dbName}", dbName);
-		    url = StringUtils.replace(url, "${dbUser}", dbUser);
-		    url = StringUtils.replace(url, "${dbPassword}", dbPassword);
-		    url = StringUtils.replace(url, "${dbPort}", dbPort);
 		} catch (Exception e) {
 		    e.printStackTrace();
 		}
@@ -83,7 +85,7 @@ public class MySQLConnector extends SqlConnector {
         Connection connectionInstance;
         try {
 //			if (_connectionInstance == null || _connectionInstance.isClosed()) {
-				connectionInstance = DriverManager.getConnection(url);
+				connectionInstance = DriverManager.getConnection(fUrl);
 //			}
 		} catch (SQLException exception) {
 			if (exception.getMessage().contains("Unknown database")) {

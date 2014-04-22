@@ -309,7 +309,7 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 	
 	private void ensureTable() throws RepositoryException {
 		try {
-			if (!fDbConnector.tableExist(fTableName)) {
+			if (!fDbConnector.tableExists(fTableName)) {
 				createTableFor(fEntityClass, fDbConnector);
 			} 
 			
