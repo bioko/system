@@ -42,6 +42,7 @@ public class TestRandomGeneratorService implements IRandomService {
 	
 	private static HashMap<String, Integer> _currentIndexesInt = new HashMap<String, Integer>();
 	private static HashMap<String, List<Long>> _fakeRandomQueuesInt = new HashMap<String, List<Long>>();
+    private static UUID sUUID;
 
 	@Override
 	public String generateString(String label, int length) {
@@ -120,8 +121,15 @@ public class TestRandomGeneratorService implements IRandomService {
 		return value;
 	}
 
+    public static void setUUID(String uuid) {
+        sUUID = UUID.fromString(uuid);
+    }
+
     @Override
     public UUID generateUUID() {
+        if (sUUID != null) {
+            return sUUID;
+        }
         return UUID.fromString("00000000-0000-0000-0000-000000000000");
     }
 
