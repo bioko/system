@@ -29,7 +29,7 @@ package org.biokoframework.system.KILL_ME;
 
 import org.biokoframework.system.command.CommandNames;
 
-public class FieldDefaultData {
+public interface FieldDefaultData {
 
 	public static final String NUMBER = "1";
 	public static final String DEFAULT_COMMAND = CommandNames.PRINT_COMMAND;

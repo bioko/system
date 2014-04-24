@@ -27,7 +27,8 @@
 
 package org.biokoframework.system.KILL_ME;
 
-public class SystemNames {
+@Deprecated
+public interface SystemNames {
 
 	public static final String BUONOBOX = "buonobox";
 	public static final String VERSION_1_0 = "1.0";

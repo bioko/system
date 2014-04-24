@@ -31,7 +31,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.biokoframework.system.ConfigurationEnum;
 
-
+@Deprecated
 public class XSystemIdentityCard {
 
 	private String _xSystemName;

@@ -27,6 +27,7 @@
 
 package org.biokoframework.system.KILL_ME;
 
+@Deprecated
 public class XSystemData {
 	public static final String A_FIELD_VALUE = "aFieldValue";
 }

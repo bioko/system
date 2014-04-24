@@ -32,7 +32,7 @@ import org.biokoframework.utils.exception.BiokoException;
 import org.biokoframework.utils.fields.FieldNames;
 import org.biokoframework.utils.fields.Fields;
 
-
+@Deprecated
 public class XSystem {
 
 	private final Logger fLogger;
