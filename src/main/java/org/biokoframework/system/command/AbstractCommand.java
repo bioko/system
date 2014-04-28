@@ -72,19 +72,19 @@ public abstract class AbstractCommand implements ICommand {
 	
 	@Override
     @Deprecated
-	public final Fields componingInputKeys() {
+	public Fields componingInputKeys() {
 		return new Fields();
 	}
 
 	@Override
     @Deprecated
-	public final Fields componingOutputKeys() {
+	public Fields componingOutputKeys() {
 		return new Fields();
 	}
 	
 	@Override
     @Deprecated
-	public final void setContext(Context context) {
+	public void setContext(Context context) {
 		fContext = context;
 	}
 
