@@ -51,7 +51,7 @@ public class LocalDateTranslator implements Translator {
 		if (fieldValue == null) {
 			statement.setObject(sqlIndex, null);
 		} else {
-			LocalDate timestamp = (LocalDate) fieldValue;
+			LocalDate timestamp = LocalDate.parse((String) fieldValue);
 			statement.setString(sqlIndex, timestamp.toString(DateTimeFormat.forPattern(MYSQL_DATE)));
 		}
 	}
