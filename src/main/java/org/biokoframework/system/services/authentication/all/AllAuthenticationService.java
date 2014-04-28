@@ -68,7 +68,8 @@ public class AllAuthenticationService implements IAuthenticationService {
                         return authResponse;
                     }
                 } catch (AuthenticationFailureException exception) {
-                    if (exception.getErrors().get(0).get(ErrorEntity.ERROR_CODE) != FieldNames.AUTHENTICATION_REQUIRED_CODE) {
+                    Long errorCode = exception.getErrors().get(0).get(ErrorEntity.ERROR_CODE);
+                    if (FieldNames.AUTHENTICATION_REQUIRED_CODE != errorCode) {
                         throw exception;
                     }
                 }
