@@ -60,6 +60,7 @@ public abstract class AbstractCommand implements ICommand {
 		fBuilder = builder;
 	}
 
+    @Deprecated
 	public void fillInvocationInfo(Fields output) {
 		try {
 			output.put(FieldNames.COMMAND_INVOCATION_INPUT_INFO, new JSonBuilder().buildFrom(componingInputKeys()));
@@ -70,17 +71,20 @@ public abstract class AbstractCommand implements ICommand {
 	}
 	
 	@Override
-	public Fields componingInputKeys() {
+    @Deprecated
+	public final Fields componingInputKeys() {
 		return new Fields();
 	}
 
 	@Override
-	public Fields componingOutputKeys() {
+    @Deprecated
+	public final Fields componingOutputKeys() {
 		return new Fields();
 	}
 	
 	@Override
-	public void setContext(Context context) {
+    @Deprecated
+	public final void setContext(Context context) {
 		fContext = context;
 	}
 
@@ -123,5 +127,16 @@ public abstract class AbstractCommand implements ICommand {
 	protected <DE extends DomainEntity, R extends Repository<DE>> R getRepository(Class<DE> entityClass, String name) {
 		return fRepositoryService.getRepository(entityClass, name);
 	}
+
+    ////////////////////////////////////////////////
+
+    /**
+     * @see ICommand#_dont_implement_ICommand___instead_extend_AbstractCommand_()
+     */
+    @Override
+    @Deprecated
+    public final void _dont_implement_ICommand___instead_extend_AbstractCommand_() {
+        // See Matcher interface for an explanation of this method.
+    }
 	
 }

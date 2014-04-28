@@ -41,5 +41,16 @@ public interface ICommand {
 	Fields componingInputKeys();
 	@Deprecated
 	Fields componingOutputKeys();
-	
+
+    /**
+     * This method simply acts a friendly reminder not to implement ICommand directly and
+     * instead extend AbstractMacher. It's easy to ignore JavaDoc, but a bit harder to
+     * ignore compile errors.
+     *
+     * @see ICommand for reasons why.
+     * @see AbstractCommand
+     * @deprecated to make
+     */
+    @Deprecated
+    void _dont_implement_ICommand___instead_extend_AbstractCommand_();
 }
