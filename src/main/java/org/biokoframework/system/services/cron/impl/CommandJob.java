@@ -33,6 +33,7 @@ import org.biokoframework.system.command.ICommand;
 import org.biokoframework.utils.exception.ValidationException;
 import org.biokoframework.utils.fields.Fields;
 import org.quartz.Job;
+import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
@@ -47,8 +48,9 @@ public class CommandJob implements Job {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
-		Injector injector = (Injector) context.get(QuartzCronService.INJECTOR);
-		Class<? extends ICommand> commandClass = (Class<? extends ICommand>) context.get(QuartzCronService.COMMAND);
+        JobDataMap jobData = context.getMergedJobDataMap();
+		Injector injector = (Injector) jobData.get(QuartzCronService.INJECTOR);
+		Class<? extends ICommand> commandClass = (Class<? extends ICommand>) jobData.get(QuartzCronService.COMMAND);
 		
 		ICommand command = injector.getInstance(commandClass);
 		

@@ -36,11 +36,13 @@ import org.biokoframework.system.KILL_ME.exception.SystemException;
 import org.biokoframework.system.command.ICommand;
 import org.biokoframework.system.services.cron.CronException;
 import org.biokoframework.system.services.cron.ICronListener;
+import org.biokoframework.system.services.cron.ICronLocator;
 import org.biokoframework.system.services.cron.ICronService;
 import org.biokoframework.system.services.email.IEmailService;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,7 +70,7 @@ public class QuartzCronService implements ICronService {
 	private final Injector fInjector;
 	
 	@Inject
-	public QuartzCronService(IEmailService mailService, @Named("cronEmailAddress") String cronEmailAddress, Injector injector) {
+	public QuartzCronService(IEmailService mailService, @Named("cronEmailAddress") String cronEmailAddress, Injector injector, @Nullable ICronLocator cronLocator) {
 		try {
 			fScheduler = StdSchedulerFactory.getDefaultScheduler();
 			fScheduler.start();
@@ -79,10 +81,14 @@ public class QuartzCronService implements ICronService {
 		fMailService = mailService;
 		fCronEmailAddress = cronEmailAddress;
 		fInjector = injector;
-	}
+
+        if (cronLocator != null) {
+            cronLocator.locateAndRegisterAll(this);
+        }
+    }
 	
 	@Override
-	public <C  extends ICommand> void schedule(Class<C> command, String cronExpression, String notificationEmail) throws CronException {
+	public <C extends ICommand> void schedule(Class<C> command, String cronExpression, String notificationEmail) throws CronException {
 		schedule(command, cronExpression, notificationEmail, null);
 	}
 
@@ -98,11 +104,9 @@ public class QuartzCronService implements ICronService {
 					build();
 			
 			Trigger jobTrigger = createCronTrigger(cronExpression);
-			
-			if (listeners == null) {
-				listeners = new ArrayList<>(1);
-			}
-			listeners.add(new CronFailureNotifier(fMailService, fCronEmailAddress, notificationEmail));
+
+            listeners = ensureListeners(listeners);
+            listeners.add(new CronFailureNotifier(fMailService, fCronEmailAddress, notificationEmail));
 			
 			fScheduler.
 				getListenerManager().
@@ -115,8 +119,16 @@ public class QuartzCronService implements ICronService {
 			throw new CronException(exception);
 		}
 	}
-	
-	private Trigger createCronTrigger(String cronExpression) {
+
+    private List<ICronListener> ensureListeners(List<ICronListener> listeners) {
+        if (listeners == null) {
+            return new ArrayList<>(1);
+        } else {
+            return new ArrayList<>(listeners);
+        }
+    }
+
+    private Trigger createCronTrigger(String cronExpression) {
 		return newTrigger().withSchedule(cronSchedule(cronExpression)).build();
 	}
 
