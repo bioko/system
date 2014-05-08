@@ -83,7 +83,11 @@ public class QuartzCronService implements ICronService {
 		fInjector = injector;
 
         if (cronLocator != null) {
-            cronLocator.locateAndRegisterAll(this);
+            try {
+                cronLocator.locateAndRegisterAll(this);
+            } catch (CronException exception) {
+                throw new RuntimeException(exception);
+            }
         }
     }
 	

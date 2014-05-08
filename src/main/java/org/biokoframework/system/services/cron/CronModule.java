@@ -28,6 +28,7 @@
 package org.biokoframework.system.services.cron;
 
 import org.biokoframework.system.ConfigurationEnum;
+import org.biokoframework.system.services.cron.impl.AnnotatedCronLocator;
 import org.biokoframework.system.services.cron.impl.QuartzCronService;
 import org.biokoframework.system.services.injection.ServiceModule;
 
@@ -49,7 +50,8 @@ public class CronModule extends ServiceModule {
 
 	@Override
 	protected void configureForProd() {
-		bind(ICronService.class).to(QuartzCronService.class).asEagerSingleton();
+        bind(ICronLocator.class).to(AnnotatedCronLocator.class);
+        bind(ICronService.class).to(QuartzCronService.class).asEagerSingleton();
 	}
 
 }

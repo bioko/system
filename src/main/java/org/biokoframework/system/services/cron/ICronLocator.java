@@ -6,6 +6,6 @@ package org.biokoframework.system.services.cron;
  */
 public interface ICronLocator {
 
-    public void locateAndRegisterAll(ICronService cronService);
+    public void locateAndRegisterAll(ICronService cronService) throws CronException;
 
 }
