@@ -1,14 +1,10 @@
-package org.biokoframework.system.services.cron.impl;
+package org.biokoframework.system.services.cron.dev;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.name.Names;
 import com.google.inject.util.Providers;
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
 import org.biokoframework.system.ConfigurationEnum;
 import org.biokoframework.system.command.CommandException;
 import org.biokoframework.system.exceptions.CommandExceptionsFactory;
@@ -27,7 +23,6 @@ import org.biokoframework.system.services.repository.RepositoryModule;
 import org.biokoframework.system.services.templates.TemplatingModule;
 import org.hamcrest.Matchers;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.jvnet.mock_javamail.Mailbox;
 
@@ -36,23 +31,15 @@ import java.util.Collections;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
-public class QuartzCronServiceTest {
+/**
+ * @author Mikol Faro <mikol.faro@gmail.com>
+ * @date 2014-05-13
+ */
+public class DevCronTest {
 
     public static final String ADMIN_EMAIL = "notify-me@example.com";
-    private QuartzCronService fService;
     private Injector fInjector;
-
-    @BeforeClass
-    public static void redirectLoggerToStdOut() {
-        ConsoleAppender console = new ConsoleAppender(); //create appender
-        //configure the appender
-        String PATTERN = "%d [%p|%c|%C{1}] %m%n";
-        console.setLayout(new PatternLayout(PATTERN));
-        console.setThreshold(Level.ERROR);
-        console.activateOptions();
-        //add appender to any Logger (here is root)
-        Logger.getRootLogger().addAppender(console);
-    }
+    private DevCronService fService;
 
     @Before
     public void createService() {
@@ -66,10 +53,12 @@ public class QuartzCronServiceTest {
                     protected void configureForDev() {
                         bindRepositoryTo(InMemoryRepository.class);
                     }
+
                     @Override
                     protected void configureForDemo() {
                         configureForDev();
                     }
+
                     @Override
                     protected void configureForProd() {
                         configureForDemo();
@@ -83,10 +72,11 @@ public class QuartzCronServiceTest {
                         bindConstant().annotatedWith(Names.named("cronEmailAddress")).to("cron@example.com");
                         bind(ICronLocator.class).toProvider(Providers.<ICronLocator>of(null));
                     }
-                });
+                }
+        );
         IEmailService emailService = fInjector.getInstance(IEmailService.class);
 
-        fService = new QuartzCronService(emailService, "cron@example.com", fInjector, null);
+        fService = new DevCronService(emailService, "cron@example.com", fInjector, null);
 
         Mailbox.clearAll();
     }
@@ -96,9 +86,9 @@ public class QuartzCronServiceTest {
         SuccessfulCommand.EXECUTED = false;
         fService.schedule(SuccessfulCommand.class, "0/1 * * * * ?", ADMIN_EMAIL);
 
-        Thread.sleep(2000);
+        assertThat(DevCronService.INSTANCE, is(equalTo(fService)));
 
-        fService.stop();
+        DevCronService.INSTANCE.trigger(SuccessfulCommand.class);
 
         assertThat(SuccessfulCommand.EXECUTED, is(true));
         assertThat(Mailbox.get(ADMIN_EMAIL), is(empty()));
@@ -110,9 +100,7 @@ public class QuartzCronServiceTest {
 
         fService.schedule(SuccessfulCommand.class, "0/1 * * * * ?", ADMIN_EMAIL, Collections.<ICronListener>singletonList(customListener));
 
-        Thread.sleep(2000);
-
-        fService.stop();
+        DevCronService.INSTANCE.trigger(SuccessfulCommand.class);
 
         assertThat(customListener.getCommand(), is(Matchers.<Object>equalTo(SuccessfulCommand.class)));
         assertThat(Mailbox.get(ADMIN_EMAIL), is(empty()));
@@ -122,9 +110,7 @@ public class QuartzCronServiceTest {
     public void simpleFailingExecution() throws Exception {
         fService.schedule(FailingCommand.class, "0/1 * * * * ?", ADMIN_EMAIL);
 
-        Thread.sleep(2000);
-
-        fService.stop();
+        DevCronService.INSTANCE.trigger(FailingCommand.class);
 
         Mailbox mailbox = Mailbox.get(ADMIN_EMAIL);
         assertThat(mailbox, is(not(empty())));
@@ -138,9 +124,7 @@ public class QuartzCronServiceTest {
 
         fService.schedule(FailingCommand.class, "0/1 * * * * ?", ADMIN_EMAIL, Collections.<ICronListener>singletonList(customListener));
 
-        Thread.sleep(2000);
-
-        fService.stop();
+        DevCronService.INSTANCE.trigger(FailingCommand.class);
 
         assertThat(customListener.getCommand(), is(Matchers.<Object>equalTo(FailingCommand.class)));
 
@@ -155,8 +139,4 @@ public class QuartzCronServiceTest {
         assertThat((String) mailbox.get(0).getContent(), startsWith("Command " + FailingCommand.class.getName() + " failed"));
     }
 
-    @Test
-    public void simpleNullableInjection() {
-        fInjector.getInstance(QuartzCronService.class);
-    }
 }

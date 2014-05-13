@@ -5,15 +5,16 @@ import org.biokoframework.system.KILL_ME.commons.GenericFieldValues;
 import org.biokoframework.system.services.cron.CronException;
 import org.biokoframework.system.services.cron.annotation.Cron;
 import org.biokoframework.system.services.cron.annotation.CronExpression;
+import org.biokoframework.system.services.cron.dev.DevCronEntry;
 import org.biokoframework.system.services.cron.mock.FailingCommand;
 import org.biokoframework.system.services.cron.mock.MockCronService;
-import org.biokoframework.system.services.cron.mock.MockCronService.MockCronEntry;
 import org.biokoframework.system.services.cron.mock.SuccessfulCommand;
 import org.junit.Test;
 
 import java.util.List;
 
 import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -29,11 +30,11 @@ public class AnnotatedCronLocatorTest {
         AnnotatedCronLocator locator = new AnnotatedCronLocator(DummyCronCommands.class, ConfigurationEnum.DEV);
         locator.locateAndRegisterAll(mockCronService);
 
-        List<MockCronEntry> entries = mockCronService.getEntries();
+        List<DevCronEntry> entries = mockCronService.getEntries();
 
-        assertThat(entries, contains(
-                new MockCronEntry(SuccessfulCommand.class, "10 * * * * ?", GenericFieldValues.CRON_EMAIL, null),
-                new MockCronEntry(FailingCommand.class, "0/10 * * * * ?", GenericFieldValues.CRON_EMAIL, null)
+        assertThat(entries, containsInAnyOrder(
+                new DevCronEntry(SuccessfulCommand.class, "10 * * * * ?", GenericFieldValues.CRON_EMAIL, null),
+                new DevCronEntry(FailingCommand.class, "0/10 * * * * ?", GenericFieldValues.CRON_EMAIL, null)
         ));
 
         mockCronService = new MockCronService();
@@ -43,7 +44,7 @@ public class AnnotatedCronLocatorTest {
         entries = mockCronService.getEntries();
 
         assertThat(entries, contains(
-                new MockCronEntry(SuccessfulCommand.class, "0 0 10 * * ?", GenericFieldValues.CRON_EMAIL, null)
+                new DevCronEntry(SuccessfulCommand.class, "0 0 10 * * ?", GenericFieldValues.CRON_EMAIL, null)
         ));
 
     }

@@ -10,9 +10,13 @@ import org.biokoframework.utils.fields.Fields;
  */
 public class SuccessfulCommand extends AbstractCommand {
 
+    public static boolean EXECUTED;
+
     @Override
     public Fields execute(Fields input) throws CommandException {
         logInput(input);
+
+        EXECUTED = true;
 
         logOutput();
         return new Fields();
