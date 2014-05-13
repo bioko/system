@@ -57,14 +57,14 @@ public class EmailService implements IEmailService {
 	}
 
 	@Override
-	public void sendASAP(String destinationAddress, String sourceAddress, String content, String subjet) throws EmailException {
+	public void sendASAP(String destinationAddress, String sourceAddress, String content, String subject) throws EmailException {
 		
 		EmailFiller filler = new EmailFiller();
 		filler.addTo(destinationAddress);
 		filler.setFrom(sourceAddress);
 		
 		filler.setContent(content);
-		filler.setSubject(subjet);
+		filler.setSubject(subject);
 
 		EmailServiceImplementation dispatcher = EmailServiceImplementation.mailServer();
 		MimeMessage message = dispatcher.newMessage();

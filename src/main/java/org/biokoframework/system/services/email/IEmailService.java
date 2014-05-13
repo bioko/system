@@ -35,8 +35,8 @@ package org.biokoframework.system.services.email;
  */
 public interface IEmailService {
 	
-	void send(String destinationAddress, String sourceAddress, String content, String subjet) throws EmailException;
+	void send(String destinationAddress, String sourceAddress, String content, String subject) throws EmailException;
 	
-	void sendASAP(String destinationAddress, String sourceAddress, String content, String subjet) throws EmailException;
+	void sendASAP(String destinationAddress, String sourceAddress, String content, String subject) throws EmailException;
 	
 }
