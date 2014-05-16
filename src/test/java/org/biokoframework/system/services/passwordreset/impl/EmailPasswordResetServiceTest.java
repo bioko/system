@@ -28,6 +28,7 @@ package org.biokoframework.system.services.passwordreset.impl;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.util.Providers;
 import org.biokoframework.system.ConfigurationEnum;
 import org.biokoframework.system.entity.authentication.PasswordReset;
 import org.biokoframework.system.entity.login.Login;
@@ -35,6 +36,7 @@ import org.biokoframework.system.entity.login.LoginBuilder;
 import org.biokoframework.system.entity.template.Template;
 import org.biokoframework.system.repository.memory.InMemoryRepository;
 import org.biokoframework.system.repository.service.IRepositoryService;
+import org.biokoframework.system.services.cron.ICronService;
 import org.biokoframework.system.services.currenttime.CurrentTimeModule;
 import org.biokoframework.system.services.currenttime.ICurrentTimeService;
 import org.biokoframework.system.services.currenttime.impl.TestCurrentTimeService;
@@ -114,6 +116,7 @@ public class EmailPasswordResetServiceTest {
                     @Override
                     protected void configure() {
                         bindConstant().annotatedWith(named("noReplyEmailAddress")).to(NO_REPLY_EMAIL_ADDRESS);
+                        bind(ICronService.class).toProvider(Providers.<ICronService>of(null));
                     }
                 });
 

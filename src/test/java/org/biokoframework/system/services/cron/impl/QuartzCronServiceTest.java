@@ -15,6 +15,7 @@ import org.biokoframework.system.exceptions.CommandExceptionsFactory;
 import org.biokoframework.system.repository.memory.InMemoryRepository;
 import org.biokoframework.system.services.cron.ICronListener;
 import org.biokoframework.system.services.cron.ICronLocator;
+import org.biokoframework.system.services.cron.ICronService;
 import org.biokoframework.system.services.cron.mock.FailingCommand;
 import org.biokoframework.system.services.cron.mock.MockListener;
 import org.biokoframework.system.services.cron.mock.SuccessfulCommand;
@@ -82,6 +83,7 @@ public class QuartzCronServiceTest {
                         bindConstant().annotatedWith(Names.named("noReplyEmailAddress")).to("no-reply@example.com");
                         bindConstant().annotatedWith(Names.named("cronEmailAddress")).to("cron@example.com");
                         bind(ICronLocator.class).toProvider(Providers.<ICronLocator>of(null));
+                        bind(ICronService.class).toProvider(Providers.<ICronService>of(null));
                     }
                 });
         IEmailService emailService = fInjector.getInstance(IEmailService.class);
