@@ -73,7 +73,12 @@ public class DevCronService implements ICronService {
     }
 
     public <C extends ICommand> void trigger(Class<C> command) {
-        execute(fEntries.get(command));
+        DevCronEntry devCronEntry = fEntries.get(command);
+        if (devCronEntry != null) {
+            execute(devCronEntry);
+        } else {
+            throw new RuntimeException("Command " + command.getName() + " was not scheduled");
+        }
     }
 
     private void execute(DevCronEntry devCronEntry) {
