@@ -28,11 +28,12 @@
 package org.biokoframework.system.services.email.impl;
 
 import com.google.inject.Inject;
-import org.biokoframework.system.services.cron.ICronService;
 import org.biokoframework.system.services.email.EmailException;
 import org.biokoframework.system.services.email.IEmailService;
 import org.biokoframework.system.services.email.KILL_ME.EmailFiller;
 import org.biokoframework.system.services.email.KILL_ME.EmailServiceImplementation;
+import org.biokoframework.system.services.queue.IQueueService;
+import org.biokoframework.utils.fields.Fields;
 
 import javax.annotation.Nullable;
 import javax.mail.internet.MimeMessage;
@@ -40,24 +41,23 @@ import javax.mail.internet.MimeMessage;
 public class EmailService implements IEmailService {
 
     private static final String MAIL_QUEUE = "mailQueue";
-
-    private final ICronService fCronService;
+    private final IQueueService fQueueService;
 
     @Inject
-	public EmailService(@Nullable ICronService cronService) throws EmailException {
-        fCronService = cronService;
+	public EmailService(@Nullable IQueueService queueService) throws EmailException {
+        fQueueService = queueService;
 	}
 	
 	@Override
 	public void send(String destinationAddress, String sourceAddress, String content, String subject) throws EmailException {
-        if (fCronService != null) {
-//    		Fields sendMailInputFields = new Fields();
-//    		sendMailInputFields.put(SendMailCommand.FROM, sourceAddress);
-//    		sendMailInputFields.put(SendMailCommand.TO, destinationAddress);
-//    		sendMailInputFields.put(SendMailCommand.CONTENT, content);
-//    		sendMailInputFields.put(SendMailCommand.SUBJECT, subject);
-//
-//    		fMailQueueService.pushFields(sendMailInputFields);
+        if (fQueueService != null) {
+    		Fields sendMailInputFields = new Fields();
+    		sendMailInputFields.put(SendMailCommand.FROM, sourceAddress);
+    		sendMailInputFields.put(SendMailCommand.TO, destinationAddress);
+    		sendMailInputFields.put(SendMailCommand.CONTENT, content);
+    		sendMailInputFields.put(SendMailCommand.SUBJECT, subject);
+
+    		fQueueService.pushFields(MAIL_QUEUE, sendMailInputFields);
         } else {
             sendASAP(destinationAddress, sourceAddress, content, subject);
         }

@@ -45,6 +45,7 @@ import org.biokoframework.system.services.entity.EntityModule;
 import org.biokoframework.system.services.queue.IQueueService;
 import org.biokoframework.system.services.queue.impl.SqlQueueService;
 import org.biokoframework.system.services.repository.RepositoryModule;
+import org.biokoframework.utils.validation.ValidationModule;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -73,7 +74,7 @@ public class EmailServiceTest {
         Injector injector = Guice.createInjector(new AbstractModule() {
             @Override
             protected void configure() {
-                bind(ICronService.class).toProvider(Providers.<ICronService>of(null));
+                bind(IQueueService.class).toProvider(Providers.<IQueueService>of(null));
             }
         });
 
@@ -117,6 +118,7 @@ public class EmailServiceTest {
     private IEmailService prepareEmailServiceWithCron() throws CronException {
         Injector injector = Guice.createInjector(
                 new EntityModule(),
+                new ValidationModule(),
                 new RepositoryModule(ConfigurationEnum.DEV) {
                     @Override
                     protected void configureForDev() {

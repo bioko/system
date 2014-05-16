@@ -36,7 +36,6 @@ import org.biokoframework.system.entity.login.LoginBuilder;
 import org.biokoframework.system.entity.template.Template;
 import org.biokoframework.system.repository.memory.InMemoryRepository;
 import org.biokoframework.system.repository.service.IRepositoryService;
-import org.biokoframework.system.services.cron.ICronService;
 import org.biokoframework.system.services.currenttime.CurrentTimeModule;
 import org.biokoframework.system.services.currenttime.ICurrentTimeService;
 import org.biokoframework.system.services.currenttime.impl.TestCurrentTimeService;
@@ -44,6 +43,7 @@ import org.biokoframework.system.services.email.impl.EmailConfirmationServiceImp
 import org.biokoframework.system.services.email.impl.EmailService;
 import org.biokoframework.system.services.entity.EntityModule;
 import org.biokoframework.system.services.entity.IEntityBuilderService;
+import org.biokoframework.system.services.queue.IQueueService;
 import org.biokoframework.system.services.random.IRandomService;
 import org.biokoframework.system.services.random.RandomModule;
 import org.biokoframework.system.services.repository.RepositoryModule;
@@ -106,7 +106,7 @@ public class EmailConfirmationServiceTest {
                     @Override
                     protected void configure() {
                         bind(IEmailService.class).to(EmailService.class);
-                        bind(ICronService.class).toProvider(Providers.<ICronService>of(null));
+                        bind(IQueueService.class).toProvider(Providers.<IQueueService>of(null));
                     }
                 }
 

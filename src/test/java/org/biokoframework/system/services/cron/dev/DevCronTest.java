@@ -10,8 +10,6 @@ import org.biokoframework.system.command.CommandException;
 import org.biokoframework.system.exceptions.CommandExceptionsFactory;
 import org.biokoframework.system.repository.memory.InMemoryRepository;
 import org.biokoframework.system.services.cron.ICronListener;
-import org.biokoframework.system.services.cron.ICronLocator;
-import org.biokoframework.system.services.cron.ICronService;
 import org.biokoframework.system.services.cron.mock.FailingCommand;
 import org.biokoframework.system.services.cron.mock.MockListener;
 import org.biokoframework.system.services.cron.mock.SuccessfulCommand;
@@ -19,6 +17,7 @@ import org.biokoframework.system.services.currenttime.CurrentTimeModule;
 import org.biokoframework.system.services.email.EmailModule;
 import org.biokoframework.system.services.email.IEmailService;
 import org.biokoframework.system.services.entity.EntityModule;
+import org.biokoframework.system.services.queue.IQueueService;
 import org.biokoframework.system.services.random.RandomModule;
 import org.biokoframework.system.services.repository.RepositoryModule;
 import org.biokoframework.system.services.templates.TemplatingModule;
@@ -71,8 +70,7 @@ public class DevCronTest {
                     protected void configure() {
                         bindConstant().annotatedWith(Names.named("noReplyEmailAddress")).to("no-reply@example.com");
                         bindConstant().annotatedWith(Names.named("cronEmailAddress")).to("cron@example.com");
-                        bind(ICronLocator.class).toProvider(Providers.<ICronLocator>of(null));
-                        bind(ICronService.class).toProvider(Providers.<ICronService>of(null));
+                        bind(IQueueService.class).toProvider(Providers.<IQueueService>of(null));
                     }
                 }
         );

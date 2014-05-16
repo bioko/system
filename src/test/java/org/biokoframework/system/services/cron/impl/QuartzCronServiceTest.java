@@ -23,6 +23,7 @@ import org.biokoframework.system.services.currenttime.CurrentTimeModule;
 import org.biokoframework.system.services.email.EmailModule;
 import org.biokoframework.system.services.email.IEmailService;
 import org.biokoframework.system.services.entity.EntityModule;
+import org.biokoframework.system.services.queue.IQueueService;
 import org.biokoframework.system.services.random.RandomModule;
 import org.biokoframework.system.services.repository.RepositoryModule;
 import org.biokoframework.system.services.templates.TemplatingModule;
@@ -84,6 +85,7 @@ public class QuartzCronServiceTest {
                         bindConstant().annotatedWith(Names.named("cronEmailAddress")).to("cron@example.com");
                         bind(ICronLocator.class).toProvider(Providers.<ICronLocator>of(null));
                         bind(ICronService.class).toProvider(Providers.<ICronService>of(null));
+                        bind(IQueueService.class).toProvider(Providers.<IQueueService>of(null));
                     }
                 });
         IEmailService emailService = fInjector.getInstance(IEmailService.class);
