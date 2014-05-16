@@ -30,6 +30,7 @@ package org.biokoframework.system.services.queue.impl;
 import com.google.inject.Inject;
 import org.apache.log4j.Logger;
 import org.biokoframework.system.repository.service.IRepositoryService;
+import org.biokoframework.system.services.entity.IEntityBuilderService;
 import org.biokoframework.system.services.queue.IQueueService;
 import org.biokoframework.system.services.queue.QueuedItem;
 import org.biokoframework.utils.exception.ValidationException;
@@ -37,80 +38,51 @@ import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.repository.Repository;
 import org.biokoframework.utils.repository.RepositoryException;
 
-import java.util.List;
-
 
 // TODO all the queue can be replaced by two queries:
 // POP = SELECT * FROM _baseRepository WHERE IDX = lowest()
 // PUSH = SELECT * FROM _baseRepository WHERE IDX = greatest()
 
-public class QueueService implements IQueueService {
+public class SqlQueueService implements IQueueService {
 
 	private static final Long START = 0L;
 
-	private static final Logger LOGGER = Logger.getLogger(QueueService.class);
+	private static final Logger LOGGER = Logger.getLogger(SqlQueueService.class);
 
-	private Repository<QueuedItem> fBaseRepository;
-	
-	protected Long head = Long.MAX_VALUE;
-	protected Long tail = START;
-	
+    private final IEntityBuilderService fEntityBuilderService;
+    private final Repository<QueuedItem> fBaseRepository;
+
 	protected final Object popLock = new Object();
-	protected final Object pushLock = new Object();
 
 	@Inject
-	public QueueService(IRepositoryService repoService) {
+	public SqlQueueService(IRepositoryService repoService, IEntityBuilderService entityBuilderService) {
+        fEntityBuilderService = entityBuilderService;
 		fBaseRepository = repoService.getRepository(QueuedItem.class);
-		List<QueuedItem> items = fBaseRepository.getAll();
-		
-		for (QueuedItem anItem : items) {
-			if (Long.parseLong(anItem.get(QueuedItem.IDX).toString()) == tail) {
-				tail = Long.parseLong(anItem.get(QueuedItem.IDX).toString()) + 1;
-			}
-			
-			if (head > Long.parseLong(anItem.get(QueuedItem.IDX).toString())) {
-				head = Long.parseLong(anItem.get(QueuedItem.IDX).toString());
-			}
-		}
-		
-		if (tail == START) {
-			head = tail;
-		}
 	}
 	
 	@Override
-	public void push(String content) throws ValidationException, RepositoryException {
-		QueuedItem item = new QueuedItem();
+	public void push(String queueName, String content) throws ValidationException, RepositoryException {
+		QueuedItem item = fEntityBuilderService.getInstance(QueuedItem.class);
 		item.set(QueuedItem.CONTENT, content);
-		synchronized (pushLock) {
-			synchronized (tail) {
-				item.set(QueuedItem.IDX, Long.toString(tail));
-				fBaseRepository.save(item);
-				tail++;
-			}
-		}
+        item.set(QueuedItem.QUEUE_NAME, queueName);
+        fBaseRepository.save(item);
 	}
 
 	@Override
-	public String pop() {
+	public String pop(String queueName) {
 		synchronized (popLock) {
-			synchronized (head) {
-				 QueuedItem item = fBaseRepository.retrieveByForeignKey(QueuedItem.IDX, Long.toString(head));
-				 if (item != null) {
-					 String content = item.get(QueuedItem.CONTENT);
-					 fBaseRepository.delete(item.getId());
-					 head++;
-					 return content;
-				 }
-			}
+            fBaseRepository.createQuery().
+                    select().
+                    from(fBaseRepository, QueuedItem.class).
+                    where(QueuedItem.ID).equals();
 		}
 		return null;
 	}
 	
 	
 	@Override
-	public Fields popFields() {
-		String popped = pop();
+	public Fields popFields(String queueName) {
+		String popped = pop(queueName);
 		if (popped == null) {
 			return null;
 		}
@@ -118,9 +90,9 @@ public class QueueService implements IQueueService {
 		return Fields.fromJson(popped);
 	}
 	
-	public void pushFields(Fields fields) {
+	public void pushFields(String queueName, Fields fields) {
 		try {
-			push(fields.toJSONString());
+			push(queueName, fields.toJSONString());
 		} catch (Exception exception) {
 			LOGGER.error("Error pushing Fields", exception);
 		}
