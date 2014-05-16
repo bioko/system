@@ -160,7 +160,7 @@ public class BinaryEntityRepository extends AbstractRepository<BinaryEntity> {
 	}
 
 	@Override
-	public BinaryEntity retrieveByForeignKey(String foreignKeyName, String foreignKeyValue) {
+	public BinaryEntity retrieveByForeignKey(String foreignKeyName, Object foreignKeyValue) {
 		throw new UnsupportedOperationException();
 	}
 

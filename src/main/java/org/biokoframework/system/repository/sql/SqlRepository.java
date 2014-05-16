@@ -262,14 +262,14 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 	}
 
 	@Override
-	public DE retrieveByForeignKey(String foreignKeyName, String foreignKeyValue) {
+	public DE retrieveByForeignKey(String foreignKeyName, Object foreignKeyValue) {
 		ArrayList<DE> entities = new ArrayList<DE>();
 		Connection connection = null;
 		PreparedStatement retrieveStatement = null;
 		try {
 			connection = fDbConnector.getConnection();
 			retrieveStatement = SqlStatementsHelper.prepareRetrieveOneByForeignKey(fEntityClass, fTableName, connection, foreignKeyName);
-			retrieveStatement.setString(1, foreignKeyValue);
+			retrieveStatement.setObject(1, foreignKeyValue);
 			retrieveStatement.execute();
 			
 			entities = SqlStatementsHelper.retrieveEntities(retrieveStatement.getResultSet(), fEntityClass, fTranslator, fEntityBuilderService);

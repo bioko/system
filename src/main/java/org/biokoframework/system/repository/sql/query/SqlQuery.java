@@ -27,6 +27,7 @@
 
 package org.biokoframework.system.repository.sql.query;
 
+import org.apache.commons.lang3.StringUtils;
 import org.biokoframework.system.repository.sql.SqlConnector;
 import org.biokoframework.system.repository.sql.SqlRepository;
 import org.biokoframework.system.repository.sql.util.SqlStatementsHelper;
@@ -54,13 +55,15 @@ public class SqlQuery<DE extends DomainEntity> implements Query<DE> {
 	// WHERE
 	private List<Entry<SqlLogicOperator, SqlConstraint<DE>>> fConstraints = new LinkedList<Entry<SqlLogicOperator, SqlConstraint<DE>>>();
 
-	private PreparedStatement fStatement;
-	private List<String> fPlaceholders;
-	private Connection fConnection;
-	private final SqlConnector fDbConnector;
-	private final IEntityBuilderService fEntityBuilderService;
+    private String fOrderBy;
 
-	public SqlQuery(SqlConnector helper, IEntityBuilderService entityBuilderService) {
+    private PreparedStatement fStatement;
+    private List<String> fPlaceholders;
+    private Connection fConnection;
+    private final SqlConnector fDbConnector;
+    private final IEntityBuilderService fEntityBuilderService;
+
+    public SqlQuery(SqlConnector helper, IEntityBuilderService entityBuilderService) {
 		fEntityBuilderService = entityBuilderService;
 		fDbConnector = helper;
 	}
@@ -94,7 +97,7 @@ public class SqlQuery<DE extends DomainEntity> implements Query<DE> {
 		return createConstraint(SqlLogicOperator.OR, fieldName);
 	}
 
-	private SqlConstraint<DE> createConstraint(SqlLogicOperator logicOperator, String fieldName) {
+    private SqlConstraint<DE> createConstraint(SqlLogicOperator logicOperator, String fieldName) {
 		SqlConstraint<DE> constraint = new SqlConstraint<DE>(this).setFieldName(fieldName);
 		fConstraints.add(new SimpleEntry<SqlLogicOperator, SqlConstraint<DE>>(logicOperator, constraint));
 		return constraint;
@@ -159,6 +162,11 @@ public class SqlQuery<DE extends DomainEntity> implements Query<DE> {
 		}
 	}
 
+    public SqlQuery<DE> orderBy(String fieldName) {
+        fOrderBy = fieldName;
+        return this;
+    }
+
 	@Override
 	public String toString() {
 		StringBuilder s = new StringBuilder();
@@ -177,6 +185,11 @@ public class SqlQuery<DE extends DomainEntity> implements Query<DE> {
 				s.append(aConnectedConstraint.getKey()).append(" (").append(aConnectedConstraint.getValue()).append(") ");
 			}
 		}
+
+        if (!StringUtils.isEmpty(fOrderBy)) {
+            s.append(" order by ").append(fOrderBy);
+        }
+
 		s.append(";");
 		return s.toString();
 	}
@@ -193,6 +206,11 @@ public class SqlQuery<DE extends DomainEntity> implements Query<DE> {
 				s.append(aConnectedConstraint.getKey()).append(" (").append(aConnectedConstraint.getValue().toSqlString()).append(") ");
 			}
 		}
+
+        if (!StringUtils.isEmpty(fOrderBy)) {
+            s.append(" order by ").append(fOrderBy);
+        }
+
 		s.append(";");
 		return s.toString();
 	}

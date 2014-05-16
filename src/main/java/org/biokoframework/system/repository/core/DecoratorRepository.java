@@ -73,7 +73,7 @@ public class DecoratorRepository<DE extends DomainEntity, R extends Repository<D
 	}
 
 	@Override
-	public DE retrieveByForeignKey(String foreignKeyName, String foreignKeyValue) {
+	public DE retrieveByForeignKey(String foreignKeyName, Object foreignKeyValue) {
 		return fBaseRepository.retrieveByForeignKey(foreignKeyName, foreignKeyValue);
 	}
 
