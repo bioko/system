@@ -58,8 +58,9 @@ public abstract class AbstractPushNotificationService implements IPushNotificati
 	protected static final String REGISTER_DEVICE = "/register-device";
 	protected static final String SEND_TARGETED_MESSAGE = "/send-message";
 	protected static final String SEND_BROADCAST_MESSAGE = "/send-broadcast-message";
+    private static final String PUSH_QUEUE = "pushQueue";
 
-	private final String fPusherdrilloUrl;
+    private final String fPusherdrilloUrl;
 	private final String fAppToken;
 	private final boolean fProduction;
 	private final IQueueService fPushQueueService;
@@ -111,7 +112,7 @@ public abstract class AbstractPushNotificationService implements IPushNotificati
 		sendMailInputFields.put(GenericFieldNames.CONTENT, message);
 		sendMailInputFields.put(IPushNotificationService.PRODUCTION, fProduction);
 		
-		fPushQueueService.pushFields(sendMailInputFields);
+		fPushQueueService.pushFields(PUSH_QUEUE, sendMailInputFields);
 	}
 
 	@Override
@@ -120,7 +121,7 @@ public abstract class AbstractPushNotificationService implements IPushNotificati
 		sendMailInputFields.put(GenericFieldNames.CONTENT, message);
 		sendMailInputFields.put(IPushNotificationService.PRODUCTION, fProduction);
 		
-		fPushQueueService.pushFields(sendMailInputFields);
+		fPushQueueService.pushFields(PUSH_QUEUE, sendMailInputFields);
 	}
 
 

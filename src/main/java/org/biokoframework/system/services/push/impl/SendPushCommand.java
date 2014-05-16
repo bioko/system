@@ -49,8 +49,9 @@ import org.biokoframework.utils.fields.Fields;
 public class SendPushCommand extends AbstractCommand {
 
 	private static final Logger LOGGER = Logger.getLogger(SendPushCommand.class);
-	
-	private final IQueueService fPushQueueService;
+    private static final String PUSH_QUEUE = "pushQueue";
+
+    private final IQueueService fPushQueueService;
 	private final String fPusherdrilloUrl;
 	private final String fAppToken;
 	private final String fAppSecret;
@@ -71,7 +72,7 @@ public class SendPushCommand extends AbstractCommand {
 		logInput(input);
 
 		Fields pushFields;
-		while((pushFields = fPushQueueService.popFields()) != null) {
+		while((pushFields = fPushQueueService.popFields(PUSH_QUEUE)) != null) {
 			String userToken = pushFields.get(IPushNotificationService.USER_TOKEN);
 			String content = pushFields.get(GenericFieldNames.CONTENT);
 			Boolean production = pushFields.get(IPushNotificationService.PRODUCTION);

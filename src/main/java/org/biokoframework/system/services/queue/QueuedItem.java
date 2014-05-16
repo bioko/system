@@ -43,7 +43,7 @@ public class QueuedItem extends DomainEntity {
 	})
 	public static final String CONTENT = "content";
 	
-	@Field(type=Long.class)
-	public static final String IDX = "idx";
+    @Field(type = String.class)
+    public static final String QUEUE_NAME = "queueName";
 
 }

@@ -37,6 +37,9 @@ import org.biokoframework.utils.exception.ValidationException;
 import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.repository.Repository;
 import org.biokoframework.utils.repository.RepositoryException;
+import org.biokoframework.utils.repository.query.Query;
+
+import java.util.List;
 
 
 // TODO all the queue can be replaced by two queries:
@@ -71,10 +74,19 @@ public class SqlQueueService implements IQueueService {
 	@Override
 	public String pop(String queueName) {
 		synchronized (popLock) {
-            fBaseRepository.createQuery().
+            Query<QueuedItem> q = fBaseRepository.createQuery().
                     select().
                     from(fBaseRepository, QueuedItem.class).
-                    where(QueuedItem.ID).equals();
+                    where(QueuedItem.QUEUE_NAME).isEqual(queueName).
+                    orderBy(QueuedItem.ID);
+
+            List<QueuedItem> items = q.getAll();
+
+            if (!items.isEmpty()) {
+                QueuedItem target = items.get(0);
+                fBaseRepository.delete(target.getId());
+                return target.get(QueuedItem.CONTENT);
+            }
 		}
 		return null;
 	}

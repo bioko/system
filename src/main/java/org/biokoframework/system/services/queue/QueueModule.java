@@ -30,7 +30,7 @@ package org.biokoframework.system.services.queue;
 import com.google.inject.Module;
 import org.biokoframework.system.ConfigurationEnum;
 import org.biokoframework.system.services.injection.ServiceModule;
-import org.biokoframework.system.services.queue.impl.QueueService;
+import org.biokoframework.system.services.queue.impl.SqlQueueService;
 
 /**
  * 
@@ -57,7 +57,7 @@ public class QueueModule extends ServiceModule implements Module {
 	@Override
 	protected void configureForProd() {
 		bind(IQueueService.class)
-			.to(QueueService.class);
+			.to(SqlQueueService.class);
 	}
 
 }
