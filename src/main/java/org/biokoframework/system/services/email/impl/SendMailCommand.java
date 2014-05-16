@@ -45,7 +45,8 @@ public class SendMailCommand extends AbstractCommand {
 	public static final String TO = "to";
 	public static final String FROM = "from";
 	public static final String SUBJECT = "subject";
-	private final IQueueService fMailQueueService;
+    private static final String MAIL_QUEUE = "mailQueue";
+    private final IQueueService fMailQueueService;
 	private final IEmailService fEmailService;
 	
 	@Inject
@@ -59,7 +60,7 @@ public class SendMailCommand extends AbstractCommand {
 		logInput(input);
 
 		Fields mailFields;
-		while((mailFields = fMailQueueService.popFields()) != null) {
+		while((mailFields = fMailQueueService.popFields(MAIL_QUEUE)) != null) {
 			String destinationAddress = mailFields.get(TO);
 			String sourceAddress = mailFields.get(FROM);
 			
@@ -72,7 +73,7 @@ public class SendMailCommand extends AbstractCommand {
 			} catch (EmailException exception) {
                 LOGGER.error("error while sending mail", exception);
 
-				fMailQueueService.pushFields(mailFields);
+				fMailQueueService.pushFields(MAIL_QUEUE, mailFields);
 				
 				throw new CommandException(exception);
 			}

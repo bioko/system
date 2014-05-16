@@ -28,32 +28,39 @@
 package org.biokoframework.system.services.email.impl;
 
 import com.google.inject.Inject;
+import org.biokoframework.system.services.cron.ICronService;
 import org.biokoframework.system.services.email.EmailException;
 import org.biokoframework.system.services.email.IEmailService;
 import org.biokoframework.system.services.email.KILL_ME.EmailFiller;
 import org.biokoframework.system.services.email.KILL_ME.EmailServiceImplementation;
 
+import javax.annotation.Nullable;
 import javax.mail.internet.MimeMessage;
 
 public class EmailService implements IEmailService {
 
-//	private final IQueueService fMailQueueService;
+    private static final String MAIL_QUEUE = "mailQueue";
 
-	@Inject
-//	public EmailService(@Named("mailQueue") IQueueService mailQueueService, ICronService cronService) throws EmailException {
-//		fMailQueueService = mailQueueService;
-    public EmailService() throws EmailException {
+    private final ICronService fCronService;
+
+    @Inject
+	public EmailService(@Nullable ICronService cronService) throws EmailException {
+        fCronService = cronService;
 	}
 	
 	@Override
 	public void send(String destinationAddress, String sourceAddress, String content, String subject) throws EmailException {
-//		Fields sendMailInputFields = new Fields();
-//		sendMailInputFields.put(SendMailCommand.FROM, sourceAddress);
-//		sendMailInputFields.put(SendMailCommand.TO, destinationAddress);
-//		sendMailInputFields.put(SendMailCommand.CONTENT, content);
-//		sendMailInputFields.put(SendMailCommand.SUBJECT, subject);
+        if (fCronService != null) {
+//    		Fields sendMailInputFields = new Fields();
+//    		sendMailInputFields.put(SendMailCommand.FROM, sourceAddress);
+//    		sendMailInputFields.put(SendMailCommand.TO, destinationAddress);
+//    		sendMailInputFields.put(SendMailCommand.CONTENT, content);
+//    		sendMailInputFields.put(SendMailCommand.SUBJECT, subject);
 //
-//		fMailQueueService.pushFields(sendMailInputFields);
+//    		fMailQueueService.pushFields(sendMailInputFields);
+        } else {
+            sendASAP(destinationAddress, sourceAddress, content, subject);
+        }
 	}
 
 	@Override

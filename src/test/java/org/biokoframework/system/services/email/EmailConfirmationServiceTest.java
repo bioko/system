@@ -28,6 +28,7 @@ package org.biokoframework.system.services.email;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.util.Providers;
 import org.biokoframework.system.ConfigurationEnum;
 import org.biokoframework.system.entity.authentication.EmailConfirmation;
 import org.biokoframework.system.entity.login.Login;
@@ -35,6 +36,7 @@ import org.biokoframework.system.entity.login.LoginBuilder;
 import org.biokoframework.system.entity.template.Template;
 import org.biokoframework.system.repository.memory.InMemoryRepository;
 import org.biokoframework.system.repository.service.IRepositoryService;
+import org.biokoframework.system.services.cron.ICronService;
 import org.biokoframework.system.services.currenttime.CurrentTimeModule;
 import org.biokoframework.system.services.currenttime.ICurrentTimeService;
 import org.biokoframework.system.services.currenttime.impl.TestCurrentTimeService;
@@ -104,6 +106,7 @@ public class EmailConfirmationServiceTest {
                     @Override
                     protected void configure() {
                         bind(IEmailService.class).to(EmailService.class);
+                        bind(ICronService.class).toProvider(Providers.<ICronService>of(null));
                     }
                 }
 
