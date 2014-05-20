@@ -40,12 +40,13 @@ import org.biokoframework.utils.fields.Fields;
 public class SendMailCommand extends AbstractCommand {
 
 	private static final Logger LOGGER = Logger.getLogger(SendMailCommand.class);
+    private static final String MAIL_QUEUE = "mailQueue";
 
 	public static final String CONTENT = GenericFieldNames.CONTENT;
 	public static final String TO = "to";
 	public static final String FROM = "from";
 	public static final String SUBJECT = "subject";
-    private static final String MAIL_QUEUE = "mailQueue";
+
     private final IQueueService fMailQueueService;
 	private final IEmailService fEmailService;
 	
