@@ -27,6 +27,7 @@
 
 package org.biokoframework.system.repository.memory;
 
+import org.biokoframework.system.repository.service.IRepositoryService;
 import org.biokoframework.system.repository.sql.SqlRepository;
 import org.biokoframework.system.services.entity.IEntityBuilderService;
 import org.biokoframework.utils.domain.DomainEntity;
@@ -40,8 +41,8 @@ public class InMemoryRepository<DE extends DomainEntity> extends SqlRepository<D
 
 	@SuppressWarnings("rawtypes")
 	@Inject
-	public InMemoryRepository(Class entityClass, IEntityBuilderService entityBuilderService) throws RepositoryException {		
-		super(entityClass, entityClass.getSimpleName(), HsqldbMemConnector.getInstance(), entityBuilderService);		
+	public InMemoryRepository(Class entityClass, IEntityBuilderService entityBuilderService, IRepositoryService repositoryService) throws RepositoryException {
+		super(entityClass, entityClass.getSimpleName(), HsqldbMemConnector.getInstance(), entityBuilderService, repositoryService);
 		
 		try {
 			fDbConnector.emptyTable(fTableName);

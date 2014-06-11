@@ -30,6 +30,7 @@ package org.biokoframework.system.repository.sql;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.biokoframework.system.repository.core.AbstractRepository;
+import org.biokoframework.system.repository.service.IRepositoryService;
 import org.biokoframework.system.repository.sql.query.SqlQuery;
 import org.biokoframework.system.repository.sql.translator.SqlTypesTranslator;
 import org.biokoframework.system.repository.sql.util.SqlStatementsHelper;
@@ -57,8 +58,9 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 	private LinkedHashMap<String, Field> fFieldNames;
 	private SqlTypesTranslator fTranslator;
 
-	public SqlRepository(Class entityClass, String tableName, SqlConnector connector, IEntityBuilderService entityBuilderService) throws RepositoryException {
-		super(entityBuilderService);
+	public SqlRepository(Class entityClass, String tableName, SqlConnector connector, IEntityBuilderService entityBuilderService, IRepositoryService repositoryService) throws RepositoryException {
+		super(entityBuilderService, repositoryService);
+
 		fEntityClass = (Class<DE>) entityClass;
 		fTableName = tableName;
 		try {
@@ -77,12 +79,12 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
     @SuppressWarnings("rawtypes")
     @Inject
 	public SqlRepository(Class entityClass, SqlConnector connectionHelper, IEntityBuilderService entityBuilderService) throws RepositoryException {
-		this(entityClass, entityClass.getSimpleName(), connectionHelper, entityBuilderService);
+		this(entityClass, entityClass.getSimpleName(), connectionHelper, entityBuilderService, null);
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public DE save(DomainEntity entity) throws RepositoryException, ValidationException {
+	public DE saveAfterValidation(DomainEntity entity) throws RepositoryException, ValidationException {
 		DE castedEntity = (DE) entity;
 		if (!entity.isValid()) {
 			throw new ValidationException(entity.getValidationErrors());

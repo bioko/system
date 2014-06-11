@@ -59,7 +59,7 @@ public class ManyTypesTest {
 	
 	@Test
 	public void integerTypes() throws Exception {
-		Repository<ManyTypesEntity> repository = new InMemoryRepository<ManyTypesEntity>(ManyTypesEntity.class, fInjector.getInstance(IEntityBuilderService.class));
+		Repository<ManyTypesEntity> repository = new InMemoryRepository<ManyTypesEntity>(ManyTypesEntity.class, fInjector.getInstance(IEntityBuilderService.class), null);
 
 		EntityBuilder<ManyTypesEntity> entityBuilder = fInjector.getInstance(ManyTypesEntityBuilder.class).loadDefaultExample();
 		
