@@ -67,13 +67,13 @@ public class BinaryEntityRepository extends AbstractRepository<BinaryEntity> {
 
 	@Inject
 	public BinaryEntityRepository(@Named("fileBaseDirectory") File baseDirectory, Repository<BinaryEntity> supportRepository, IEntityBuilderService entityBuilderService) {
-		super(entityBuilderService);
+		super(entityBuilderService, null);
 		fBaseDirectory = baseDirectory;
 		fSupportRepository = supportRepository;
 	}
 
 	@Override
-	public BinaryEntity save(DomainEntity anEntity) throws ValidationException, RepositoryException {
+	public BinaryEntity saveAfterValidation(DomainEntity anEntity) throws ValidationException, RepositoryException {
 		BinaryEntity aBlob = (BinaryEntity) anEntity;
 		try {
 			if (aBlob.getId() != null) {

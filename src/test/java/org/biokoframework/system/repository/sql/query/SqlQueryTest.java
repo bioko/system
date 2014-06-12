@@ -29,6 +29,7 @@ package org.biokoframework.system.repository.sql.query;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import org.biokoframework.system.ConfigurationEnum;
 import org.biokoframework.system.entity.dummy1.DummyEntity1;
 import org.biokoframework.system.entity.dummy1.DummyEntity1Builder;
 import org.biokoframework.system.entity.dummy2.DummyEntity2;
@@ -38,8 +39,9 @@ import org.biokoframework.system.entity.dummyWithDate.DummyEntityWithDateBuilder
 import org.biokoframework.system.entity.dummyWithInteger.DummyEntityWithInteger;
 import org.biokoframework.system.entity.dummyWithInteger.DummyEntityWithIntegerBuilder;
 import org.biokoframework.system.repository.memory.InMemoryRepository;
+import org.biokoframework.system.repository.service.IRepositoryService;
 import org.biokoframework.system.services.entity.EntityModule;
-import org.biokoframework.system.services.entity.IEntityBuilderService;
+import org.biokoframework.system.services.repository.RepositoryModule;
 import org.biokoframework.utils.domain.EntityBuilder;
 import org.biokoframework.utils.exception.ValidationException;
 import org.biokoframework.utils.repository.RepositoryException;
@@ -69,17 +71,34 @@ public class SqlQueryTest {
 
 	@Before
 	public void createRepository() throws Exception {
-		fInjector = Guice.createInjector(new EntityModule(), new ValidationModule());
+		fInjector = Guice.createInjector(
+                new EntityModule(),
+                new ValidationModule(),
+                new RepositoryModule(ConfigurationEnum.DEV) {
+                    @Override
+                    protected void configureForDev() {
+                        bindRepositoryTo(InMemoryRepository.class);
+                    }
+                    @Override
+                    protected void configureForDemo() {
+                        configureForDev();
+                    }
+                    @Override
+                    protected void configureForProd() {
+                        configureForDev();
+                    }
+                });
 		
 		fDummy1Builder = fInjector.getInstance(DummyEntity1Builder.class);
 		fDummy2Builder = fInjector.getInstance(DummyEntity2Builder.class);
 		fDummyWithDateBuilder = fInjector.getInstance(DummyEntityWithDateBuilder.class);
 		fDummyWithIntegerBuilder = fInjector.getInstance(DummyEntityWithIntegerBuilder.class);
-		
-		fDummy1Repo = new InMemoryRepository<>(DummyEntity1.class, fInjector.getInstance(IEntityBuilderService.class));
-		fDummy2Repo = new InMemoryRepository<>(DummyEntity2.class, fInjector.getInstance(IEntityBuilderService.class));
-		fDummyWithIntegerRepo = new InMemoryRepository<>(DummyEntityWithInteger.class, fInjector.getInstance(IEntityBuilderService.class));
-		fDummyWithDateRepo = new InMemoryRepository<>(DummyEntityWithDate.class, fInjector.getInstance(IEntityBuilderService.class));
+
+        IRepositoryService repositoryService = fInjector.getInstance(IRepositoryService.class);
+        fDummy1Repo = repositoryService.getRepository(DummyEntity1.class);
+		fDummy2Repo = repositoryService.getRepository(DummyEntity2.class);
+		fDummyWithIntegerRepo = repositoryService.getRepository(DummyEntityWithInteger.class);
+		fDummyWithDateRepo = repositoryService.getRepository(DummyEntityWithDate.class);
 	}
 
 	@Test
@@ -419,6 +438,9 @@ public class SqlQueryTest {
 
     @Test
     public void orderByTest() throws ValidationException, RepositoryException {
+        fDummy1Repo.save(fDummy1Builder.loadDefaultExample().build(false));
+        fDummy1Repo.save(fDummy1Builder.loadDefaultExample().build(false));
+
         EntityBuilder<DummyEntity2> dummyEntity2Builder = fDummy2Builder.loadDefaultExample();
         fDummy2Repo.save(dummyEntity2Builder.build(false));
 

@@ -56,7 +56,7 @@ public class MemoryRepositoryTest {
 	public void fillExampleRepo() throws ValidationException, RepositoryException {
 		fInjector = Guice.createInjector(new ValidationModule(), new EntityModule());
 		
-		fRepo = new InMemoryRepository<ASDummyEntity1>(ASDummyEntity1.class, fInjector.getInstance(IEntityBuilderService.class));
+		fRepo = new InMemoryRepository<ASDummyEntity1>(ASDummyEntity1.class, fInjector.getInstance(IEntityBuilderService.class), null);
 		ASDummyEntity1Builder builder = fInjector.getInstance(ASDummyEntity1Builder.class);
 
 		fRepo.save(builder.loadExample(ASDummyEntity1Builder.EXAMPLE_GINO).build(false));

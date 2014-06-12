@@ -27,6 +27,7 @@
 
 package org.biokoframework.system.repository.core;
 
+import org.biokoframework.system.repository.service.IRepositoryService;
 import org.biokoframework.system.services.entity.IEntityBuilderService;
 import org.biokoframework.utils.domain.DomainEntity;
 import org.biokoframework.utils.exception.ValidationException;
@@ -50,14 +51,14 @@ public class DecoratorRepository<DE extends DomainEntity, R extends Repository<D
 	private R fBaseRepository;
 
 	@Inject
-	public DecoratorRepository(R baseRepository, IEntityBuilderService entityBuilderService) {
-		super(entityBuilderService);
+	public DecoratorRepository(R baseRepository, IEntityBuilderService entityBuilderService, IRepositoryService repositoryService) {
+		super(entityBuilderService, repositoryService);
 		fBaseRepository = baseRepository;
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public DE save(DomainEntity anEntity) throws ValidationException, RepositoryException {
+	public DE saveAfterValidation(DomainEntity anEntity) throws ValidationException, RepositoryException {
 		DE entity = (DE) anEntity;
 		return fBaseRepository.save(entity);
 	}
