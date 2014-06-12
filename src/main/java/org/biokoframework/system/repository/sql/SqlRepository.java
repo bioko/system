@@ -58,7 +58,10 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 	private LinkedHashMap<String, Field> fFieldNames;
 	private SqlTypesTranslator fTranslator;
 
-	public SqlRepository(Class entityClass, String tableName, SqlConnector connector, IEntityBuilderService entityBuilderService, IRepositoryService repositoryService) throws RepositoryException {
+
+    @SuppressWarnings("rawtypes")
+    @Inject
+    public SqlRepository(Class entityClass, String tableName, SqlConnector connector, IEntityBuilderService entityBuilderService, IRepositoryService repositoryService) throws RepositoryException {
 		super(entityBuilderService, repositoryService);
 
 		fEntityClass = (Class<DE>) entityClass;
@@ -75,13 +78,6 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 		ensureTable();
 	}
 
-
-    @SuppressWarnings("rawtypes")
-    @Inject
-	public SqlRepository(Class entityClass, SqlConnector connectionHelper, IEntityBuilderService entityBuilderService) throws RepositoryException {
-		this(entityClass, entityClass.getSimpleName(), connectionHelper, entityBuilderService, null);
-	}
-	
 	@SuppressWarnings("unchecked")
 	@Override
 	public DE saveAfterValidation(DomainEntity entity) throws RepositoryException, ValidationException {

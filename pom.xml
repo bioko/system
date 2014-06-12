@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.biokoframework</groupId>
 	<artifactId>system</artifactId>
-	<version>0.3</version>
+	<version>0.3.1</version>
 	<name>Bioko Framework - System</name>
 	<url>http://biokoframework.org</url>
 	<dependencies>
