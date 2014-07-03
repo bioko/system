@@ -30,7 +30,6 @@ package org.biokoframework.system.command.crud.binary;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.CommandException;
-import org.biokoframework.system.entity.EntityClassNameTranslator;
 import org.biokoframework.system.entity.binary.BinaryEntity;
 import org.biokoframework.system.exceptions.CommandExceptionsFactory;
 import org.biokoframework.system.factory.binary.BinaryEntityRepository;
@@ -41,11 +40,11 @@ import java.util.ArrayList;
 
 public class PostBinaryEntityCommand extends AbstractCommand {
 
-	private final String fBlobFieldName;
+	private final String fBlobFieldName = "";
 
-	public PostBinaryEntityCommand(String blobName) {
-		fBlobFieldName = EntityClassNameTranslator.toFieldName(blobName);
-	}
+//	public PostBinaryEntityCommand(String blobName) {
+//		fBlobFieldName = EntityClassNameTranslator.toFieldName(blobName);
+//	}
 
 	@Override
 	public Fields execute(Fields input) throws CommandException {
