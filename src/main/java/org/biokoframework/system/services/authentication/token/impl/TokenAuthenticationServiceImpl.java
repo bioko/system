@@ -89,8 +89,11 @@ public class TokenAuthenticationServiceImpl extends AbstractAuthenticationServic
 	@Override
 	public AuthResponse authenticate(Fields fields, List<String> requiredRoles) throws AuthenticationFailureException {
         String token = (String) fields.get(AUTH_TOKEN);
-		Authentication auth = fAuthRepo.retrieveByForeignKey(Authentication.TOKEN, token);
-		if (auth == null) {
+        if (token == null) {
+            throw CommandExceptionsFactory.createUnauthorisedAccessException();
+        }
+        Authentication auth = fAuthRepo.retrieveByForeignKey(Authentication.TOKEN, token);
+        if (auth == null) {
 			throw CommandExceptionsFactory.createUnauthorisedAccessException();
         } else if (isExpired(auth)) {
             fAuthRepo.delete(auth.getId());
