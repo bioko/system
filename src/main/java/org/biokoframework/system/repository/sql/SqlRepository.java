@@ -60,7 +60,6 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 
 
     @SuppressWarnings("rawtypes")
-    @Inject
     public SqlRepository(Class entityClass, String tableName, SqlConnector connector, IEntityBuilderService entityBuilderService, IRepositoryService repositoryService) throws RepositoryException {
 		super(entityBuilderService, repositoryService);
 
@@ -77,6 +76,12 @@ public class SqlRepository<DE extends DomainEntity> extends AbstractRepository<D
 		fTranslator = connector.getTypesTranslator();
 		ensureTable();
 	}
+
+    @SuppressWarnings("rawtypes")
+    @Inject
+    public SqlRepository(Class entityClass, SqlConnector connectionHelper, IEntityBuilderService entityBuilderService, IRepositoryService repositoryService) throws RepositoryException {
+        this(entityClass, entityClass.getSimpleName(), connectionHelper, entityBuilderService, repositoryService);
+    }
 
 	@SuppressWarnings("unchecked")
 	@Override
