@@ -27,29 +27,27 @@
 
 package org.biokoframework.system.command.crud.binary;
 
+import org.apache.log4j.Logger;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.CommandException;
-import org.biokoframework.system.entity.EntityClassNameTranslator;
 import org.biokoframework.system.entity.binary.BinaryEntity;
 import org.biokoframework.system.exceptions.CommandExceptionsFactory;
 import org.biokoframework.system.factory.binary.BinaryEntityRepository;
-import org.biokoframework.system.repository.core.SafeRepositoryHelper;
 import org.biokoframework.utils.domain.DomainEntity;
+import org.biokoframework.utils.exception.ValidationException;
 import org.biokoframework.utils.fields.Fields;
+import org.biokoframework.utils.repository.RepositoryException;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PutBinaryEntityCommand extends AbstractCommand {
 
-	private final String fBlobFieldName;
+    private static final Logger LOGGER = Logger.getLogger(PutBinaryEntityCommand.class);
 
-	public PutBinaryEntityCommand(String blobName) {
-		fBlobFieldName = EntityClassNameTranslator.toFieldName(blobName);
-	}
-
-	@Override
-	public Fields execute(Fields input) throws CommandException {
+    @Override
+	public Fields execute(Fields input) throws CommandException, ValidationException {
 		logInput(input);
 		Fields result = new Fields();
 		
@@ -63,8 +61,17 @@ public class PutBinaryEntityCommand extends AbstractCommand {
 		if (existingBlob == null) {
 			throw CommandExceptionsFactory.createEntityNotFound(BinaryEntity.class, blobId);
 		}
-		
-		BinaryEntity newBlob = input.get(fBlobFieldName);
+
+        String blobFieldName = "";
+        if (input.keys().size() != 2) {
+            throw CommandExceptionsFactory.createBadCommandInvocationException();
+        } else {
+            List<String> keys = input.keys();
+            keys.remove(DomainEntity.ID);
+            blobFieldName = keys.get(0);
+        }
+
+		BinaryEntity newBlob = input.get(blobFieldName);
 		newBlob.setId(blobId);
 		
 		ArrayList<BinaryEntity> response = new ArrayList<BinaryEntity>();
@@ -72,13 +79,14 @@ public class PutBinaryEntityCommand extends AbstractCommand {
 		if (!newBlob.isValid()) {
 			throw CommandExceptionsFactory.createNotCompleteEntity(newBlob.getClass().getSimpleName());
 		}
-		newBlob = SafeRepositoryHelper.save(blobRepo, newBlob);
-		if (newBlob == null) {
-			throw CommandExceptionsFactory.createBadCommandInvocationException();
-		}
-		response.add(newBlob);
-		
-		
+        try {
+            newBlob = blobRepo.save(newBlob);
+        } catch (RepositoryException e) {
+            LOGGER.error("Saving blob", e);
+            throw CommandExceptionsFactory.createBadCommandInvocationException();
+        }
+        response.add(newBlob);
+
 		result.put(GenericFieldNames.RESPONSE, response);
 		logOutput(result);
 		return result;

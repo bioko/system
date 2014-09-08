@@ -27,6 +27,7 @@
 
 package org.biokoframework.system.command.crud.binary;
 
+import com.google.common.net.MediaType;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldValues;
 import org.biokoframework.system.command.AbstractCommand;
@@ -62,9 +63,10 @@ public class GetBinaryEntityCommand extends AbstractCommand {
 			throw CommandExceptionsFactory.createEntityNotFound(BinaryEntity.class, blobId);
 		}
 		response.add(blob);
-		
+
+        String mediaType = blob.get(BinaryEntity.MEDIA_TYPE);
 		Fields output = new Fields(
-				GenericFieldNames.RESPONSE_CONTENT_TYPE, blob.get(BinaryEntity.MEDIA_TYPE),
+				"mediaType", MediaType.parse(mediaType),
 				GenericFieldNames.RESPONSE, response);
 		
 		logOutput(output);
