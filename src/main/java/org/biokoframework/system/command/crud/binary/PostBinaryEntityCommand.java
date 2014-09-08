@@ -27,44 +27,55 @@
 
 package org.biokoframework.system.command.crud.binary;
 
+import org.apache.log4j.Logger;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.CommandException;
 import org.biokoframework.system.entity.binary.BinaryEntity;
 import org.biokoframework.system.exceptions.CommandExceptionsFactory;
 import org.biokoframework.system.factory.binary.BinaryEntityRepository;
-import org.biokoframework.system.repository.core.SafeRepositoryHelper;
+import org.biokoframework.utils.exception.ValidationException;
 import org.biokoframework.utils.fields.Fields;
+import org.biokoframework.utils.repository.RepositoryException;
 
 import java.util.ArrayList;
 
 public class PostBinaryEntityCommand extends AbstractCommand {
 
-	private final String fBlobFieldName = "";
+    private static final Logger LOGGER = Logger.getLogger(PostBinaryEntityCommand.class);
 
 //	public PostBinaryEntityCommand(String blobName) {
 //		fBlobFieldName = EntityClassNameTranslator.toFieldName(blobName);
 //	}
 
 	@Override
-	public Fields execute(Fields input) throws CommandException {
+	public Fields execute(Fields input) throws CommandException, ValidationException {
 		logInput(input);
 		Fields result = new Fields();
 		
 		BinaryEntityRepository blobRepo = getRepository(BinaryEntity.class);
 		
 		ArrayList<BinaryEntity> response = new ArrayList<BinaryEntity>();
-		
-		BinaryEntity blob = input.get(fBlobFieldName);
+
+        String blobFieldName = "";
+        if (input.keys().size() != 1) {
+            throw CommandExceptionsFactory.createBadCommandInvocationException();
+        } else {
+            blobFieldName = input.keys().get(0);
+        }
+
+		BinaryEntity blob = input.get(blobFieldName);
 
 		if (!blob.isValid()) {
 			throw CommandExceptionsFactory.createNotCompleteEntity(blob.getClass().getSimpleName());
 		}
-			
-		blob = SafeRepositoryHelper.save(blobRepo, blob);
-		if (blob == null) {
-			throw CommandExceptionsFactory.createBadCommandInvocationException();
-		}
+
+        try {
+            blob = blobRepo.save(blob);
+        } catch (RepositoryException e) {
+            LOGGER.error("Saving blob", e);
+            throw CommandExceptionsFactory.createBadCommandInvocationException();
+        }
 		response.add(blob);
 		
 		result.put(GenericFieldNames.RESPONSE, response);
