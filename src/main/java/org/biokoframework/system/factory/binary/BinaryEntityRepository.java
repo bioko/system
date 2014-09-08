@@ -189,7 +189,7 @@ public class BinaryEntityRepository extends AbstractRepository<BinaryEntity> {
 		IOUtils.copy(blob.getStream(), fileOutputStream);
 		blob.getStream().close();
 		fileOutputStream.close();
-		blob.set(BinaryEntity.SIZE_BYTES, Long.toString(file.length()));
+		blob.set(BinaryEntity.SIZE_BYTES, file.length());
 	}
 
 	private String timestampPath() {
