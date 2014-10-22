@@ -37,4 +37,6 @@ public interface ITemplatingService {
 
     Template compileTemplate(Template template, Map<String, Object> values) throws TemplatingException;
 
+    String compileRawString(String template, Map<String, Object> values) throws TemplatingException;
+
 }
