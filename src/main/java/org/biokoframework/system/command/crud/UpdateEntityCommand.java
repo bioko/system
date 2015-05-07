@@ -29,11 +29,13 @@
 package org.biokoframework.system.command.crud;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.biokoframework.system.KILL_ME.commons.GenericFieldNames;
 import org.biokoframework.system.command.AbstractCommand;
 import org.biokoframework.system.command.CommandException;
 import org.biokoframework.system.exceptions.CommandExceptionsFactory;
 import org.biokoframework.utils.domain.DomainEntity;
+import org.biokoframework.utils.domain.annotation.field.ComponingFieldsFactory;
 import org.biokoframework.utils.exception.ValidationException;
 import org.biokoframework.utils.fields.Fields;
 import org.biokoframework.utils.repository.Repository;
@@ -46,7 +48,8 @@ import java.util.ArrayList;
 
 public class UpdateEntityCommand extends AbstractCommand {
 
-	private final Class<? extends DomainEntity> fDomainEntityClass;
+    private static final Logger LOGGER = Logger.getLogger(UpdateEntityCommand.class);
+    private final Class<? extends DomainEntity> fDomainEntityClass;
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Inject
@@ -68,12 +71,19 @@ public class UpdateEntityCommand extends AbstractCommand {
 		if (entity == null) {
 			throw CommandExceptionsFactory.createEntityNotFound(fDomainEntityClass, id);
 		}
-		
-		for (String aKey : input.keys()) {
-			entity.set(aKey, input.get(aKey));
-		}
-		
-		ArrayList<DomainEntity> response = new ArrayList<>();
+
+        try {
+            for (String aKey : ComponingFieldsFactory.create(entity.getClass())) {
+                Object value = input.get(aKey);
+                if (value != null) {
+                    entity.set(aKey, input.get(aKey));
+                }
+            }
+        } catch (IllegalAccessException e) {
+            LOGGER.error("[easy-man] - there was an error with the entity reflection method");
+        }
+
+        ArrayList<DomainEntity> response = new ArrayList<>();
 		try {
 			response.add(repository.save(entity));
 		} catch (RepositoryException exception) {

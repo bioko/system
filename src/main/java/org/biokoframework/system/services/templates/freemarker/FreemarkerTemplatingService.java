@@ -71,6 +71,11 @@ public class FreemarkerTemplatingService implements ITemplatingService {
         return compiled;
     }
 
+    @Override
+    public String compileRawString(String template, Map<String, Object> content) throws TemplatingException {
+        return compile(template, content);
+    }
+
     private String compile(String template, Map<String, Object> content) throws TemplatingException {
         StringReader stringReader = new StringReader(template);
         StringWriter stringWriter = new StringWriter();

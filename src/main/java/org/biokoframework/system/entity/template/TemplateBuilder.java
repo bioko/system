@@ -27,7 +27,10 @@
 
 package org.biokoframework.system.entity.template;
 
+import com.google.inject.Injector;
 import org.biokoframework.utils.domain.EntityBuilder;
+
+import javax.inject.Inject;
 
 
 public class TemplateBuilder extends EntityBuilder<Template> {
@@ -44,11 +47,17 @@ public class TemplateBuilder extends EntityBuilder<Template> {
 	
 	public static final String SYSTEM_A_TEMPLATE = "systemAtemplate";
 
+
+    @Inject
+    public TemplateBuilder(Injector injector) {
+        super(Template.class, injector);
+        putExample(EXAMPLE, EXAMPLE_JSON);
+        putExample(SYSTEM_A_TEMPLATE, "{'track':'passwordResetMailTemplate','title':'Password reset','body':'Abbiamo ricevuto una richiesta di reset della password. Clicca <a href=\\\"http://local.engaged.it/password-reset&token=${token}\\\">qui</a> per resettare la tua password'}");
+    }
+
 	public TemplateBuilder() {
-		super(Template.class);
-		putExample(EXAMPLE, EXAMPLE_JSON);
-		putExample(SYSTEM_A_TEMPLATE, "{'track':'passwordResetMailTemplate','title':'Password reset','body':'Abbiamo ricevuto una richiesta di reset della password. Clicca <a href=\\\"http://local.engaged.it/password-reset&token=${token}\\\">qui</a> per resettare la tua password'}");
-	}
+        this(null);
+    }
 
 	@Override
 	public EntityBuilder<Template> loadDefaultExample() {

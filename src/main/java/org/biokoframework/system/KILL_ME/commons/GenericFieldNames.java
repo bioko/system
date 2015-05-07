@@ -52,7 +52,7 @@ public interface GenericFieldNames {
 	public static final String CONTENT = "content";
 
 	public static final String RESPONSE = "RESPONSE";
-	public static final String RESPONSE_CONTENT_TYPE = "responseContentType";
+	public static final String RESPONSE_CONTENT_TYPE = "mediaType";
 	
 	public static final String TOKEN_HEADER = "Engaged-Auth-Token";
 	public static final String TOKEN_EXPIRE_HEADER = "Engaged-Auth-Token-Expire";
